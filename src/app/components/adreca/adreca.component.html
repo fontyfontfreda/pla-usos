@@ -1,0 +1,23 @@
+<!-- Formulari d'adreça amb autocompletat -->
+<form (ngSubmit)="onSubmit()">
+  <div>
+    <label for="adreca">Adreça:</label>
+    <input
+      type="text"
+      id="adreca"
+      [(ngModel)]="adrecaSeleccionada"
+      name="adreca"
+      (input)="filterAdreces($event)"
+      required
+    />
+    <ul *ngIf="filteredAdreces.length > 0">
+      <li *ngFor="let adreca of filteredAdreces" (click)="selectAdreca(adreca)">
+        {{ adreca.carrer }}, {{ adreca.numero }}
+      </li>
+    </ul>
+  </div>
+  <div class="buttons">
+    <button (click)="goBack()">Tornar enrera</button>
+    <button type="submit">Enviar</button>
+  </div>
+</form>

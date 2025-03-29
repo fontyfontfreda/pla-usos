@@ -1,0 +1,11 @@
+<!-- Formulari de dades d'usuari -->
+<form (ngSubmit)="onSubmit()">
+  <div>
+    <label for="activitat">Activitat:</label>
+    <input type="text" id="activitat" [(ngModel)]="formData.activitat" name="activitat" required />
+  </div>
+  <div class="buttons">
+    <button (click)="goBack()">Tornar enrera</button>
+    <button type="submit">Enviar</button>
+  </div>
+</form>

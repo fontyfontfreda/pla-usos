@@ -1,0 +1,18 @@
+<img src="assets/logo.png" alt="logo">
+<h2>Pla especial d’usos i activitats de nucli antic d’Olot</h2>
+
+<!-- Formulari de dades de l'usuari -->
+<app-dades-usuari *ngIf="formDadesUsuari" (dadesUsuariSubmit)="onDadesUsuariSubmit($event)"></app-dades-usuari>
+
+<!-- Formulari d'adreça -->
+<app-adreca *ngIf="formAdreca" (adrecaSubmit)="onAdrecaSubmit($event)" (goBackEvent)="goBack($event)"></app-adreca>
+
+<!-- Formulari d'activitat -->
+<app-activitat *ngIf="formActivitat" (activitatSubmit)="onActivitatSubmit($event)" (goBackEvent)="goBack($event)"></app-activitat>
+
+<!-- Botó per pujar un fitxer Excel -->
+<div class="upload-section">
+  <label for="fileUpload">Puja un fitxer Excel:</label>
+  <input type="file" id="fileUpload" (change)="onFileSelected($event)" accept=".xlsx">
+  <button (click)="uploadFile()">Carregar Excel</button>
+</div>

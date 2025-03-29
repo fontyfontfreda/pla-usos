@@ -1,0 +1,96 @@
+/* Formulari - Estil */
+form {
+  background-color: #f4f4f9;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+form div {
+  margin-bottom: 15px;
+}
+
+form label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
+}
+
+form input,
+form select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+form button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.3s;
+}
+
+form button:hover {
+  background-color: #45a049;
+}
+
+
+/* Estil de la pàgina */
+h2 {
+  text-align: center;
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Responsive - Ajustament per a mòbils */
+@media (max-width: 600px) {
+  form {
+    padding: 15px;
+    margin: 10px;
+  }
+
+  form button {
+    width: 100%;
+  }
+}
+
+/* Autocompletat */
+ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 5px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+li {
+  padding: 8px;
+  cursor: pointer;
+}
+
+li:hover {
+  background-color: #f4f4f4;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 50px;
+}

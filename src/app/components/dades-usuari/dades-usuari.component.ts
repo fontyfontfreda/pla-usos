@@ -1,0 +1,23 @@
+import { Component, EventEmitter, Output } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+
+@Component({
+  selector: 'app-dades-usuari',
+  standalone: true,
+  imports: [FormsModule],
+  templateUrl: './dades-usuari.component.html',
+  styleUrls: ['./dades-usuari.component.css']
+})
+export class DadesUsuariComponent {
+  @Output() dadesUsuariSubmit = new EventEmitter<any>(); // Emissor d'esdeveniments per a les dades de l'usuari
+
+  formData = {
+    nom: '',
+    dni: '',
+    actuaEnNomDe: 'nomPropi'
+  };
+
+  onSubmit() {
+    this.dadesUsuariSubmit.emit(this.formData); // Enviar les dades de l'usuari al component pare
+  }
+}
