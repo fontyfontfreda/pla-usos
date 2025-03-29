@@ -4,11 +4,12 @@ import {AdrecaComponent} from '../adreca/adreca.component'; // Importa el compon
 import {ActivitatComponent} from '../activitat/activitat.component'; // Importa el component d'activitat
 import {FormsModule} from '@angular/forms';  // Importa FormsModule
 import {CommonModule} from '@angular/common'; // Afegeix CommonModule
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-formulari',
   standalone: true,
-  imports: [FormsModule, CommonModule, DadesUsuariComponent, AdrecaComponent, ActivitatComponent],
+  imports: [FormsModule, CommonModule, DadesUsuariComponent, AdrecaComponent, ActivitatComponent, RouterModule],
   templateUrl: './formulari.component.html',
   styleUrls: ['./formulari.component.css']
 })

@@ -1,13 +1,12 @@
-//src/app/app.component.ts
 import { Component } from '@angular/core';
-import { FormulariComponent } from './components/formulari/formulari.component'; // 🔹 Importa el component
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  standalone: true, // 🔹 Comprovació que és un component standalone
-  templateUrl: './app.component.html',
-  imports: [FormulariComponent] // 🔹 Aquí afegim el component perquè sigui reconegut
+  standalone: true,
+  imports: [RouterModule],  // Afegeix RouterModule aquí
+  template: '<router-outlet></router-outlet>',  // Aquí es mostrarà el contingut segons la ruta
 })
 export class AppComponent {
-  title = 'adreces-app';
+  // No cal cap codi extra per aquí
 }
