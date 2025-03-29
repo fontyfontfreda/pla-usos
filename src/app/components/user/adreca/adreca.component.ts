@@ -1,5 +1,5 @@
 import {Component, Input, Output, EventEmitter} from '@angular/core';
-import {AdrecaService} from '../../services/adreca.service';
+import {AdrecaService} from '../../../services/adreca.service';
 import {FormsModule} from '@angular/forms';
 import {NgForOf, NgIf} from '@angular/common';  // Importa FormsModule
 
