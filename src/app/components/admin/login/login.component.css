@@ -1,0 +1,86 @@
+/* Estil per al contenidor del formulari */
+form {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Títol del formulari */
+h2 {
+  text-align: center;
+  color: #333;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+/* Estils dels elements del formulari (input, label) */
+label {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 5px;
+  margin-top: 10px;
+}
+
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+  border-color: #4CAF50;  /* Verd quan el camp està enfocat */
+  outline: none;
+}
+
+/* Botó de submit */
+button {
+  padding: 12px;
+  background-color: #4CAF50; /* Verd */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #45a049; /* Verd més fosc quan passa el cursor */
+}
+
+/* Missatges d'error */
+.error-message {
+  color: red;
+  font-size: 14px;
+  margin-top: 10px;
+  text-align: center;
+}
+
+/* Responsive - per pantalles petites */
+@media (max-width: 480px) {
+  form {
+    padding: 15px;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+
+  input[type="text"],
+  input[type="password"],
+  button {
+    font-size: 14px;
+  }
+}

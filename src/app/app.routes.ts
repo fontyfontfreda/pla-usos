@@ -13,7 +13,7 @@ export const routes: Routes = [
   { path: 'formulari', component: FormulariComponent },
   {
     path: 'admin', component: AdminComponent,
-    canActivate: [AuthGuard],
+    //canActivate: [AuthGuard],
   },
   { path: 'login', component: LoginComponent },
   { path: '**', redirectTo: '' }

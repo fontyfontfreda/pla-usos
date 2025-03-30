@@ -1,3 +1,66 @@
-<!-- src/app/components/admin/zona/zona.component.html -->
-<h2>Pàgina Zona</h2>
-<p>Aquí es gestionen les zones.</p>
+<div class="zona-container">
+  <div *ngIf="missatgeError" class="alert alert-danger">
+    {{ missatgeError }}
+  </div>
+
+  <div *ngIf="missatge" class="alert alert-success">
+    {{ missatge }}
+  </div>
+
+  <div class="taules-grup">
+    <div class="div-taula">
+      <h2>Zones</h2>
+      <!-- Formulari per afegir una nova zona -->
+      <div>
+        <input [(ngModel)]="newZona.descripcio_zona" placeholder="Descripció de la zona"/>
+        <button (click)="addZona()">Afegir Zona</button>
+      </div>
+
+      <table>
+        <thead>
+        <tr>
+          <th>Codi Zona</th>
+          <th>Descripció Zona</th>
+          <th>Accions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let zona of zones">
+          <td>{{ zona.codi_zona }}</td>
+          <td>{{ zona.descripcio_zona }}</td>
+          <td>
+            <button (click)="deleteZona(zona)" class="button-delete">Eliminar</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="div-taula">
+      <h2>Àrees</h2>
+      <!-- Formulari per afegir una nova àrea a una zona -->
+      <div>
+        <input [(ngModel)]="newArea.descripcio_area" placeholder="Descripció de l'àrea"/>
+        <button (click)="addArea()">Afegir Àrea</button>
+      </div>
+
+      <table *ngIf="zones.length > 0">
+        <thead>
+        <tr>
+          <th>Codi Àrea</th>
+          <th>Descripció Àrea</th>
+          <th>Accions</th>
+        </tr>
+        </thead>
+        <tbody *ngFor="let zona of zones">
+        <tr *ngFor="let area of zona.arees">
+          <td>{{ area.codi_area }}</td>
+          <td>{{ area.descripcio_area }}</td>
+          <td>
+            <button (click)="deleteArea(area)" class="button-delete">Eliminar</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

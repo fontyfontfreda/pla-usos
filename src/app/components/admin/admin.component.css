@@ -8,3 +8,8 @@
   padding: 20px;
   flex-grow: 1;
 }
+
+.container {
+  display: flex;
+  flex-direction: column;
+}

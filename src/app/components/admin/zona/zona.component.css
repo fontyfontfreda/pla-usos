@@ -1,0 +1,66 @@
+.zona-container {
+  padding: 20px;
+}
+
+input {
+  margin: 5px;
+  padding: 10px;
+}
+
+button {
+  margin: 5px;
+  padding: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
+
+table {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse;
+}
+
+table, th, td {
+  border: 1px solid #ddd;
+}
+
+th, td {
+  padding: 10px;
+  text-align: left;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+.taules-grup {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  gap: 50px;
+}
+
+.div-taula {
+  width: 50%;
+}
+
+.alert {
+  text-align: center;
+}
+
+.alert-danger {
+  color: red;
+}
+
+.alert-success {
+  color: green;
+}
+
+.button-delete {
+  background-color: #E62B01;
+}
+.button-delete:hover {
+  background-color: red;
+}
