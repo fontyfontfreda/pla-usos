@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
 import {ZonaService} from '../../../services/zona.service';
+import {MatDialog} from '@angular/material/dialog';
+import {DialogAddComponent} from './dialog-add/dialog-add.component';
 
 interface Area {
   codi_area: string;
@@ -29,11 +31,11 @@ export class ZonaComponent {
   missatge: string = "";
   missatgeError: string = "";
 
-  constructor(private zonaService: ZonaService) {
+  constructor(private zonaService: ZonaService, public dialog: MatDialog) {
   }
 
   ngOnInit(): void {
-    this.loadZones();
+    this.loadZones().then();
   }
 
   async loadZones() {
@@ -41,14 +43,54 @@ export class ZonaComponent {
     console.log(this.zones)
   }
 
-  addZona() {
-    //   if (this.newZona.descripcio_zona.trim()) {
-    //     this.zonaService.addZona(this.newZona);
-    //     this.newZona = { codi_zona: 0, descripcio_zona: '', arees: [] };  // Reset form
-    //   }
+  addZona(): void {
+    const dialogRef = this.dialog.open(DialogAddComponent, {
+      width: '500px',
+      data: {tipus: 1}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.zonaService.addZona({codi_zona: result.codi, descripcio_zona: result.descripcio, arees: []})
+          .then(r => {
+            this.zones.push({codi_zona: result.codi, descripcio_zona: result.descripcio, arees: []});
+            this.missatge = `Zona ${result.codi} - ${result.descripcio} creada correctament.`;
+          })
+          .catch(error => {
+            console.error("Error al crear la zona:", error);
+
+            // Si l'error ve del backend, mostrem el missatge
+            if (error.response && error.response.data) {
+              this.missatgeError = error.response.data;
+            } else {
+              this.missatgeError = "S'ha produït un error en crear la zona.";
+            }
+          });
+      }
+    });
   }
 
-  //
+  addArea(): void {
+    if (this.zones.length === 0) {
+      alert("No hi ha zones disponibles. Crea una zona primer.");
+      return;
+    }
+
+    const dialogRef = this.dialog.open(DialogAddComponent, {
+      width: '500px',
+      data: {tipus: 2, zones: this.zones}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        const zona = this.zones.find(z => z.codi_zona === result.zonaCodi);
+        if (zona) {
+          zona.arees.push({codi_area: result.codi, descripcio_area: result.descripcio});
+        }
+      }
+    });
+  }
+
   deleteZona(zona: Zona) {
     // Demanem confirmació abans d'eliminar
     const confirmacio = window.confirm(`Segur que vols eliminar la zona ${zona.codi_zona} - ${zona.descripcio_zona}?`);
@@ -75,14 +117,6 @@ export class ZonaComponent {
           this.missatgeError = "S'ha produït un error en eliminar la zona.";
         }
       });
-  }
-
-  //
-  addArea(): void {
-    //   if (this.newArea.descripcio_area.trim()) {
-    //     this.zonaService.addArea(codi_zona, this.newArea);
-    //     this.newArea = { codi_area: 0, descripcio_area: '' };  // Reset form
-    //   }
   }
 
   deleteArea(area: Area): void {

@@ -51,4 +51,15 @@ export class ZonaService {
       throw error;
     }
   }
+
+  async addZona(zona: Zona): Promise<any> {
+    try {
+      const response: AxiosResponse<any> = await axios.post(`${this.API_URL}/zona`, {
+        zona: { zona }, // Enviem les dades al cos de la sol·licitud
+      });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
