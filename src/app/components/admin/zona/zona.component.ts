@@ -26,8 +26,6 @@ interface Zona {
 
 export class ZonaComponent {
   zones: Zona[] = [];
-  newZona: Zona = {codi_zona: 0, descripcio_zona: '', arees: []};
-  newArea: Area = {codi_area: "0", descripcio_area: ''};
   missatge: string = "";
   missatgeError: string = "";
 
@@ -83,9 +81,30 @@ export class ZonaComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        const zona = this.zones.find(z => z.codi_zona === result.zonaCodi);
+        const zona = this.zones.find(z => z.codi_zona === +result.zonaCodi);
+        console.log(zona)
         if (zona) {
-          zona.arees.push({codi_area: result.codi, descripcio_area: result.descripcio});
+          const mateixCodi = zona.arees.find(a => a.codi_area === zona.codi_zona + '.' + result.codi);
+          if (mateixCodi)
+            this.missatgeError = "Ja hi ha una zona amb aquest codi dins la zona " + zona.codi_zona + " - " +
+              zona.descripcio_zona + ": " + mateixCodi.codi_area + " - " + mateixCodi.descripcio_area;
+          else {
+            this.zonaService.addArea({codi_area: result.zonaCodi + '.' + result.codi, descripcio_area: result.descripcio})
+              .then(r => {
+                zona.arees.push({codi_area: zona.codi_zona + '.' + result.codi, descripcio_area: result.descripcio});
+                this.missatge = `Àrea ${zona.codi_zona + '.' + result.codi} - ${result.descripcio} creada correctament.`;
+              })
+              .catch(error => {
+                console.error("Error al crear l'àrea':", error);
+
+                // Si l'error ve del backend, mostrem el missatge
+                if (error.response && error.response.data) {
+                  this.missatgeError = error.response.data;
+                } else {
+                  this.missatgeError = "S'ha produït un error en crear l'àrea.";
+                }
+              });
+          }
         }
       }
     });

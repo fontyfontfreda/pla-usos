@@ -62,4 +62,15 @@ export class ZonaService {
       throw error;
     }
   }
+
+  async addArea(area: Area): Promise<any> {
+    try {
+      const response: AxiosResponse<any> = await axios.post(`${this.API_URL}/area`, {
+        area: { area }, // Enviem les dades al cos de la sol·licitud
+      });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
 }

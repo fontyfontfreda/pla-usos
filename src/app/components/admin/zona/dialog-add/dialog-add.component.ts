@@ -1,13 +1,15 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import {FormsModule} from '@angular/forms';
+import {NgForOf, NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-dialog-add',
   standalone: true,
   imports: [
-    FormsModule
-  ],
+    FormsModule,
+    NgIf,
+    NgForOf],
   templateUrl: './dialog-add.component.html',
   styleUrls: ['./dialog-add.component.css']
 })
