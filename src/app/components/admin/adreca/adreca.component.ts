@@ -13,7 +13,7 @@ import {AdrecaService} from '../../../services/adreca.service';  // Importar el 
   styleUrls: ['./adreca.component.css']
 })
 export class AdrecaComponent {
-
+  isLoading: boolean = false;
   // Llista d'adreces amb el model Adreca
   adreces: Adreca[] = [];
 
@@ -27,9 +27,17 @@ export class AdrecaComponent {
     this.loadAdreces().then();
   }
 
-  async loadAdreces(){
-    this.adreces = await this.adrecaService.getAdreces();
+  async loadAdreces() {
+    this.isLoading = true; // Activa el loader
+    try {
+      this.adreces = await this.adrecaService.getAdreces();
+    } catch (error) {
+      console.error('Error carregant les adreces', error);
+    } finally {
+      this.isLoading = false; // Desactiva el loader quan acaba
+    }
   }
+
 
   // Mètode per filtrar les adreces segons el terme de cerca
   filteredAdreces() {
@@ -44,7 +52,6 @@ export class AdrecaComponent {
 
   // Mètode per veure els detalls d'una adreça
   veureDetalls(adreca: Adreca) {
-    console.log(adreca)
     this.selectedAdreca = { ...adreca };  // Copiar les dades de l'adreça seleccionada
   }
 
