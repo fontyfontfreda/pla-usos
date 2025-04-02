@@ -1,3 +1,44 @@
-<!-- src/app/components/admin/adreca/adreca.component.html -->
-<h2>Pàgina Adreça</h2>
-<p>Aquí es gestionen les adreces.</p>
+<!-- adreca.component.html -->
+<div class="adreca-table">
+  <!-- Input de cerca -->
+  <div class="search-container">
+    <label for="search">Cerca:</label>
+    <input [(ngModel)]="searchTerm" id="search" placeholder="Cerca per DOMCOD o ADREÇA" />
+  </div>
+
+  <!-- Taula de les adreces -->
+  <table>
+    <thead>
+    <tr>
+      <th>DOMCOD</th>
+      <th>ADREÇA</th>
+      <th>Accions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let adreca of filteredAdreces()">
+      <td>{{ adreca.DOMCOD }}</td>
+      <td>{{ adreca.adreca }}</td>
+      <td>
+        <button (click)="verDetalls(adreca)">Veure detalls</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <!-- Modal per editar/eliminar l'adreça -->
+  <div *ngIf="selectedAdreca" class="modal">
+    <div class="modal-content">
+      <h3>Detalls d'Adreça</h3>
+      <label for="DOMCOD">DOMCOD:</label>
+      <input [(ngModel)]="selectedAdreca.DOMCOD" id="DOMCOD" disabled />
+
+      <label for="adreca">Adreça:</label>
+      <input [(ngModel)]="selectedAdreca.adreca" id="adreca" />
+
+      <button (click)="guardarAdreca()">Guardar</button>
+      <button (click)="eliminarAdreca()">Eliminar</button>
+      <button (click)="tancarModal()">Tancar</button>
+    </div>
+  </div>
+</div>
