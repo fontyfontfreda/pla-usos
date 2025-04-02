@@ -1,7 +1,8 @@
 import {Component, Input, Output, EventEmitter} from '@angular/core';
 import {AdrecaService} from '../../../services/adreca.service';
 import {FormsModule} from '@angular/forms';
-import {NgForOf, NgIf} from '@angular/common';  // Importa FormsModule
+import {NgForOf, NgIf} from '@angular/common';
+import {Adreca} from '../../../models/adreca.model';  // Importa FormsModule
 
 @Component({
   selector: 'app-adreca',
@@ -12,11 +13,12 @@ import {NgForOf, NgIf} from '@angular/common';  // Importa FormsModule
 })
 export class AdrecaComponent {
   @Input() adrecaSeleccionada = '';  // Dades d'adreça inicials (si es proporcionen des del component pare)
-  @Output() adrecaSubmit = new EventEmitter<string>(); // Emissor d'esdeveniments per a l'adreça
+  @Output() adrecaSubmit = new EventEmitter<number>(); // Emissor d'esdeveniments per a l'adreça
   @Output() goBackEvent = new EventEmitter<number>(); // Emissor d'esdeveniments per tornar enrera
 
-  adreces: any[] = [];
-  filteredAdreces: any[] = [];
+  adreces: Adreca[] = [];
+  filteredAdreces: Adreca[] = [];
+  domcodSeleccionat: number = 0;
 
   constructor(private adrecaService: AdrecaService) {
   }
@@ -30,20 +32,19 @@ export class AdrecaComponent {
     const query = event.target.value.toLowerCase();
     if (query.length >= 3) {  // Només es filtra quan hi ha almenys 3 caràcters
       this.filteredAdreces = this.adreces.filter(adreca =>
-        (adreca.carrer + ', ' + adreca.numero).toLowerCase().includes(query));
+        (adreca.adreca).toLowerCase().includes(query));
     } else {
       this.filteredAdreces = [];  // Si l'usuari escriu menys de 3 caràcters, es buida la llista
     }
   }
 
   selectAdreca(adreca: any) {
-    this.adrecaSeleccionada = `${adreca.carrer}, ${adreca.numero}`;
+    this.adrecaSeleccionada = `${adreca.adreca}`;
     this.filteredAdreces = [];  // Esborrar les opcions després de la selecció
   }
 
   onSubmit() {
-    this.adrecaSubmit.emit(this.adrecaSeleccionada); // Enviar l'adreça seleccionada al component pare
-    console.log(this.adrecaSeleccionada);
+    this.adrecaSubmit.emit(this.domcodSeleccionat); // Enviar l'adreça seleccionada al component pare
   }
 
   goBack() {

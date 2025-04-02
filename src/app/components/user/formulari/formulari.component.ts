@@ -27,7 +27,6 @@ export class FormulariComponent implements OnInit {
     actuaEnNomDe: 'nomPropi'
   };
 
-  adrecaSeleccionada = '';
   activitatSeleccionada = '';
 
   ngOnInit() {
@@ -42,10 +41,9 @@ export class FormulariComponent implements OnInit {
   }
 
   // Aquesta funció es crida quan es selecciona una adreça
-  onAdrecaSubmit(adreca: string) {
-    if (adreca != '') {
-      this.adrecaSeleccionada = adreca;
-      console.log('Adreça seleccionada:', this.adrecaSeleccionada);
+  onAdrecaSubmit(domcod: number) {
+    if (domcod != 0) {
+      console.log(domcod)
       this.formAdreca = false;
       this.formActivitat = true;
     } else
@@ -61,7 +59,6 @@ export class FormulariComponent implements OnInit {
   onSubmit() {
     console.log('Form Data Final:', {
       ...this.formDataUsuari,
-      adreca: this.adrecaSeleccionada
     });
     // Aquí pots enviar tot a un backend si ho desitges
   }
