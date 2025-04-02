@@ -20,7 +20,7 @@
       <td>{{ adreca.DOMCOD }}</td>
       <td>{{ adreca.adreca }}</td>
       <td>
-        <button (click)="verDetalls(adreca)">Veure detalls</button>
+        <button (click)="veureDetalls(adreca)" class="button-detalls">Veure detalls</button>
       </td>
     </tr>
     </tbody>
@@ -29,16 +29,18 @@
   <!-- Modal per editar/eliminar l'adreça -->
   <div *ngIf="selectedAdreca" class="modal">
     <div class="modal-content">
-      <h3>Detalls d'Adreça</h3>
-      <label for="DOMCOD">DOMCOD:</label>
-      <input [(ngModel)]="selectedAdreca.DOMCOD" id="DOMCOD" disabled />
-
-      <label for="adreca">Adreça:</label>
-      <input [(ngModel)]="selectedAdreca.adreca" id="adreca" />
-
-      <button (click)="guardarAdreca()">Guardar</button>
-      <button (click)="eliminarAdreca()">Eliminar</button>
-      <button (click)="tancarModal()">Tancar</button>
+      <div class="button"><button (click)="tancarModal()">X</button></div>
+      <h3>Detalls de l'adreça</h3>
+      <p><strong>DOMCOD: </strong>{{selectedAdreca.DOMCOD}}</p>
+      <p><strong>ADREÇA: </strong>{{selectedAdreca.adreca}}</p>
+      <p><strong>NUCLICOD: </strong>{{selectedAdreca.nucli_cod}}</p>
+      <p><strong>TIPUS DOMICILI: </strong>{{selectedAdreca.tipus_dom}}</p>
+      <p><strong>TIPUS LOCAL: </strong>{{selectedAdreca.tipus_loc}}</p>
+      <p><strong>AMPLADA CARRER: </strong>{{selectedAdreca.amplada_carrer}}</p>
+      <p><strong>COORD X: </strong>{{selectedAdreca.coord_x}}</p>
+      <p><strong>COORD Y: </strong>{{selectedAdreca.coord_y}}</p>
+      <p><strong>CODI ZONA: </strong>{{selectedAdreca.codi_zona}}</p>
+      <p *ngIf="selectedAdreca.codi_area"><strong>CODI ÀREA: </strong>{{selectedAdreca.codi_area}}</p>
     </div>
   </div>
 </div>

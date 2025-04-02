@@ -15,7 +15,9 @@ export class Adreca {
   coord_x: number;
   coord_y: number;
   zona_id: number;
+  codi_zona: string;
   area_tractament_id?: number;
+  codi_area?: string;
   tipus_carrer_id: number;
 
   constructor(
@@ -28,6 +30,7 @@ export class Adreca {
     coord_x: number,
     coord_y: number,
     zona_id: number,
+    codi_zona: string,
     tipus_carrer_id: number,
     bis?: string,
     pis?: string,
@@ -35,7 +38,8 @@ export class Adreca {
     tipus_dom?: string,
     tipus_loc?: string,
     amplada_carrer?: number,
-    area_tractament_id?: number
+    area_tractament_id?: number,
+    codi_area?: string
   ) {
     this.DOMCOD = DOMCOD;
     this.adreca = adreca;
@@ -46,6 +50,7 @@ export class Adreca {
     this.coord_x = coord_x;
     this.coord_y = coord_y;
     this.zona_id = zona_id;
+    this.codi_zona = codi_zona;
     this.tipus_carrer_id = tipus_carrer_id;
     this.bis = bis;
     this.pis = pis;
@@ -53,6 +58,7 @@ export class Adreca {
     this.tipus_dom = tipus_dom;
     this.tipus_loc = tipus_loc;
     this.amplada_carrer = amplada_carrer;
-    this.area_tractament_id = area_tractament_id;
+    this.area_tractament_id = area_tractament_id
+    this.codi_area = codi_area;
   }
 }

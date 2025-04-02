@@ -43,26 +43,9 @@ export class AdrecaComponent {
   }
 
   // Mètode per veure els detalls d'una adreça
-  verDetalls(adreca: Adreca) {
+  veureDetalls(adreca: Adreca) {
+    console.log(adreca)
     this.selectedAdreca = { ...adreca };  // Copiar les dades de l'adreça seleccionada
-  }
-
-  // Mètode per guardar els canvis d'una adreça
-  guardarAdreca() {
-    console.log('Adreça guardada:', this.selectedAdreca);
-    this.tancarModal();
-  }
-
-  // Mètode per eliminar una adreça
-  eliminarAdreca() {
-    if (this.selectedAdreca) {
-      const index = this.adreces.findIndex(a => a.DOMCOD === this.selectedAdreca!.DOMCOD);
-      if (index > -1) {
-        this.adreces.splice(index, 1);
-        console.log('Adreça eliminada:', this.selectedAdreca);
-        this.tancarModal();
-      }
-    }
   }
 
   // Mètode per tancar el modal
