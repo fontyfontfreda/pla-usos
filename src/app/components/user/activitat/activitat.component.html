@@ -1,6 +1,7 @@
 <!-- Formulari de dades d'usuari -->
 <form (ngSubmit)="onSubmit()">
   <div>
+    <p>Escull l'activitat per a l'adreça {{this.adreca?.adreca}}</p>
     <label for="activitat">Activitat:</label>
     <input type="text" id="activitat" [(ngModel)]="formData.activitat" name="activitat" required />
   </div>

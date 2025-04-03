@@ -1,4 +1,4 @@
-<img src="assets/logo.png" alt="logo">
+<img src="assets/logo.png" alt="logo" class="logo">
 <h2>Pla especial d’usos i activitats de nucli antic d’Olot</h2>
 
 <!-- Formulari de dades de l'usuari -->
@@ -8,7 +8,7 @@
 <app-adreca *ngIf="formAdreca" (adrecaSubmit)="onAdrecaSubmit($event)" (goBackEvent)="goBack($event)"></app-adreca>
 
 <!-- Formulari d'activitat -->
-<app-activitat *ngIf="formActivitat" (activitatSubmit)="onActivitatSubmit($event)" (goBackEvent)="goBack($event)"></app-activitat>
+<app-activitat *ngIf="formActivitat" (activitatSubmit)="onActivitatSubmit($event)" (goBackEvent)="goBack($event)" [adreca]="adrecaSeleccionada"></app-activitat>
 
 <!-- Botó per pujar un fitxer Excel -->
 <!--<div class="upload-section">-->

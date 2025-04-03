@@ -5,6 +5,7 @@ import {ActivitatComponent} from '../activitat/activitat.component'; // Importa 
 import {FormsModule} from '@angular/forms';  // Importa FormsModule
 import {CommonModule} from '@angular/common'; // Afegeix CommonModule
 import {RouterModule} from '@angular/router';
+import {Adreca} from '../../../models/adreca.model';
 
 @Component({
   selector: 'app-formulari',
@@ -20,12 +21,13 @@ export class FormulariComponent implements OnInit {
 
   selectedFile: File | null = null;
 
-
   formDataUsuari = {
     nom: '',
     dni: '',
     actuaEnNomDe: 'nomPropi'
   };
+
+  adrecaSeleccionada: Adreca | null = null;
 
   activitatSeleccionada = '';
 
@@ -41,9 +43,10 @@ export class FormulariComponent implements OnInit {
   }
 
   // Aquesta funció es crida quan es selecciona una adreça
-  onAdrecaSubmit(domcod: number) {
-    if (domcod != 0) {
-      console.log(domcod)
+  onAdrecaSubmit(adreca: Adreca | null) {
+    if (adreca) {
+      this.adrecaSeleccionada = adreca;
+      console.log(adreca.DOMCOD)
       this.formAdreca = false;
       this.formActivitat = true;
     } else
