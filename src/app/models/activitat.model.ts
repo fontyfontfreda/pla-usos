@@ -6,6 +6,9 @@ export class Activitat {
   descripcio_subgrup: string;
   codi_descripcio_activitat: number;
   descripcio_descripcio_activitat: string;
+  id_condicio: number;
+  condicio: string;
+  valor_condicio: string | null;
 
 
   constructor(
@@ -15,7 +18,9 @@ export class Activitat {
     descripcio_subgrup: string,
     codi_descripcio_activitat: number,
     descripcio_descripcio_activitat: string,
-
+    id_condicio: number,
+    condicio: string,
+    valor_condicio: string | null
   ) {
     this.codi_grup = codi_grup;
     this.descripcio_grup = descripcio_grup;
@@ -23,5 +28,8 @@ export class Activitat {
     this.descripcio_subgrup = descripcio_subgrup;
     this.codi_descripcio_activitat = codi_descripcio_activitat;
     this.descripcio_descripcio_activitat = descripcio_descripcio_activitat;
+    this.id_condicio = id_condicio;
+    this.condicio = condicio;
+    this.valor_condicio = valor_condicio;
   }
 }

@@ -1,12 +1,46 @@
 <!-- Formulari de dades d'usuari -->
 <form (ngSubmit)="onSubmit()">
   <div>
-    <p>Escull l'activitat per a l'adreça {{this.adreca?.adreca}}</p>
-    <label for="activitat">Activitat:</label>
-    <input type="text" id="activitat" [(ngModel)]="formData.activitat" name="activitat" required />
+    <p>Escull l'activitat per a l'adreça <strong>{{ this.adreca?.adreca }}</strong></p>
+
+    <div class="seleccionables">
+      <div class="seleccionable">
+
+        <label for="grup">Grup:</label>
+        <select id="grup" [(ngModel)]="selectedGrup" name="grup" (change)="onGrupChange()" required>
+          <option value="" disabled selected>Selecciona un grup</option>
+          <option *ngFor="let grup of grups" [value]="grup">{{ grup }}</option>
+        </select>
+      </div>
+      <div class="seleccionable">
+        <label for="subgrup" *ngIf="subgrups.length > 0">Subgrup:</label>
+        <select id="subgrup" [(ngModel)]="selectedSubgrup" name="subgrup" (change)="onSubgrupChange()"
+                *ngIf="subgrups.length > 0" required>
+          <option value="" disabled selected>Selecciona un subgrup</option>
+          <option *ngFor="let subgrup of subgrups" [value]="subgrup">{{ subgrup }}</option>
+        </select>
+      </div>
+      <div class="seleccionable">
+        <label for="activitat" *ngIf="activitatsFiltrades.length > 0">Activitat:</label>
+        <select id="activitat" [(ngModel)]="selectedActivitat" name="activitat" *ngIf="activitatsFiltrades.length > 0"
+                required>
+          <option value="" disabled selected>Selecciona una activitat</option>
+          <option *ngFor="let act of activitatsFiltrades" [value]="act.nom" [ngStyle]="{ color: getColor(act.condicio) }">{{ act.nom }}</option>
+        </select>
+      </div>
+    </div>
   </div>
+
+  <div class="condicions" *ngIf="activitatsFiltrades.length > 0">
+    <h3>Llegenda de condicions:</h3>
+    <p style="color: green">Les activitats de color verd, són activitats APTES per l'adreça.</p>
+    <p style="color: orange">Les activitats de color taronja, són activitats APTES AMB CONDICIONS per l'adreça.</p>
+    <p style="color: red;">Les activitats de color vermell, són activitats NO aptes per l'adreça.</p>
+  </div>
+
   <div class="buttons">
-    <button (click)="goBack()">Tornar enrera</button>
-    <button type="submit">Enviar</button>
+    <button type="button" (click)="goBack()">Tornar enrera</button>
+    <button type="submit" [disabled]="!selectedActivitat">Enviar</button>
   </div>
 </form>
+

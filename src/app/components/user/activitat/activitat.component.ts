@@ -3,11 +3,12 @@ import { FormsModule } from '@angular/forms';
 import {Adreca} from '../../../models/adreca.model';
 import {Activitat} from '../../../models/activitat.model';
 import {ActivitatService} from '../../../services/activitat.service';
+import {NgForOf, NgIf, NgStyle} from '@angular/common';
 
 @Component({
   selector: 'app-activitat',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, NgIf, NgForOf, NgStyle],
   templateUrl: './activitat.component.html',
   styleUrl: './activitat.component.css'
 })
@@ -18,19 +19,64 @@ export class ActivitatComponent {
 
   activitats: Activitat[] = [];
 
-  constructor(private activitatService: ActivitatService) {
-  }
-
-  async ngOnInit() {
-    this.activitats = await this.activitatService.getActivitats(this.adreca);
-  }
-
   formData = {
     activitat: '',
   };
 
+  grups: string[] = [];
+  subgrups: string[] = [];
+  activitatsFiltrades: { nom: string; condicio: number }[] = [];
+
+  selectedGrup: string = '';
+  selectedSubgrup: string = '';
+  selectedActivitat: string = '';
+
+  constructor(private activitatService: ActivitatService) {
+  }
+
+  ngOnInit() {
+    this.activitatService.getActivitats(this.adreca).then(data => {
+      this.activitats = data;
+      console.log(this.activitats);
+      this.grups = [...new Set(this.activitats.map(a => a.descripcio_grup))];
+    });
+  }
+
+  onGrupChange() {
+    this.subgrups = [
+      ...new Set(
+        this.activitats
+          .filter(a => a.descripcio_grup === this.selectedGrup)
+          .map(a => a.descripcio_subgrup)
+      )
+    ];
+    this.selectedSubgrup = '';
+    this.activitatsFiltrades = [];
+    this.selectedActivitat = '';
+  }
+
+  onSubgrupChange() {
+    this.activitatsFiltrades = this.activitats
+      .filter(a => a.descripcio_grup === this.selectedGrup && a.descripcio_subgrup === this.selectedSubgrup)
+      .map(a => ({
+        nom: a.descripcio_descripcio_activitat,
+        condicio: a.id_condicio
+      }));
+  }
+
+  getColor(condicio: number): string {
+    if (!condicio) return 'black';
+
+    if (condicio == 2 || condicio == 3) return 'green';
+    if (condicio == 1) return 'red';
+
+    return 'orange';
+  }
+
+
   onSubmit() {
-    this.activitatSubmit.emit(this.formData); // Enviar les dades de l'activitat al component pare
+    this.formData.activitat = this.selectedActivitat;
+    this.activitatSubmit.emit(this.formData);
   }
 
   goBack() {

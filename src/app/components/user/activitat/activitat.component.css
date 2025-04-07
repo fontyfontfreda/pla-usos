@@ -64,3 +64,11 @@ form button:hover {
   justify-content: space-between;
   gap: 50px;
 }
+
+form select:disabled {
+  background-color: #eee;
+}
+
+.condicions {
+  margin-top: 20px;
+}
