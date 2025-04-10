@@ -58,9 +58,42 @@ export class ActivitatComponent {
   }
 
   onSubgrupChange() {
+    if (!this.selectedGrup) {
+      // @ts-ignore
+      this.selectedGrup = this.activitats.find(a => a.descripcio_subgrup === this.selectedSubgrup).descripcio_grup;
+
+      this.subgrups = [
+        ...new Set(
+          this.activitats
+            .filter(a => a.descripcio_grup === this.selectedGrup)
+            .map(a => a.descripcio_subgrup)
+        )
+      ];
+    }
     this.activitatsFiltrades = this.activitats
       .filter(a => a.descripcio_grup === this.selectedGrup && a.descripcio_subgrup === this.selectedSubgrup)
       .map(a => a.descripcio_descripcio_activitat);
+  }
+
+  onDescripcioChange() {
+    // @ts-ignore
+    this.selectedGrup = this.activitats.find(a => a.descripcio_descripcio_activitat === this.selectedActivitat).descripcio_grup;
+
+    // @ts-ignore
+    this.selectedSubgrup = this.activitats.find(a => a.descripcio_descripcio_activitat === this.selectedActivitat).descripcio_subgrup;
+
+    this.subgrups = [
+      ...new Set(
+        this.activitats
+          .filter(a => a.descripcio_grup === this.selectedGrup)
+          .map(a => a.descripcio_subgrup)
+      )
+    ];
+
+    this.activitatsFiltrades = this.activitats
+      .filter(a => a.descripcio_grup === this.selectedGrup && a.descripcio_subgrup === this.selectedSubgrup)
+      .map(a => a.descripcio_descripcio_activitat);
+
   }
 
   getColor(activitat: string): string {

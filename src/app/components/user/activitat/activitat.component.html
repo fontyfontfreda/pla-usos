@@ -11,7 +11,7 @@
         </select>
       </div>
       <div class="seleccionable">
-        <label for="subgrup" *ngIf="subgrups.length > 0">Subgrup:</label>
+        <label for="subgrup">Subgrup:</label>
         <select id="subgrup" [(ngModel)]="selectedSubgrup" name="subgrup" (change)="onSubgrupChange()"
                 *ngIf="subgrups.length > 0" required>
           <option value="" disabled selected>Selecciona un subgrup</option>
@@ -20,8 +20,7 @@
       </div>
       <div class="seleccionable">
         <label for="activitat" *ngIf="activitatsFiltrades.length > 0">Activitat:</label>
-        <select id="activitat" [(ngModel)]="selectedActivitat" name="activitat" *ngIf="activitatsFiltrades.length > 0"
-                required>
+        <select id="activitat" [(ngModel)]="selectedActivitat" name="activitat" (change)="onDescripcioChange()" required>
           <option value="" disabled selected>Selecciona una activitat</option>
           <option *ngFor="let act of activitatsFiltrades" [value]="act" [ngStyle]="{ color: getColor(act) }">{{ act }}</option>
         </select>
