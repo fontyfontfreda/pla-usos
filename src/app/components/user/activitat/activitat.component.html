@@ -4,14 +4,14 @@
     <p>*Escull l'activitat per a l'adreça <strong>{{ this.adreca?.adreca }}, ZONA: {{this.adreca?.codi_zona}}{{this.adreca?.codi_area ? ", Àrea: " + this.adreca?.codi_area : ""}}</strong></p>
     <div class="seleccionables">
       <div class="seleccionable">
-        <label for="grup">Grup:</label>
+        <label for="grup">Ús:</label>
         <select id="grup" [(ngModel)]="selectedGrup" name="grup" (change)="onGrupChange()" required>
-          <option value="" disabled selected>Selecciona un grup</option>
+          <option value="" disabled selected>Selecciona un ús</option>
           <option *ngFor="let grup of grups" [value]="grup">{{ grup }}</option>
         </select>
         <input
           type="text"
-          placeholder="O bé escriu aquí per buscar un grup"
+          placeholder="O bé escriu aquí per buscar un ús"
           id="grupText"
           [(ngModel)]="selectedGrup"
           name="grup"
@@ -25,15 +25,15 @@
         </ul>
       </div>
       <div class="seleccionable">
-        <label for="subgrup">Subgrup:</label>
+        <label for="subgrup">Grup:</label>
         <select id="subgrup" [(ngModel)]="selectedSubgrup" name="subgrup" (change)="onSubgrupChange()"
                 *ngIf="subgrups.length > 0" required>
-          <option value="" disabled selected>Selecciona un subgrup</option>
+          <option value="" disabled selected>Selecciona un grup</option>
           <option *ngFor="let subgrup of subgrups" [value]="subgrup">{{ subgrup }}</option>
         </select>
         <input
           type="text"
-          placeholder="O bé escriu aquí per buscar un subgrup"
+          placeholder="O bé escriu aquí per buscar un grup"
           id="subgrupText"
           [(ngModel)]="selectedSubgrup"
           name="subgrup"
@@ -47,14 +47,14 @@
         </ul>
       </div>
       <div class="seleccionable">
-        <label for="activitat">Activitat:</label>
+        <label for="activitat">Epígraf:</label>
         <select id="activitat" [(ngModel)]="selectedActivitat" name="activitat" (change)="onDescripcioChange()" [ngStyle]="{ color: getColor(selectedActivitat) }" required>
-          <option value="" disabled selected>Selecciona una activitat</option>
+          <option value="" disabled selected>Selecciona un epígraf</option>
           <option *ngFor="let act of activitatsFiltrades" [value]="act" [ngStyle]="{ color: getColor(act) }">{{ act }}</option>
         </select>
         <input
           type="text"
-          placeholder="O bé escriu aquí per buscar una activitat"
+          placeholder="O bé escriu aquí per buscar un epígraf"
           id="descripcioText"
           [(ngModel)]="selectedActivitat"
           name="activitat"
@@ -67,15 +67,23 @@
             {{ descripcio }}
           </li>
         </ul>
+        <br>
+        <label *ngIf="altres">Breu descripció de l'epígraf:</label>
+        <input *ngIf="altres"
+          type="text"
+          id="descripcioActivitat"
+          name="descripcioActivitat"
+          required
+        />
       </div>
     </div>
   </div>
 
   <div class="condicions" *ngIf="activitatsFiltrades.length > 0">
     <h3>Llegenda de condicions:</h3>
-    <p style="color: green">Les activitats de color verd, són activitats APTES per l'adreça.</p>
-    <p style="color: orange">Les activitats de color taronja, són activitats APTES AMB CONDICIONS per l'adreça.</p>
-    <p style="color: red;">Les activitats de color vermell, són activitats NO aptes per l'adreça.</p>
+    <p style="color: green">Els epígrafs de color verd, són epígrafs APTES per l'adreça.</p>
+    <p style="color: orange">Els epígrafs de color taronja, són epígrafs APTES AMB CONDICIONS per l'adreça.</p>
+    <p style="color: red;">Els epígrafs de color vermell, són epígrafs NO aptes per l'adreça.</p>
   </div>
 
   <div class="buttons">

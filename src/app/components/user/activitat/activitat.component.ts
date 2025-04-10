@@ -30,6 +30,8 @@ export class ActivitatComponent {
   activitatsFiltrades: string[] = [];
   filteredDescripcions: string[] = [];
 
+  altres: boolean = false;
+
   selectedGrup: string = '';
   selectedSubgrup: string = '';
   selectedActivitat: string = '';
@@ -43,7 +45,7 @@ export class ActivitatComponent {
       console.log(this.activitats);
       this.grups = [...new Set(this.activitats.map(a => a.descripcio_grup))];
       this.subgrups = [...new Set(this.activitats.map(a => a.descripcio_subgrup))];
-      this.activitatsFiltrades = [...new Set(this.activitats.map(a => a.descripcio_descripcio_activitat))]
+      this.activitatsFiltrades = [...new Set(this.activitats.map(a => a.descripcio_descripcio_activitat)), "Altres"]
     });
   }
 
@@ -57,9 +59,9 @@ export class ActivitatComponent {
       )
     ];
     this.selectedSubgrup = '';
-    this.activitatsFiltrades = this.activitats
+    this.activitatsFiltrades = [...new Set(this.activitats
       .filter(a => a.descripcio_grup === this.selectedGrup)
-      .map(a => a.descripcio_descripcio_activitat);
+      .map(a => a.descripcio_descripcio_activitat)), "Altres"];
     this.selectedActivitat = '';
   }
 
@@ -91,9 +93,9 @@ export class ActivitatComponent {
           .map(a => a.descripcio_subgrup)
       )
     ];
-    this.activitatsFiltrades = this.activitats
+    this.activitatsFiltrades = [...new Set(this.activitats
       .filter(a => a.descripcio_grup === this.selectedGrup && a.descripcio_subgrup === this.selectedSubgrup)
-      .map(a => a.descripcio_descripcio_activitat);
+      .map(a => a.descripcio_descripcio_activitat)), "Altres"];
   }
 
   filterSubgrup(event: any) {
@@ -114,24 +116,27 @@ export class ActivitatComponent {
 
   //DESRIPCIONS
   onDescripcioChange() {
-    // @ts-ignore
-    this.selectedGrup = this.activitats.find(a => a.descripcio_descripcio_activitat === this.selectedActivitat).descripcio_grup;
+    if (this.selectedActivitat != "Altres") {
+      this.altres = false;
+      // @ts-ignore
+      this.selectedGrup = this.activitats.find(a => a.descripcio_descripcio_activitat === this.selectedActivitat).descripcio_grup;
 
-    // @ts-ignore
-    this.selectedSubgrup = this.activitats.find(a => a.descripcio_descripcio_activitat === this.selectedActivitat).descripcio_subgrup;
+      // @ts-ignore
+      this.selectedSubgrup = this.activitats.find(a => a.descripcio_descripcio_activitat === this.selectedActivitat).descripcio_subgrup;
 
-    this.subgrups = [
-      ...new Set(
-        this.activitats
-          .filter(a => a.descripcio_grup === this.selectedGrup)
-          .map(a => a.descripcio_subgrup)
-      )
-    ];
+      this.subgrups = [
+        ...new Set(
+          this.activitats
+            .filter(a => a.descripcio_grup === this.selectedGrup)
+            .map(a => a.descripcio_subgrup)
+        )
+      ];
 
-    this.activitatsFiltrades = this.activitats
-      .filter(a => a.descripcio_grup === this.selectedGrup && a.descripcio_subgrup === this.selectedSubgrup)
-      .map(a => a.descripcio_descripcio_activitat);
-
+      this.activitatsFiltrades = [...new Set(this.activitats
+        .filter(a => a.descripcio_grup === this.selectedGrup && a.descripcio_subgrup === this.selectedSubgrup)
+        .map(a => a.descripcio_descripcio_activitat)), "Altres"];
+    } else
+      this.altres = true;
   }
 
   filterDescripcio(event: any) {
