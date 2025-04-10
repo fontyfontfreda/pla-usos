@@ -10,14 +10,20 @@ import { FormsModule } from '@angular/forms';
 })
 export class DadesUsuariComponent {
   @Output() dadesUsuariSubmit = new EventEmitter<any>(); // Emissor d'esdeveniments per a les dades de l'usuari
+  @Output() goBackEvent = new EventEmitter<number>(); // Emissor d'esdeveniments per tornar enrera
+
 
   formData = {
     nom: '',
     dni: '',
-    actuaEnNomDe: 'nomPropi'
+    actuaComA: 'propietari'
   };
 
   onSubmit() {
     this.dadesUsuariSubmit.emit(this.formData); // Enviar les dades de l'usuari al component pare
+  }
+
+  goBack() {
+    this.goBackEvent.emit(1);
   }
 }

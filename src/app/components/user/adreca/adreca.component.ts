@@ -13,12 +13,14 @@ import {Adreca} from '../../../models/adreca.model';  // Importa FormsModule
 })
 export class AdrecaComponent {
   @Input() adrecaSeleccionada = '';  // Dades d'adreça inicials (si es proporcionen des del component pare)
-  @Output() adrecaSubmit = new EventEmitter<Adreca |null>(); // Emissor d'esdeveniments per a l'adreça
+  @Output() adrecaSubmit = new EventEmitter<Adreca | null>(); // Emissor d'esdeveniments per a l'adreça
   @Output() goBackEvent = new EventEmitter<number>(); // Emissor d'esdeveniments per tornar enrera
 
   adreces: Adreca[] = [];
   filteredAdreces: Adreca[] = [];
   adreca: Adreca | null = null;
+
+  modalError: boolean = false;
 
   constructor(private adrecaService: AdrecaService) {
   }
@@ -45,11 +47,18 @@ export class AdrecaComponent {
   }
 
   onSubmit() {
-    this.adrecaSubmit.emit(this.adreca); // Enviar l'adreça seleccionada al component pare
+    if (this.adreca)
+      this.adrecaSubmit.emit(this.adreca); // Enviar l'adreça seleccionada al component pare
+    else
+      this.modalError = true;
   }
 
   goBack() {
     this.goBackEvent.emit(2);
+  }
+
+  tancarModal() {
+    this.modalError = false;
   }
 }
 

@@ -6,16 +6,18 @@ import {FormsModule} from '@angular/forms';  // Importa FormsModule
 import {CommonModule} from '@angular/common'; // Afegeix CommonModule
 import {RouterModule} from '@angular/router';
 import {Adreca} from '../../../models/adreca.model';
+import {PresentacioComponent} from '../presentacio/presentacio.component';
 
 @Component({
   selector: 'app-formulari',
   standalone: true,
-  imports: [FormsModule, CommonModule, DadesUsuariComponent, AdrecaComponent, ActivitatComponent, RouterModule],
+  imports: [FormsModule, CommonModule, DadesUsuariComponent, AdrecaComponent, ActivitatComponent, RouterModule, PresentacioComponent],
   templateUrl: './formulari.component.html',
   styleUrls: ['./formulari.component.css']
 })
 export class FormulariComponent implements OnInit {
-  formDadesUsuari: boolean = true;
+  formPresenatcio: boolean = true;
+  formDadesUsuari: boolean = false;
   formAdreca: boolean = false;
   formActivitat: boolean = false;
 
@@ -34,6 +36,12 @@ export class FormulariComponent implements OnInit {
   ngOnInit() {
   }
 
+  // Aquesta funció es crida quan es submiten la presentació
+  onPresentacioSubmit() {
+    this.formPresenatcio = false;
+    this.formDadesUsuari = true;
+  }
+
   // Aquesta funció es crida quan es submiten les dades de l'usuari
   onDadesUsuariSubmit(dades: any) {
     this.formDataUsuari = dades;
@@ -44,13 +52,9 @@ export class FormulariComponent implements OnInit {
 
   // Aquesta funció es crida quan es selecciona una adreça
   onAdrecaSubmit(adreca: Adreca | null) {
-    if (adreca) {
       this.adrecaSeleccionada = adreca;
-      console.log(adreca.DOMCOD)
       this.formAdreca = false;
       this.formActivitat = true;
-    } else
-      alert("Ha de seleccionar una adreça vàlida")
   }
 
   // Aquesta funció es crida quan es selecciona una adreça
@@ -68,8 +72,11 @@ export class FormulariComponent implements OnInit {
 
   // Funció per tornar enrere al formulari de dades d'usuari
   goBack(page: number) {
-    console.log(page)
     switch (page) {
+      case 1:
+        this.formDadesUsuari = false;
+        this.formPresenatcio = true;
+        break;
       case 2:
         this.formDadesUsuari = true;
         this.formAdreca = false;

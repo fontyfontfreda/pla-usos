@@ -1,5 +1,6 @@
 <!-- Formulari de dades d'usuari -->
 <form (ngSubmit)="onSubmit()">
+<p>*Text explciatiu del formulari.</p>
   <div>
     <label for="nom">Nom:</label>
     <input type="text" id="nom" [(ngModel)]="formData.nom" name="nom" required />
@@ -9,11 +10,16 @@
     <input type="text" id="dni" [(ngModel)]="formData.dni" name="dni" required />
   </div>
   <div>
-    <label for="actuaEnNomDe">Actua en nom de:</label>
-    <select id="actuaEnNomDe" [(ngModel)]="formData.actuaEnNomDe" name="actuaEnNomDe" required>
-      <option value="nomPropi">Nom propi</option>
-      <option value="empresa">Empresa</option>
+    <label for="actuaComA">Actua com a:</label>
+    <select id="actuaComA" [(ngModel)]="formData.actuaComA" name="actuaComA" required>
+      <option value="propietari">Propietari</option>
+      <option value="llogater">Possible llogater</option>
+      <option value="tecnic">Tècnic de projectes</option>
+      <option value="immobiliari">Administrador immobiliari</option>
     </select>
   </div>
-  <button type="submit">Enviar</button>
+  <div class="buttons">
+    <button (click)="goBack()">*Tornar enrera</button>
+    <button type="submit">*Següent</button>
+  </div>
 </form>

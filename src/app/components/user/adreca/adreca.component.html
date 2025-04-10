@@ -1,7 +1,8 @@
 <!-- Formulari d'adreça amb autocompletat -->
 <form (ngSubmit)="onSubmit()">
+  <p>*Text explicatiu formulari</p>
   <div>
-    <label for="adreca">Adreça:</label>
+    <label for="adreca">Adreça del local d'interès:</label>
     <input
       type="text"
       id="adreca"
@@ -17,7 +18,16 @@
     </ul>
   </div>
   <div class="buttons">
-    <button (click)="goBack()">Tornar enrera</button>
-    <button type="submit">Següent</button>
+    <button (click)="goBack()">*Tornar enrera</button>
+    <button type="submit">*Següent</button>
   </div>
 </form>
+
+<div *ngIf="modalError" class="modal">
+  <div class="modal-content">
+    <h3>Atenció, ha de seleccionar una adreça vàlida</h3>
+    <div class="button">
+      <button (click)="tancarModal()">D'acord</button>
+    </div>
+  </div>
+</div>

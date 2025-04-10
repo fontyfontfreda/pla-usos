@@ -2,7 +2,10 @@
 <h2>Pla especial d’usos i activitats de nucli antic d’Olot</h2>
 
 <!-- Formulari de dades de l'usuari -->
-<app-dades-usuari *ngIf="formDadesUsuari" (dadesUsuariSubmit)="onDadesUsuariSubmit($event)"></app-dades-usuari>
+<app-presentacio *ngIf="formPresenatcio" (presentacioSubmit)="onPresentacioSubmit()"></app-presentacio>
+
+<!-- Formulari de dades de l'usuari -->
+<app-dades-usuari *ngIf="formDadesUsuari" (dadesUsuariSubmit)="onDadesUsuariSubmit($event)" (goBackEvent)="goBack($event)"></app-dades-usuari>
 
 <!-- Formulari d'adreça -->
 <app-adreca *ngIf="formAdreca" (adrecaSubmit)="onAdrecaSubmit($event)" (goBackEvent)="goBack($event)"></app-adreca>
