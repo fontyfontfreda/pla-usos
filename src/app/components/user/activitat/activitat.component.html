@@ -2,10 +2,8 @@
 <form (ngSubmit)="onSubmit()">
   <div>
     <p>*Escull l'activitat per a l'adreça <strong>{{ this.adreca?.adreca }}, ZONA: {{this.adreca?.codi_zona}}{{this.adreca?.codi_area ? ", Àrea: " + this.adreca?.codi_area : ""}}</strong></p>
-
     <div class="seleccionables">
       <div class="seleccionable">
-
         <label for="grup">Grup:</label>
         <select id="grup" [(ngModel)]="selectedGrup" name="grup" (change)="onGrupChange()" required>
           <option value="" disabled selected>Selecciona un grup</option>
@@ -25,7 +23,7 @@
         <select id="activitat" [(ngModel)]="selectedActivitat" name="activitat" *ngIf="activitatsFiltrades.length > 0"
                 required>
           <option value="" disabled selected>Selecciona una activitat</option>
-          <option *ngFor="let act of activitatsFiltrades" [value]="act.nom" [ngStyle]="{ color: getColor(act.condicio) }">{{ act.nom }}</option>
+          <option *ngFor="let act of activitatsFiltrades" [value]="act" [ngStyle]="{ color: getColor(act) }">{{ act }}</option>
         </select>
       </div>
     </div>

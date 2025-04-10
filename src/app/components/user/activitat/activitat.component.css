@@ -5,7 +5,7 @@ form {
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   margin-bottom: 30px;
-  max-width: 500px;
+  max-width: 80%;
   margin-left: auto;
   margin-right: auto;
 }
@@ -71,4 +71,11 @@ form select:disabled {
 
 .condicions {
   margin-top: 20px;
+}
+
+.seleccionables {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }

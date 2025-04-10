@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import {FormsModule} from '@angular/forms';
 import {Adreca} from '../../../models/adreca.model';
 import {Activitat} from '../../../models/activitat.model';
 import {ActivitatService} from '../../../services/activitat.service';
@@ -25,7 +25,7 @@ export class ActivitatComponent {
 
   grups: string[] = [];
   subgrups: string[] = [];
-  activitatsFiltrades: { nom: string; condicio: number }[] = [];
+  activitatsFiltrades: string[] = [];
 
   selectedGrup: string = '';
   selectedSubgrup: string = '';
@@ -39,6 +39,8 @@ export class ActivitatComponent {
       this.activitats = data;
       console.log(this.activitats);
       this.grups = [...new Set(this.activitats.map(a => a.descripcio_grup))];
+      this.subgrups = [...new Set(this.activitats.map(a => a.descripcio_subgrup))];
+      this.activitatsFiltrades = [...new Set(this.activitats.map(a => a.descripcio_descripcio_activitat))]
     });
   }
 
@@ -58,17 +60,14 @@ export class ActivitatComponent {
   onSubgrupChange() {
     this.activitatsFiltrades = this.activitats
       .filter(a => a.descripcio_grup === this.selectedGrup && a.descripcio_subgrup === this.selectedSubgrup)
-      .map(a => ({
-        nom: a.descripcio_descripcio_activitat,
-        condicio: a.id_condicio
-      }));
+      .map(a => a.descripcio_descripcio_activitat);
   }
 
-  getColor(condicio: number): string {
+  getColor(activitat: string): string {
+    let condicio = this.activitats.find(a => a.descripcio_descripcio_activitat === activitat)?.id_condicio;
     if (!condicio) return 'black';
-
-    if (condicio == 2 || condicio == 3) return 'green';
-    if (condicio == 1) return 'red';
+    else if (+condicio == 2 || +condicio == 3) return 'green';
+    if (+condicio == 1) return 'red';
 
     return 'orange';
   }
