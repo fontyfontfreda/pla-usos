@@ -78,4 +78,33 @@ form select:disabled {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  gap: 50px;
+}
+
+.seleccionable{
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+}
+
+/* Autocompletat */
+ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 5px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+li {
+  padding: 8px;
+  cursor: pointer;
+}
+
+li:hover {
+  background-color: #f4f4f4;
 }

@@ -24,8 +24,11 @@ export class ActivitatComponent {
   };
 
   grups: string[] = [];
+  filteredGrups: string[] = [];
   subgrups: string[] = [];
+  filteredSubgrups: string[] = [];
   activitatsFiltrades: string[] = [];
+  filteredDescripcions: string[] = [];
 
   selectedGrup: string = '';
   selectedSubgrup: string = '';
@@ -44,6 +47,7 @@ export class ActivitatComponent {
     });
   }
 
+  //GRUPS
   onGrupChange() {
     this.subgrups = [
       ...new Set(
@@ -53,28 +57,62 @@ export class ActivitatComponent {
       )
     ];
     this.selectedSubgrup = '';
-    this.activitatsFiltrades = [];
+    this.activitatsFiltrades = this.activitats
+      .filter(a => a.descripcio_grup === this.selectedGrup)
+      .map(a => a.descripcio_descripcio_activitat);
     this.selectedActivitat = '';
   }
 
-  onSubgrupChange() {
-    if (!this.selectedGrup) {
-      // @ts-ignore
-      this.selectedGrup = this.activitats.find(a => a.descripcio_subgrup === this.selectedSubgrup).descripcio_grup;
-
-      this.subgrups = [
-        ...new Set(
-          this.activitats
-            .filter(a => a.descripcio_grup === this.selectedGrup)
-            .map(a => a.descripcio_subgrup)
-        )
-      ];
+  filterGrup(event: any) {
+    const query = event.target.value.toLowerCase();
+    if (query.length >= 1) {  // Només es filtra quan hi ha almenys 1 caràcter
+      this.filteredGrups = this.grups.filter(grup =>
+        (grup).toLowerCase().includes(query));
+    } else {
+      this.filteredGrups = [];  // Si l'usuari escriu menys d'1 caràcter, es buida la llista
     }
+  }
+
+  selectGrup(grup: string) {
+    this.selectedGrup = grup;
+    this.onGrupChange();
+    this.filteredGrups = []
+  }
+
+  //SUBGRUPS
+  onSubgrupChange() {
+    // @ts-ignore
+    this.selectedGrup = this.activitats.find(a => a.descripcio_subgrup === this.selectedSubgrup).descripcio_grup;
+
+    this.subgrups = [
+      ...new Set(
+        this.activitats
+          .filter(a => a.descripcio_grup === this.selectedGrup)
+          .map(a => a.descripcio_subgrup)
+      )
+    ];
     this.activitatsFiltrades = this.activitats
       .filter(a => a.descripcio_grup === this.selectedGrup && a.descripcio_subgrup === this.selectedSubgrup)
       .map(a => a.descripcio_descripcio_activitat);
   }
 
+  filterSubgrup(event: any) {
+    const query = event.target.value.toLowerCase();
+    if (query.length >= 1) {  // Només es filtra quan hi ha almenys 1 caràcter
+      this.filteredSubgrups = this.subgrups.filter(subgrup =>
+        (subgrup).toLowerCase().includes(query));
+    } else {
+      this.filteredSubgrups = [];  // Si l'usuari escriu menys d'1 caràcter, es buida la llista
+    }
+  }
+
+  selectSubgrup(subgrup: string) {
+    this.selectedSubgrup = subgrup;
+    this.onSubgrupChange();
+    this.filteredSubgrups = []
+  }
+
+  //DESRIPCIONS
   onDescripcioChange() {
     // @ts-ignore
     this.selectedGrup = this.activitats.find(a => a.descripcio_descripcio_activitat === this.selectedActivitat).descripcio_grup;
@@ -94,6 +132,22 @@ export class ActivitatComponent {
       .filter(a => a.descripcio_grup === this.selectedGrup && a.descripcio_subgrup === this.selectedSubgrup)
       .map(a => a.descripcio_descripcio_activitat);
 
+  }
+
+  filterDescripcio(event: any) {
+    const query = event.target.value.toLowerCase();
+    if (query.length >= 1) {  // Només es filtra quan hi ha almenys 1 caràcter
+      this.filteredDescripcions = this.activitatsFiltrades.filter(descripcio =>
+        (descripcio).toLowerCase().includes(query));
+    } else {
+      this.filteredDescripcions = [];  // Si l'usuari escriu menys d'1 caràcter, es buida la llista
+    }
+  }
+
+  selectDescripcio(descripcio: string) {
+    this.selectedActivitat = descripcio;
+    this.onDescripcioChange();
+    this.filteredDescripcions = []
   }
 
   getColor(activitat: string): string {

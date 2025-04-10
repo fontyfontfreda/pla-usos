@@ -9,6 +9,20 @@
           <option value="" disabled selected>Selecciona un grup</option>
           <option *ngFor="let grup of grups" [value]="grup">{{ grup }}</option>
         </select>
+        <input
+          type="text"
+          placeholder="O bé escriu aquí per buscar un grup"
+          id="grupText"
+          [(ngModel)]="selectedGrup"
+          name="grup"
+          (input)="filterGrup($event)"
+          required
+        />
+        <ul *ngIf="filteredGrups.length > 0">
+          <li *ngFor="let grup of filteredGrups" (click)="selectGrup(grup)">
+            {{ grup }}
+          </li>
+        </ul>
       </div>
       <div class="seleccionable">
         <label for="subgrup">Subgrup:</label>
@@ -17,13 +31,42 @@
           <option value="" disabled selected>Selecciona un subgrup</option>
           <option *ngFor="let subgrup of subgrups" [value]="subgrup">{{ subgrup }}</option>
         </select>
+        <input
+          type="text"
+          placeholder="O bé escriu aquí per buscar un subgrup"
+          id="subgrupText"
+          [(ngModel)]="selectedSubgrup"
+          name="subgrup"
+          (input)="filterSubgrup($event)"
+          required
+        />
+        <ul *ngIf="filteredSubgrups.length > 0">
+          <li *ngFor="let subgrup of filteredSubgrups" (click)="selectSubgrup(subgrup)">
+            {{ subgrup }}
+          </li>
+        </ul>
       </div>
       <div class="seleccionable">
-        <label for="activitat" *ngIf="activitatsFiltrades.length > 0">Activitat:</label>
-        <select id="activitat" [(ngModel)]="selectedActivitat" name="activitat" (change)="onDescripcioChange()" required>
+        <label for="activitat">Activitat:</label>
+        <select id="activitat" [(ngModel)]="selectedActivitat" name="activitat" (change)="onDescripcioChange()" [ngStyle]="{ color: getColor(selectedActivitat) }" required>
           <option value="" disabled selected>Selecciona una activitat</option>
           <option *ngFor="let act of activitatsFiltrades" [value]="act" [ngStyle]="{ color: getColor(act) }">{{ act }}</option>
         </select>
+        <input
+          type="text"
+          placeholder="O bé escriu aquí per buscar una activitat"
+          id="descripcioText"
+          [(ngModel)]="selectedActivitat"
+          name="activitat"
+          (input)="filterDescripcio($event)"
+          required
+          [ngStyle]="{ color: getColor(selectedActivitat) }"
+        />
+        <ul *ngIf="filteredDescripcions.length > 0">
+          <li *ngFor="let descripcio of filteredDescripcions" (click)="selectDescripcio(descripcio)" [ngStyle]="{ color: getColor(descripcio) }">
+            {{ descripcio }}
+          </li>
+        </ul>
       </div>
     </div>
   </div>
