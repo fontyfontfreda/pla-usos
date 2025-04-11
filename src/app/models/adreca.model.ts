@@ -19,6 +19,7 @@ export class Adreca {
   area_tractament_id?: number;
   codi_area?: string;
   tipus_carrer_id: number;
+  imatge?: string;
 
   constructor(
     DOMCOD: number,
@@ -39,7 +40,8 @@ export class Adreca {
     tipus_loc?: string,
     amplada_carrer?: number,
     area_tractament_id?: number,
-    codi_area?: string
+    codi_area?: string,
+    imatge?: string
   ) {
     this.DOMCOD = DOMCOD;
     this.adreca = adreca;
@@ -60,5 +62,6 @@ export class Adreca {
     this.amplada_carrer = amplada_carrer;
     this.area_tractament_id = area_tractament_id
     this.codi_area = codi_area;
+    this.imatge = imatge;
   }
 }

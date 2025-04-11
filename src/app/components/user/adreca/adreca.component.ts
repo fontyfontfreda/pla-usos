@@ -3,6 +3,7 @@ import {AdrecaService} from '../../../services/adreca.service';
 import {FormsModule} from '@angular/forms';
 import {NgForOf, NgIf} from '@angular/common';
 import {Adreca} from '../../../models/adreca.model';  // Importa FormsModule
+import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-adreca',
@@ -21,8 +22,17 @@ export class AdrecaComponent {
   adreca: Adreca | null = null;
 
   modalError: boolean = false;
+  srcUrl!: SafeResourceUrl;
 
-  constructor(private adrecaService: AdrecaService) {
+  constructor(private adrecaService: AdrecaService, private sanitizer: DomSanitizer) {
+    this.safeUrl("0", "0");
+  }
+
+  safeUrl(x: string, y: string) {
+    if (x !== "0" && y !== "0") {
+      const url = `https://sig.olot.cat/minimapa/Pla-usos.asp?X=${x}&Y=${y}`;
+      this.srcUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+    }
   }
 
   async ngOnInit() {
@@ -44,6 +54,7 @@ export class AdrecaComponent {
     this.adrecaSeleccionada = `${adreca.adreca}`;
     this.adreca = adreca;
     this.filteredAdreces = [];  // Esborrar les opcions després de la selecció
+    this.safeUrl(adreca.coord_x, adreca.coord_y);
   }
 
   onSubmit() {

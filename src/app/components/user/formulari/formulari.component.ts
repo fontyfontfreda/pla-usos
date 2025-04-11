@@ -67,7 +67,6 @@ export class FormulariComponent implements OnInit {
     console.log('Form Data Final:', {
       ...this.formDataUsuari,
     });
-    // Aquí pots enviar tot a un backend si ho desitges
   }
 
   // Funció per tornar enrere al formulari de dades d'usuari

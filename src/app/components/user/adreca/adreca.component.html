@@ -1,27 +1,34 @@
 <!-- Formulari d'adreça amb autocompletat -->
-<form (ngSubmit)="onSubmit()">
-  <p>*Text explicatiu formulari</p>
-  <div>
-    <label for="adreca">Adreça del local d'interès:</label>
-    <input
-      type="text"
-      id="adreca"
-      [(ngModel)]="adrecaSeleccionada"
-      name="adreca"
-      (input)="filterAdreces($event)"
-      required
-    />
-    <ul *ngIf="filteredAdreces.length > 0">
-      <li *ngFor="let adreca of filteredAdreces" (click)="selectAdreca(adreca)">
-        {{ adreca.adreca }}
-      </li>
-    </ul>
-  </div>
-  <div class="buttons">
-    <button (click)="goBack()">*Tornar enrera</button>
-    <button type="submit">*Següent</button>
-  </div>
-</form>
+<div class="container">
+  <img *ngIf="adreca?.imatge" [src]="adreca?.imatge" alt="imatge del local">
+
+  <form (ngSubmit)="onSubmit()">
+    <p>*Text explicatiu formulari</p>
+    <div>
+      <label for="adreca">Adreça del local d'interès:</label>
+      <input
+        type="text"
+        id="adreca"
+        [(ngModel)]="adrecaSeleccionada"
+        name="adreca"
+        (input)="filterAdreces($event)"
+        required
+      />
+      <ul *ngIf="filteredAdreces.length > 0">
+        <li *ngFor="let adreca of filteredAdreces" (click)="selectAdreca(adreca)">
+          {{ adreca.adreca }}
+        </li>
+      </ul>
+    </div>
+
+
+    <div class="buttons">
+      <button (click)="goBack()">*Tornar enrera</button>
+      <button type="submit">*Següent</button>
+    </div>
+  </form>
+  <iframe *ngIf="srcUrl" [src]="srcUrl" width="20%"></iframe>
+</div>
 
 <div *ngIf="modalError" class="modal">
   <div class="modal-content">
