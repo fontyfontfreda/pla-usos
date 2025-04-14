@@ -17,6 +17,7 @@
           name="grup"
           (input)="filterGrup($event)"
           required
+          (click)="clean()"
         />
         <ul *ngIf="filteredGrups.length > 0">
           <li *ngFor="let grup of filteredGrups" (click)="selectGrup(grup)">
@@ -39,6 +40,7 @@
           name="subgrup"
           (input)="filterSubgrup($event)"
           required
+          (click)="clean()"
         />
         <ul *ngIf="filteredSubgrups.length > 0">
           <li *ngFor="let subgrup of filteredSubgrups" (click)="selectSubgrup(subgrup)">
@@ -61,6 +63,7 @@
           (input)="filterDescripcio($event)"
           required
           [ngStyle]="{ color: getColor(selectedActivitat) }"
+          (click)="clean()"
         />
         <ul *ngIf="filteredDescripcions.length > 0">
           <li *ngFor="let descripcio of filteredDescripcions" (click)="selectDescripcio(descripcio)" [ngStyle]="{ color: getColor(descripcio) }">

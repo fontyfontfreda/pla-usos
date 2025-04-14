@@ -42,7 +42,6 @@ export class ActivitatComponent {
   ngOnInit() {
     this.activitatService.getActivitats(this.adreca).then(data => {
       this.activitats = data;
-      console.log(this.activitats);
       this.grups = [...new Set(this.activitats.map(a => a.descripcio_grup))];
       this.subgrups = [...new Set(this.activitats.map(a => a.descripcio_subgrup))];
       this.activitatsFiltrades = [...new Set(this.activitats.map(a => a.descripcio_descripcio_activitat)), "Altres"]
@@ -172,5 +171,15 @@ export class ActivitatComponent {
 
   goBack() {
     this.goBackEvent.emit(3);
+  }
+
+  clean() {
+    this.grups = [...new Set(this.activitats.map(a => a.descripcio_grup))];
+    this.subgrups = [...new Set(this.activitats.map(a => a.descripcio_subgrup))];
+    this.activitatsFiltrades = [...new Set(this.activitats.map(a => a.descripcio_descripcio_activitat)), "Altres"];
+    this.selectedActivitat = '';
+    this.selectedSubgrup = '';
+    this.selectedGrup = '';
+
   }
 }

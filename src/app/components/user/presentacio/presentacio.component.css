@@ -1,21 +1,28 @@
 .container {
   margin: 0 100px;
+  text-align: justify;
 }
 
 h1 {
   text-align: center;
 }
 
-h2 {
-  text-align: justify;
+.punt {
+  margin-left: 30px;
 }
 
-pre {
-  font-family: Arial;
+.imatge {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+li {
+  margin-bottom: 8px; /* ajusta-ho segons necessitis */
 }
 
 button {
-  background-color: #4CAF50;
+  background-color: blueviolet;
   color: white;
   padding: 10px 20px;
   border: none;
@@ -27,5 +34,12 @@ button {
 }
 
 form button:hover {
-  background-color: #45a049;
+  background-color: violet;
+}
+
+.boto {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding: 8px 0px;
 }
