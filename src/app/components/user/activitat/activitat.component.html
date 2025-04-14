@@ -1,7 +1,9 @@
 <!-- Formulari de dades d'usuari -->
 <form (ngSubmit)="onSubmit()">
   <div>
-    <p>*Escull l'activitat per a l'adreça <strong>{{ this.adreca?.adreca }}, ZONA: {{this.adreca?.codi_zona}}{{this.adreca?.codi_area ? ", Àrea: " + this.adreca?.codi_area : ""}}</strong></p>
+    <p>*Escull l'activitat per a l'adreça <strong>{{ this.adreca?.adreca }},
+      ZONA: {{ this.adreca?.codi_zona }}{{ this.adreca?.codi_area ? ", Àrea: " + this.adreca?.codi_area : "" }}</strong>
+    </p>
     <div class="seleccionables">
       <div class="seleccionable">
         <label for="grup">Ús:</label>
@@ -50,9 +52,11 @@
       </div>
       <div class="seleccionable">
         <label for="activitat">Epígraf:</label>
-        <select id="activitat" [(ngModel)]="selectedActivitat" name="activitat" (change)="onDescripcioChange()" [ngStyle]="{ color: getColor(selectedActivitat) }" required>
+        <select id="activitat" [(ngModel)]="selectedActivitat" name="activitat" (change)="onDescripcioChange()"
+                [ngStyle]="{ color: getColor(selectedActivitat) }" required>
           <option value="" disabled selected>Selecciona un epígraf</option>
-          <option *ngFor="let act of activitatsFiltrades" [value]="act" [ngStyle]="{ color: getColor(act) }">{{ act }}</option>
+          <option *ngFor="let act of activitatsFiltrades" [value]="act" [ngStyle]="{ color: getColor(act) }">{{ act }}
+          </option>
         </select>
         <input
           type="text"
@@ -66,17 +70,18 @@
           (click)="clean()"
         />
         <ul *ngIf="filteredDescripcions.length > 0">
-          <li *ngFor="let descripcio of filteredDescripcions" (click)="selectDescripcio(descripcio)" [ngStyle]="{ color: getColor(descripcio) }">
+          <li *ngFor="let descripcio of filteredDescripcions" (click)="selectDescripcio(descripcio)"
+              [ngStyle]="{ color: getColor(descripcio) }">
             {{ descripcio }}
           </li>
         </ul>
         <br>
         <label *ngIf="altres">Breu descripció de l'epígraf:</label>
         <input *ngIf="altres"
-          type="text"
-          id="descripcioActivitat"
-          name="descripcioActivitat"
-          required
+               type="text"
+               id="descripcioActivitat"
+               name="descripcioActivitat" [(ngModel)]="descripcioActivitat"
+               required
         />
       </div>
     </div>

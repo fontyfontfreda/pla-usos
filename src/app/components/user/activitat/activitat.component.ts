@@ -36,6 +36,8 @@ export class ActivitatComponent {
   selectedSubgrup: string = '';
   selectedActivitat: string = '';
 
+  descripcioActivitat: string = "";
+
   constructor(private activitatService: ActivitatService) {
   }
 
@@ -117,6 +119,7 @@ export class ActivitatComponent {
   onDescripcioChange() {
     if (this.selectedActivitat != "Altres") {
       this.altres = false;
+      this.descripcioActivitat = "";
       // @ts-ignore
       this.selectedGrup = this.activitats.find(a => a.descripcio_descripcio_activitat === this.selectedActivitat).descripcio_grup;
 
@@ -165,8 +168,13 @@ export class ActivitatComponent {
 
 
   onSubmit() {
-    this.formData.activitat = this.selectedActivitat;
-    this.activitatSubmit.emit(this.formData);
+    let activitat = this.activitats.find(a => a.descripcio_descripcio_activitat === this.selectedActivitat);
+    if (this.altres) {
+      activitat = this.activitats[0];
+      activitat["is_altres"] = true;
+      activitat["descripcio_activitat"] = this.descripcioActivitat;
+    }
+    this.activitatSubmit.emit(activitat);
   }
 
   goBack() {

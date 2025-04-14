@@ -1,4 +1,13 @@
 <img src="assets/logo.png" alt="logo" class="logo">
+
+<div *ngIf="missatgeError" class="alert alert-danger">
+  {{ missatgeError }}
+</div>
+
+<div *ngIf="missatge" class="alert alert-success">
+  {{ missatge }}
+</div>
+
 <h2 *ngIf="!formPresenatcio">Pla Especial Urbanístic d’Usos i activitats de nucli antic d’Olot</h2>
 
 <!-- Formulari de dades de l'usuari -->

@@ -18,4 +18,15 @@ export class ActivitatService {
       return [];
     }
   }
+
+  async sendActivitat(dades: any): Promise<any> {
+    try {
+      const response: AxiosResponse<any> = await axios.post(`${this.API_URL}/consulta`, {
+        dades: { dades }, // Enviem les dades al cos de la sol·licitud
+      });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
 }

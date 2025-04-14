@@ -6,6 +6,8 @@ export class Activitat {
   descripcio_subgrup: string;
   codi_descripcio_activitat: number;
   descripcio_descripcio_activitat: string;
+  descripcio_activitat: string | null  = null;
+  is_altres: boolean = false;
   id_condicio: number;
   condicio: string;
   valor_condicio: string | null;

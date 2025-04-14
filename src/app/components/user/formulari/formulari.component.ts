@@ -7,6 +7,8 @@ import {CommonModule} from '@angular/common'; // Afegeix CommonModule
 import {RouterModule} from '@angular/router';
 import {Adreca} from '../../../models/adreca.model';
 import {PresentacioComponent} from '../presentacio/presentacio.component';
+import {Activitat} from '../../../models/activitat.model';
+import {ActivitatService} from '../../../services/activitat.service';
 
 @Component({
   selector: 'app-formulari',
@@ -21,6 +23,9 @@ export class FormulariComponent implements OnInit {
   formAdreca: boolean = false;
   formActivitat: boolean = false;
 
+  missatge: string = "";
+  missatgeError: string = "";
+
   selectedFile: File | null = null;
 
   formDataUsuari = {
@@ -31,7 +36,10 @@ export class FormulariComponent implements OnInit {
 
   adrecaSeleccionada: Adreca | null = null;
 
-  activitatSeleccionada = '';
+  activitatSeleccionada: Activitat | null = null;
+
+  constructor(private activitatService: ActivitatService) {
+  }
 
   ngOnInit() {
   }
@@ -45,22 +53,40 @@ export class FormulariComponent implements OnInit {
   // Aquesta funció es crida quan es submiten les dades de l'usuari
   onDadesUsuariSubmit(dades: any) {
     this.formDataUsuari = dades;
-    console.log('Dades d\'usuari:', this.formDataUsuari);
     this.formDadesUsuari = false;
     this.formAdreca = true;
   }
 
   // Aquesta funció es crida quan es selecciona una adreça
   onAdrecaSubmit(adreca: Adreca | null) {
-      this.adrecaSeleccionada = adreca;
-      this.formAdreca = false;
-      this.formActivitat = true;
+    this.adrecaSeleccionada = adreca;
+    this.formAdreca = false;
+    this.formActivitat = true;
   }
 
-  // Aquesta funció es crida quan es selecciona una adreça
-  onActivitatSubmit(activitat: string) {
+  // Aquesta funció es crida quan es selecciona una activitat
+  onActivitatSubmit(activitat: Activitat) {
     this.activitatSeleccionada = activitat;
-    console.log('Activitat seleccionada:', this.activitatSeleccionada);
+    this.activitatService.sendActivitat({
+      "usuari": this.formDataUsuari,
+      "adreca": this.adrecaSeleccionada,
+      "activitat": this.activitatSeleccionada
+    })
+      .then(r => {
+        this.missatge = `Dades enviades correctament.`;
+      })
+      .catch(error => {
+        console.error("Error a l'enviar les dades:", error);
+
+        // Si l'error ve del backend, mostrem el missatge
+        if (error.response && error.response.data) {
+          this.missatgeError = error.response.data;
+        } else {
+          this.missatgeError = "S'ha produït un error a l'enviar les dades.";
+        }
+      });
+    console.log('Dades:',);
+
   }
 
   onSubmit() {
