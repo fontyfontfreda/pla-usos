@@ -7,6 +7,9 @@
   background-color: #f4f4f4;
   padding-top: 20px;
   transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .sidebar.hidden {
@@ -35,4 +38,23 @@
 
 .active {
   font-weight: bold;
+}
+
+.boto {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding-bottom: 50px;
+}
+
+button {
+  background-color: darkred;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  width: 50%;
+  transition: background-color 0.3s;
 }

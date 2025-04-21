@@ -1,30 +1,44 @@
 // src/app/services/auth.service.ts
 import { Injectable } from '@angular/core';
+import axios, { AxiosResponse } from 'axios';
 import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private loggedIn: boolean = false;
+  private API_URL = 'http://localhost:3000/api/login'; // URL del login
 
   constructor(private router: Router) {}
 
-  login(username: string, password: string): boolean {
-    // Aquí faries una crida a un backend per verificar les credencials
-    if (username === 'admin' && password === 'password') {  // Exemple simplificat
-      this.loggedIn = true;
-      return true;
+  async login(username: string, password: string): Promise<boolean> {
+    try {
+      const response: AxiosResponse<any> = await axios.post(this.API_URL, { username, password });
+
+      if (response.data.token) {
+        // Guarda el token al localStorage
+        localStorage.setItem('token', response.data.token);
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      console.error('Error en login', error);
+      return false;
     }
-    return false;
   }
 
   logout() {
-    this.loggedIn = false;
+    localStorage.removeItem('token');
     this.router.navigate(['/login']);
   }
 
   isAuthenticated(): boolean {
-    return this.loggedIn;
+    const token = localStorage.getItem('token');
+    return !!token;
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem('token');
   }
 }
