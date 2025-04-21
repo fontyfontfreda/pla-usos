@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LocalComponent } from './local.component';
+import { UsuariComponent } from './usuari.component';
 
-describe('LocalComponent', () => {
-  let component: LocalComponent;
-  let fixture: ComponentFixture<LocalComponent>;
+describe('UsuariComponent', () => {
+  let component: UsuariComponent;
+  let fixture: ComponentFixture<UsuariComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [LocalComponent]
+      imports: [UsuariComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(LocalComponent);
+    fixture = TestBed.createComponent(UsuariComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

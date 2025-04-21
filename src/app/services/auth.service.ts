@@ -7,38 +7,40 @@ import { Router } from '@angular/router';
   providedIn: 'root',
 })
 export class AuthService {
+  private loggedIn: boolean = false;
   private API_URL = 'http://localhost:3000/api/login'; // URL del login
 
   constructor(private router: Router) {}
 
-  async login(username: string, password: string): Promise<boolean> {
-    try {
-      const response: AxiosResponse<any> = await axios.post(this.API_URL, { username, password });
-
-      if (response.data.token) {
-        // Guarda el token al localStorage
-        localStorage.setItem('token', response.data.token);
-        return true;
-      } else {
+  login(username: string, password: string): Promise<boolean> {
+    return axios
+      .post<any>(this.API_URL, { username, password })
+      .then((response: AxiosResponse<any>) => {
+        if (response.data.token) {
+          localStorage.setItem('jwt_token', response.data.token); // Desa el token a localStorage
+          this.loggedIn = true;
+          return true;
+        } else {
+          return false;
+        }
+      })
+      .catch((error) => {
+        console.error('Error en login', error);
         return false;
-      }
-    } catch (error) {
-      console.error('Error en login', error);
-      return false;
-    }
+      });
   }
 
   logout() {
-    localStorage.removeItem('token');
+    this.loggedIn = false;
+    localStorage.removeItem('jwt_token'); // Elimina el token en logout
     this.router.navigate(['/login']);
   }
 
   isAuthenticated(): boolean {
-    const token = localStorage.getItem('token');
-    return !!token;
+    return !!localStorage.getItem('jwt_token');
   }
 
   getToken(): string | null {
-    return localStorage.getItem('token');
+    return localStorage.getItem('jwt_token');
   }
 }

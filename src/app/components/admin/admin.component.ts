@@ -1,22 +1,22 @@
 import {Component, ViewChild} from '@angular/core';
 import {SidebarComponent} from './sidebar/sidebar.component';
 import {ZonaComponent} from './zona/zona.component';
-import {LocalComponent} from './local/local.component';
 import {AdrecaComponent} from './adreca/adreca.component';
 import {NgIf} from '@angular/common';
+import {UsuariComponent} from './usuari/usuari.component';
 
 
 @Component({
   selector: 'app-admin',
   standalone: true,
-  imports: [SidebarComponent, ZonaComponent, LocalComponent, AdrecaComponent, NgIf],
+  imports: [SidebarComponent, ZonaComponent, AdrecaComponent, UsuariComponent, NgIf],
   templateUrl: './admin.component.html',
   styleUrl: './admin.component.css'
 })
 export class AdminComponent {
   zonaComponent: boolean = true;
-  localComponent: boolean = false;
   adrecaComponent: boolean = false;
+  usuariComponent: boolean = false;
 
 
   canviComponent(pagina: number) {
@@ -26,10 +26,10 @@ export class AdminComponent {
         this.zonaComponent = true;
         break;
       case 2:
-        this.localComponent = true;
+        this.adrecaComponent = true;
         break;
       case 3:
-        this.adrecaComponent = true;
+        this.usuariComponent = true;
         break;
       default:
         break;
@@ -39,6 +39,6 @@ export class AdminComponent {
   tancarPagines() {
     this.zonaComponent = false;
     this.adrecaComponent = false;
-    this.localComponent = false;
+    this.usuariComponent = false;
   }
 }

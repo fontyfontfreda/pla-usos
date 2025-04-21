@@ -1,6 +1,6 @@
 // adreca.model.ts
 export class Adreca {
-  DOMCOD: number; // Clau primària, auto_increment
+  DOMCOD: number;
   adreca: string;
   nucli_cod: string;
   codi_carrer: number;

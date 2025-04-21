@@ -1,0 +1,22 @@
+<!-- adreca.component.html -->
+<div *ngIf="isLoading" class="loader">
+  🔄 Carregant usuaris...
+</div>
+
+<ul *ngIf="!isLoading">
+  <div class="usuaris-table">
+    <!-- Taula dels usuaris -->
+    <table>
+      <thead>
+      <tr>
+        <th>Nom Usuari</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let usuari of usuaris">
+        <td>{{ usuari.usuari }}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</ul>

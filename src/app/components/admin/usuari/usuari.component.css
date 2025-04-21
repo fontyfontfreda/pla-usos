@@ -1,0 +1,11 @@
+/* adreca.component.css */
+.usuaris-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.usuaris-table th, .usuaris-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}

@@ -1,6 +1,7 @@
 //src/app/services/zona.service.ts
 import {Injectable} from '@angular/core';
 import axios, {AxiosResponse} from 'axios';
+import { AuthService } from './auth.service';
 
 interface Area {
   codi_area: string;
@@ -20,6 +21,8 @@ interface Zona {
 export class ZonaService {
   private API_URL = 'http://localhost:3000/api/zones'; // Enllaç al backend
 
+  constructor(private authService: AuthService) {}
+
   async getZones(): Promise<Zona[]> {
     try {
       const response: AxiosResponse<any[]> = await axios.get(this.API_URL);
@@ -32,7 +35,11 @@ export class ZonaService {
 
   async deleteArea(codi_area: string): Promise<any> {
     try {
+      const token = this.authService.getToken();
       const response: AxiosResponse<any> = await axios.delete(`${this.API_URL}/area`, {
+        headers: {
+          Authorization: `Bearer ${token}` // Afegir el token a l'encapçalament
+        },
         data: { codi_area }, // Enviem les dades al cos de la sol·licitud
       });
       return response.data;
@@ -43,7 +50,11 @@ export class ZonaService {
 
   async deleteZona(codi_zona: number): Promise<any> {
     try {
+      const token = this.authService.getToken();
       const response: AxiosResponse<any> = await axios.delete(`${this.API_URL}/zona`, {
+        headers: {
+          Authorization: `Bearer ${token}` // Afegir el token a l'encapçalament
+        },
         data: { codi_zona }, // Enviem les dades al cos de la sol·licitud
       });
       return response.data;
@@ -54,9 +65,16 @@ export class ZonaService {
 
   async addZona(zona: Zona): Promise<any> {
     try {
-      const response: AxiosResponse<any> = await axios.post(`${this.API_URL}/zona`, {
-        zona: { zona }, // Enviem les dades al cos de la sol·licitud
-      });
+      const token = this.authService.getToken();
+      const response: AxiosResponse<any> = await axios.post(
+        `${this.API_URL}/zona`,
+        { zona }, // <-- Aquest és el body
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // <-- Aquest és l'encapçalament
+          },
+        }
+      );
       return response.data;
     } catch (error) {
       throw error;
@@ -65,12 +83,20 @@ export class ZonaService {
 
   async addArea(area: Area): Promise<any> {
     try {
-      const response: AxiosResponse<any> = await axios.post(`${this.API_URL}/area`, {
-        area: { area }, // Enviem les dades al cos de la sol·licitud
-      });
+      const token = this.authService.getToken();
+      const response: AxiosResponse<any> = await axios.post(
+        `${this.API_URL}/area`,
+        { area }, // <-- Aquest és el body
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // <-- Aquest és l'encapçalament
+          },
+        }
+      );
       return response.data;
     } catch (error) {
       throw error;
     }
   }
+
 }
