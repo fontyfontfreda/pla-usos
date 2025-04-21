@@ -1,22 +1,62 @@
-<!-- adreca.component.html -->
 <div *ngIf="isLoading" class="loader">
   🔄 Carregant usuaris...
 </div>
 
-<ul *ngIf="!isLoading">
+<div *ngIf="!isLoading" class="container">
+  <!-- Botó alta nou usuari -->
+  <div class="button">
+    <button (click)="usuariDialog = true;">Alta usuari</button>
+  </div>
+
   <div class="usuaris-table">
     <!-- Taula dels usuaris -->
     <table>
       <thead>
       <tr>
         <th>Nom Usuari</th>
+        <th>Accions</th> <!-- Nova columna -->
       </tr>
       </thead>
       <tbody>
       <tr *ngFor="let usuari of usuaris">
         <td>{{ usuari.usuari }}</td>
+        <td>
+          <div class="buttons-accions">
+            <button (click)="obrirCanviContrasenya(usuari)" style="background: #E0AD03">
+              <i class="fa fa-pencil"></i>
+            </button>
+            <button (click)="esborrarUsuari(usuari)" style="background: darkred">
+              <i class="fa fa-trash"></i>
+            </button>
+          </div>
+        </td>
       </tr>
       </tbody>
     </table>
   </div>
-</ul>
+</div>
+
+<!-- Modal alta usuari -->
+<div *ngIf="usuariDialog" class="altaUsuariDialog">
+  <div class="dialog-content">
+    <h3>Formulari d'alta d'un nou usuari</h3>
+    <input type="text" [(ngModel)]="nouUsuari.usuari" placeholder="Usuari"/>
+    <input type="password" [(ngModel)]="nouUsuari.contrasenya" placeholder="Contrasenya"/>
+    <div class="dialog-buttons">
+      <button (click)="guardarUsuari()">Guardar</button>
+      <button (click)="usuariDialog = false;">Tancar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal canvi contrasenya -->
+<div *ngIf="canviContrasenyaDialog" class="altaUsuariDialog">
+  <div class="dialog-content">
+    <h3>Canviar contrasenya de {{ usuariSeleccionat?.usuari }}</h3>
+    <input type="password" [(ngModel)]="novaContrasenya" placeholder="Nova contrasenya"/>
+    <div class="dialog-buttons">
+      <button (click)="guardarNovaContrasenya()">Guardar Contrasenya</button>
+      <button (click)="canviContrasenyaDialog = false;">Tancar</button>
+    </div>
+  </div>
+</div>

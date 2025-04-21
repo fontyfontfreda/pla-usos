@@ -1,7 +1,8 @@
 // src/app/services/usuari.service.ts
-import { Injectable } from '@angular/core';
-import axios, { AxiosResponse } from 'axios';
-import { AuthService } from './auth.service'; // Per obtenir el token
+import {Injectable} from '@angular/core';
+import axios, {AxiosResponse} from 'axios';
+import {AuthService} from './auth.service';
+import {Usuari} from '../models/usuari.model'; // Per obtenir el token
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,8 @@ import { AuthService } from './auth.service'; // Per obtenir el token
 export class UsuariService {
   private API_URL = 'http://localhost:3000/api/usuaris'; // Enllaç al backend
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService) {
+  }
 
   async getUsuaris(): Promise<any[]> {
     try {
@@ -25,4 +27,52 @@ export class UsuariService {
       return [];
     }
   }
+
+  async addUsuari(usuari: Usuari): Promise<any> {
+    try {
+      const response: AxiosResponse<any> = await axios.post(
+        `http://localhost:3000/api/register`,
+        {username: usuari.usuari, password: usuari.contrasenya}, // <-- Aquest és el body
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async updateContrasenya(usuari: string, novaContrasenya: string): Promise<any> {
+    try {
+      const token = this.authService.getToken();
+      const response: AxiosResponse<any> = await axios.put(
+        this.API_URL+`/${usuari}/contrasenya`,
+        { novaContrasenya },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async deleteUsuari(usuari: string): Promise<any> {
+    try {
+      const token = this.authService.getToken();
+      const response: AxiosResponse<any> = await axios.delete(
+        this.API_URL+`/${usuari}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
 }
