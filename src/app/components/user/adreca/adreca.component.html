@@ -27,7 +27,11 @@
       <button type="submit">*Següent</button>
     </div>
   </form>
-  <iframe *ngIf="srcUrl" [src]="srcUrl" width="20%"></iframe>
+
+  <div style="position: relative; width: 20%;">
+    <iframe *ngIf="srcUrl" [src]="srcUrl" width="100%" height="100%" style="pointer-events: none;"></iframe>
+  </div>
+
 </div>
 
 <div *ngIf="modalError" class="modal">
