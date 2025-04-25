@@ -4,6 +4,7 @@ import {ConsultaService} from '../../../services/consulta.service';
 import {Consulta} from '../../../models/constulta.model';
 import {NgForOf, NgIf} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-consulta',
@@ -12,7 +13,8 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
     NgForOf,
     NgIf,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './consulta.component.html',
   styleUrl: './consulta.component.css'
@@ -22,7 +24,9 @@ export class ConsultaComponent implements OnInit {
   selectedConsulta: Consulta | null = null;
   searchTerm: string = '';
 
-  constructor(private constultaService: ConsultaService, public dialog: MatDialog) {
+  generantPDF: boolean = false;
+
+  constructor(private consultaService: ConsultaService, public dialog: MatDialog) {
   }
 
   ngOnInit(): void {
@@ -31,7 +35,7 @@ export class ConsultaComponent implements OnInit {
 
   async loadConsultes() {
     try {
-      this.consultes = await this.constultaService.getConsultes();
+      this.consultes = await this.consultaService.getConsultes();
       console.log(this.consultes)
     } catch (error) {
       console.error('Error carregant les adreces', error);
@@ -52,6 +56,29 @@ export class ConsultaComponent implements OnInit {
   // Mètode per veure els detalls d'una consulta
   veureDetalls(consulta: Consulta) {
     this.selectedConsulta = { ...consulta };  // Copiar les dades de la consulta seleccionada
+  }
+
+  // Mètode per geenrar l'informe
+  generarPDF(consulta: Consulta) {
+    this.generantPDF = true;
+    this.consultaService.generarPDF(consulta.id)
+      .then(response => {
+        this.generantPDF = false;
+        // Crear un URL per al fitxer blob rebut
+        const fileURL = URL.createObjectURL(response);
+
+        // Crear un enllaç per la descàrrega del fitxer
+        const a = document.createElement('a');
+        a.href = fileURL;
+        a.download = 'informe_final.pdf';  // Nom del fitxer a descarregar
+        document.body.appendChild(a);
+        a.click();  // Simula el clic per descarregar-lo
+        document.body.removeChild(a);
+
+      })
+      .catch(error => {
+        console.error("Error a l'enviar les dades:", error);
+      });
   }
 
   // Mètode per tancar el modal

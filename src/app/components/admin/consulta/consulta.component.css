@@ -10,7 +10,20 @@
   text-align: left;
 }
 
-button {
+.button-detalls {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.button-detalls button{
+  padding: 5px 10px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.modal button {
   padding: 5px 10px;
   background-color: #E62B01;
   color: white;
@@ -18,17 +31,10 @@ button {
   cursor: pointer;
 }
 
-button:hover {
+.modal button:hover {
   background-color: red;
 }
 
-.button-detalls{
-  background-color: #E0AD03;
-}
-
-.button-detalls:hover {
-  background-color: #E0C702;
-}
 
 .modal {
   position: fixed;
@@ -73,4 +79,32 @@ h3 {
 .button{
   display: flex;
   justify-content: end;
+}
+
+.generant-pdf {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Fons negre translúcid */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Per sobre de tot */
+}
+
+.dialog-content {
+  background-color: #ffffff;
+  padding: 20px 30px;
+  border-radius: 8px;
+  text-align: center;
+  width: 20%;
+}
+
+.spinner {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-bottom: 25px;
 }

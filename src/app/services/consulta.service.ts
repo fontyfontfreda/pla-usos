@@ -27,4 +27,20 @@ export class ConsultaService {
       return [];
     }
   }
+
+  async generarPDF(consultaId: number): Promise<any> {
+    try {
+      const token = this.authService.getToken();
+      const response: AxiosResponse<Blob> = await axios.get(`${this.API_URL}/generarPDF/${consultaId}`, {
+        headers: {
+          Authorization: `Bearer ${token}` // Afegir el token a l'encapçalament
+        },
+        responseType: 'blob'  // Indiquem que esperem una resposta com a blob (fitxer)
+      });
+      return response.data; // Retorna el fitxer en forma de Blob
+    } catch (error) {
+      throw error;
+    }
+  }
+
 }

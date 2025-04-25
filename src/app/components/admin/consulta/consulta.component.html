@@ -25,7 +25,10 @@
       <td>{{ consulta.is_valid == 1 ? "Sí" : "No" }}</td>
       <td>{{ consulta.data }}</td>
       <td>
-        <button (click)="veureDetalls(consulta)" class="button-detalls">Veure detalls</button>
+        <div class="button-detalls">
+          <button (click)="veureDetalls(consulta)"><i class="fa fa-eye"></i></button>
+          <button (click)="generarPDF(consulta)"><i class="fa fa-file-pdf-o"></i></button>
+        </div>
       </td>
     </tr>
     </tbody>
@@ -45,11 +48,22 @@
       <p *ngIf="!selectedConsulta.is_altres"><strong>ÚS: </strong>{{ selectedConsulta.grup }}</p>
       <p *ngIf="!selectedConsulta.is_altres"><strong>GRUP: </strong>{{ selectedConsulta.subgrup }}</p>
       <p *ngIf="!selectedConsulta.is_altres"><strong>EPÍGRAF: </strong>{{ selectedConsulta.activitat }}</p>
-      <p *ngIf="selectedConsulta.is_altres"><strong>EPÍGRAF ALTRES: </strong>{{ selectedConsulta.descripcio_altres }}</p>
+      <p *ngIf="selectedConsulta.is_altres"><strong>EPÍGRAF ALTRES: </strong>{{ selectedConsulta.descripcio_altres }}
+      </p>
       <p><strong>ÉS VÀLID: </strong>{{ selectedConsulta.is_valid == 1 ? "SÍ" : "NO" }}</p>
       <p><strong>CONDICIÓ: </strong>{{ selectedConsulta.condicio }}</p>
-      <p *ngIf="selectedConsulta.valor_condicio"><strong>VALOR CONDICIÓ: </strong>{{ selectedConsulta.valor_condicio }}</p>
+      <p *ngIf="selectedConsulta.valor_condicio"><strong>VALOR CONDICIÓ: </strong>{{ selectedConsulta.valor_condicio }}
+      </p>
       <p><strong>DATA: </strong>{{ selectedConsulta.data }}</p>
     </div>
+  </div>
+</div>
+
+<div *ngIf="generantPDF" class="generant-pdf">
+  <div class="dialog-content">
+    <div class="spinner">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+    <p class="mt-2">Generant l'informe PDF...</p>
   </div>
 </div>
