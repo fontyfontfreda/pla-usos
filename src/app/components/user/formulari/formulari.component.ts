@@ -9,11 +9,12 @@ import {Adreca} from '../../../models/adreca.model';
 import {PresentacioComponent} from '../presentacio/presentacio.component';
 import {Activitat} from '../../../models/activitat.model';
 import {ActivitatService} from '../../../services/activitat.service';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-formulari',
   standalone: true,
-  imports: [FormsModule, CommonModule, DadesUsuariComponent, AdrecaComponent, ActivitatComponent, RouterModule, PresentacioComponent],
+  imports: [FormsModule, CommonModule, DadesUsuariComponent, AdrecaComponent, ActivitatComponent, RouterModule, PresentacioComponent, MatProgressSpinnerModule],
   templateUrl: './formulari.component.html',
   styleUrls: ['./formulari.component.css']
 })
@@ -22,6 +23,7 @@ export class FormulariComponent implements OnInit {
   formDadesUsuari: boolean = false;
   formAdreca: boolean = false;
   formActivitat: boolean = false;
+  generantPDF: boolean = false;
 
   missatge: string = "";
   missatgeError: string = "";
@@ -67,13 +69,26 @@ export class FormulariComponent implements OnInit {
   // Aquesta funció es crida quan es selecciona una activitat
   onActivitatSubmit(activitat: Activitat) {
     this.activitatSeleccionada = activitat;
+    this.generantPDF = true;
     this.activitatService.sendActivitat({
       "usuari": this.formDataUsuari,
       "adreca": this.adrecaSeleccionada,
       "activitat": this.activitatSeleccionada
     })
-      .then(r => {
-        this.missatge = `Dades enviades correctament.`;
+      .then(response => {
+        this.generantPDF = false;
+        // Crear un URL per al fitxer blob rebut
+        const fileURL = URL.createObjectURL(response);
+
+        // Crear un enllaç per la descàrrega del fitxer
+        const a = document.createElement('a');
+        a.href = fileURL;
+        a.download = 'informe_final.pdf';  // Nom del fitxer a descarregar
+        document.body.appendChild(a);
+        a.click();  // Simula el clic per descarregar-lo
+        document.body.removeChild(a);
+
+        this.missatge = `Dades enviades correctament i el fitxer s'ha descarregat.`;
       })
       .catch(error => {
         console.error("Error a l'enviar les dades:", error);
@@ -85,8 +100,6 @@ export class FormulariComponent implements OnInit {
           this.missatgeError = "S'ha produït un error a l'enviar les dades.";
         }
       });
-    console.log('Dades:',);
-
   }
 
   onSubmit() {

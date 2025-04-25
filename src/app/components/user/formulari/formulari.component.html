@@ -14,13 +14,25 @@
 <app-presentacio *ngIf="formPresenatcio" (presentacioSubmit)="onPresentacioSubmit()"></app-presentacio>
 
 <!-- Formulari de dades de l'usuari -->
-<app-dades-usuari *ngIf="formDadesUsuari" (dadesUsuariSubmit)="onDadesUsuariSubmit($event)" (goBackEvent)="goBack($event)"></app-dades-usuari>
+<app-dades-usuari *ngIf="formDadesUsuari" (dadesUsuariSubmit)="onDadesUsuariSubmit($event)"
+                  (goBackEvent)="goBack($event)"></app-dades-usuari>
 
 <!-- Formulari d'adreça -->
 <app-adreca *ngIf="formAdreca" (adrecaSubmit)="onAdrecaSubmit($event)" (goBackEvent)="goBack($event)"></app-adreca>
 
 <!-- Formulari d'activitat -->
-<app-activitat *ngIf="formActivitat" (activitatSubmit)="onActivitatSubmit($event)" (goBackEvent)="goBack($event)" [adreca]="adrecaSeleccionada"></app-activitat>
+<app-activitat *ngIf="formActivitat" (activitatSubmit)="onActivitatSubmit($event)" (goBackEvent)="goBack($event)"
+               [adreca]="adrecaSeleccionada"></app-activitat>
+
+
+<div *ngIf="generantPDF" class="generant-pdf">
+  <div class="dialog-content">
+    <div class="spinner">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+    <p class="mt-2">Generant l'informe PDF...</p>
+  </div>
+</div>
 
 <!-- Botó per pujar un fitxer Excel -->
 <!--<div class="upload-section">-->

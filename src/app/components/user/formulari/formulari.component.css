@@ -9,3 +9,31 @@ h2 {
 .logo {
   margin: 15px;
 }
+
+.generant-pdf {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Fons negre translúcid */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Per sobre de tot */
+}
+
+.dialog-content {
+  background-color: #ffffff;
+  padding: 20px 30px;
+  border-radius: 8px;
+  text-align: center;
+  width: 20%;
+}
+
+.spinner {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-bottom: 25px;
+}

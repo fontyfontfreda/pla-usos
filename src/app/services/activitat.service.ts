@@ -21,12 +21,16 @@ export class ActivitatService {
 
   async sendActivitat(dades: any): Promise<any> {
     try {
-      const response: AxiosResponse<any> = await axios.post(`${this.API_URL}/consulta`, {
+      const response: AxiosResponse<Blob> = await axios.post(`${this.API_URL}/consulta`, {
         dades: { dades }, // Enviem les dades al cos de la sol·licitud
+      }, {
+        responseType: 'blob'  // Indiquem que esperem una resposta com a blob (fitxer)
       });
-      return response.data;
+
+      return response.data; // Retorna el fitxer en forma de Blob
     } catch (error) {
       throw error;
     }
   }
+
 }
