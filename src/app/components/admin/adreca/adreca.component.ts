@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Adreca } from '../../../models/adreca.model';
@@ -12,7 +12,7 @@ import {AdrecaService} from '../../../services/adreca.service';  // Importar el 
   templateUrl: './adreca.component.html',
   styleUrls: ['./adreca.component.css']
 })
-export class AdrecaComponent {
+export class AdrecaComponent implements OnInit {
   isLoading: boolean = false;
   // Llista d'adreces amb el model Adreca
   adreces: Adreca[] = [];

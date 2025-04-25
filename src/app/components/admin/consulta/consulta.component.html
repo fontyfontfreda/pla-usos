@@ -1,0 +1,55 @@
+<!-- consulta.component.html -->
+
+<div class="consulta-table">
+  <!-- Input de cerca -->
+  <div class="search-container">
+    <label for="search">Cerca:</label>
+    <input [(ngModel)]="searchTerm" id="search" placeholder="Cerca per DOMCOD o ADREÇA"/>
+  </div>
+
+  <!-- Taula de les consultes -->
+  <table>
+    <thead>
+    <tr>
+      <th>DNI interessat</th>
+      <th>Nom interessat</th>
+      <th>És vàlid?</th>
+      <th>Data</th>
+      <th>Accions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let consulta of filteredConsultes()">
+      <td>{{ consulta.dni_interessat }}</td>
+      <td>{{ consulta.nom_interessat }}</td>
+      <td>{{ consulta.is_valid == 1 ? "Sí" : "No" }}</td>
+      <td>{{ consulta.data }}</td>
+      <td>
+        <button (click)="veureDetalls(consulta)" class="button-detalls">Veure detalls</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <!-- Modal per veure el detall de la consulta -->
+  <div *ngIf="selectedConsulta" class="modal">
+    <div class="modal-content">
+      <div class="button">
+        <button (click)="tancarModal()">X</button>
+      </div>
+      <h3>Detalls de la consulta</h3>
+      <p><strong>DNI INTERESSAT: </strong>{{ selectedConsulta.dni_interessat }}</p>
+      <p><strong>NOM INTERESSAT: </strong>{{ selectedConsulta.nom_interessat }}</p>
+      <p><strong>ACTUACIÓ INTERESSAT: </strong>{{ selectedConsulta.actuacio_interessat }}</p>
+      <p><strong>ADREÇA: </strong>{{ selectedConsulta.adreca }}</p>
+      <p *ngIf="!selectedConsulta.is_altres"><strong>ÚS: </strong>{{ selectedConsulta.grup }}</p>
+      <p *ngIf="!selectedConsulta.is_altres"><strong>GRUP: </strong>{{ selectedConsulta.subgrup }}</p>
+      <p *ngIf="!selectedConsulta.is_altres"><strong>EPÍGRAF: </strong>{{ selectedConsulta.activitat }}</p>
+      <p *ngIf="selectedConsulta.is_altres"><strong>EPÍGRAF ALTRES: </strong>{{ selectedConsulta.descripcio_altres }}</p>
+      <p><strong>ÉS VÀLID: </strong>{{ selectedConsulta.is_valid == 1 ? "SÍ" : "NO" }}</p>
+      <p><strong>CONDICIÓ: </strong>{{ selectedConsulta.condicio }}</p>
+      <p *ngIf="selectedConsulta.valor_condicio"><strong>VALOR CONDICIÓ: </strong>{{ selectedConsulta.valor_condicio }}</p>
+      <p><strong>DATA: </strong>{{ selectedConsulta.data }}</p>
+    </div>
+  </div>
+</div>
