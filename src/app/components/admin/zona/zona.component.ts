@@ -38,7 +38,6 @@ export class ZonaComponent {
 
   async loadZones() {
     this.zones = await this.zonaService.getZones();
-    console.log(this.zones)
   }
 
   addZona(): void {

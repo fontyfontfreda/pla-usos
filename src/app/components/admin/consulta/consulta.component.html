@@ -13,7 +13,7 @@
     <tr>
       <th>DNI interessat</th>
       <th>Nom interessat</th>
-      <th>És vàlid?</th>
+      <th>Epígraf</th>
       <th>Data</th>
       <th>Accions</th>
     </tr>
@@ -22,7 +22,7 @@
     <tr *ngFor="let consulta of filteredConsultes()">
       <td>{{ consulta.dni_interessat }}</td>
       <td>{{ consulta.nom_interessat }}</td>
-      <td>{{ consulta.is_valid == 1 ? "Sí" : "No" }}</td>
+      <td>{{ consulta.activitat }}</td>
       <td>{{ consulta.data }}</td>
       <td>
         <div class="button-detalls">
@@ -50,7 +50,7 @@
       <p *ngIf="!selectedConsulta.is_altres"><strong>EPÍGRAF: </strong>{{ selectedConsulta.activitat }}</p>
       <p *ngIf="selectedConsulta.is_altres"><strong>EPÍGRAF ALTRES: </strong>{{ selectedConsulta.descripcio_altres }}
       </p>
-      <p><strong>ÉS VÀLID: </strong>{{ selectedConsulta.is_valid == 1 ? "SÍ" : "NO" }}</p>
+      <p><strong>ÉS VÀLID(provisional): </strong>{{ selectedConsulta.is_valid == 1 ? "SÍ" : "NO" }}</p>
       <p><strong>CONDICIÓ: </strong>{{ selectedConsulta.condicio }}</p>
       <p *ngIf="selectedConsulta.valor_condicio"><strong>VALOR CONDICIÓ: </strong>{{ selectedConsulta.valor_condicio }}
       </p>

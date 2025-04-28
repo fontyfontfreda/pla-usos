@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import axios, {AxiosResponse} from 'axios';
 import {Adreca} from '../models/adreca.model';
+import {Activitat} from '../models/activitat.model';
+import {AuthService} from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,12 +11,14 @@ export class ActivitatService {
 
   private API_URL = 'http://localhost:3000/api/activitats'; // Enllaç al backend
 
+  constructor(private authService: AuthService) {}
+
   async getActivitats(adreca: Adreca | null): Promise<any[]> {
     try {
       const response: AxiosResponse<any[]> = await axios.get(this.API_URL+'/'+adreca?.DOMCOD);
       return response.data;
     } catch (error) {
-      console.error('Error obtenint adreces:', error);
+      console.error('Error obtenint activitats:', error);
       return [];
     }
   }
@@ -30,6 +34,21 @@ export class ActivitatService {
       return response.data; // Retorna el fitxer en forma de Blob
     } catch (error) {
       throw error;
+    }
+  }
+
+  async getAllActivitats(): Promise<Record<string, Record<string, string[]>>> {
+    try {
+      const token = this.authService.getToken();
+      const response: AxiosResponse<Record<string, Record<string, string[]>>> = await axios.get(this.API_URL, {
+        headers: {
+          Authorization: `Bearer ${token}` // Afegir el token a l'encapçalament
+        }
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error obtenint activitats:', error);
+      return {};
     }
   }
 

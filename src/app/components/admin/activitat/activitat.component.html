@@ -1,0 +1,15 @@
+<ul>
+  <li *ngFor="let grup of objectKeys(activitats)">
+    {{ grup }}
+    <ul>
+      <li *ngFor="let subgrup of objectKeys(activitats[grup])">
+        {{ subgrup }}
+        <ul>
+          <li *ngFor="let activitat of activitats[grup][subgrup]">
+            {{ activitat }}
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
