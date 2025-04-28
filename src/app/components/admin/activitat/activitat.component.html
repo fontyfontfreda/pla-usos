@@ -1,11 +1,19 @@
-<ul>
+<ul class="grup-list">
   <li *ngFor="let grup of objectKeys(activitats)">
-    {{ grup }}
-    <ul>
+    <div class="grup-title" (click)="toggleGrup(grup)">
+      {{ grup }}
+      <span class="arrow">{{ grupSeleccionat === grup ? '▲' : '▼' }}</span>
+    </div>
+
+    <ul *ngIf="grupSeleccionat === grup" class="subgrup-list">
       <li *ngFor="let subgrup of objectKeys(activitats[grup])">
-        {{ subgrup }}
-        <ul>
-          <li *ngFor="let activitat of activitats[grup][subgrup]">
+        <div class="subgrup-title" (click)="toggleSubgrup(subgrup)">
+          {{ subgrup }}
+          <span class="arrow">{{ subgrupSeleccionat === subgrup ? '▲' : '▼' }}</span>
+        </div>
+
+        <ul *ngIf="subgrupSeleccionat === subgrup" class="activitat-list">
+          <li *ngFor="let activitat of activitats[grup][subgrup]" class="activitat-item">
             {{ activitat }}
           </li>
         </ul>

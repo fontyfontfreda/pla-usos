@@ -1,0 +1,59 @@
+/* Llistes base */
+ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+/* Estil grups */
+.grup-title {
+  background-color: #f0f0f0;
+  padding: 10px;
+  margin: 5px 0;
+  cursor: pointer;
+  font-weight: bold;
+  border-radius: 8px;
+  transition: background-color 0.3s;
+}
+
+.grup-title:hover {
+  background-color: #e0e0e0;
+}
+
+/* Estil subgrups */
+.subgrup-title {
+  background-color: #e8f4fc;
+  padding: 8px;
+  margin: 4px 0 0 20px;
+  cursor: pointer;
+  font-weight: 500;
+  border-radius: 6px;
+  transition: background-color 0.3s;
+}
+
+.subgrup-title:hover {
+  background-color: #d0e8f9;
+}
+
+/* Estil activitats */
+.activitat-list {
+  padding-left: 40px;
+  margin-top: 5px;
+  animation: fadeIn 0.3s ease-in;
+}
+
+.activitat-item {
+  padding: 5px 0;
+  font-size: 14px;
+}
+
+/* Fletxa */
+.arrow {
+  float: right;
+  font-size: 12px;
+}
+
+/* Petita animació de desplegament */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
