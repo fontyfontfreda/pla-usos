@@ -4,8 +4,6 @@
 </div>
 
 <ul *ngIf="!isLoading">
-
-
   <div class="adreca-table">
     <!-- Input de cerca -->
     <div class="search-container">
@@ -27,7 +25,10 @@
         <td>{{ adreca.DOMCOD }}</td>
         <td>{{ adreca.adreca }}</td>
         <td>
-          <button (click)="veureDetalls(adreca)" class="button-detalls">Veure detalls</button>
+          <div class="button-detalls">
+            <button (click)="veureDetalls(adreca)"><i class="fa fa-eye"></i></button>
+            <button (click)="editarAdreca(adreca)"><i class="fa fa-pencil"></i></button>
+          </div>
         </td>
       </tr>
       </tbody>
@@ -40,17 +41,74 @@
           <button (click)="tancarModal()">X</button>
         </div>
         <h3>Detalls de l'adreça</h3>
-        <p><strong>DOMCOD: </strong>{{ selectedAdreca.DOMCOD }}</p>
-        <p><strong>ADREÇA: </strong>{{ selectedAdreca.adreca }}</p>
-        <p><strong>NUCLICOD: </strong>{{ selectedAdreca.nucli_cod }}</p>
-        <p><strong>TIPUS DOMICILI: </strong>{{ selectedAdreca.tipus_dom }}</p>
-        <p><strong>TIPUS LOCAL: </strong>{{ selectedAdreca.tipus_loc }}</p>
-        <p><strong>AMPLADA CARRER: </strong>{{ selectedAdreca.amplada_carrer }}</p>
-        <p><strong>COORD X: </strong>{{ selectedAdreca.coord_x }}</p>
-        <p><strong>COORD Y: </strong>{{ selectedAdreca.coord_y }}</p>
-        <p><strong>CODI ZONA: </strong>{{ selectedAdreca.codi_zona }}</p>
-        <p *ngIf="selectedAdreca.codi_area"><strong>CODI ÀREA: </strong>{{ selectedAdreca.codi_area }}</p>
+        <div class="dades_adreca">
+          <div class="dades_text">
+            <p><strong>DOMCOD: </strong>{{ selectedAdreca.DOMCOD }}</p>
+            <p><strong>ADREÇA: </strong>{{ selectedAdreca.adreca }}</p>
+            <p><strong>NUCLICOD: </strong>{{ selectedAdreca.nucli_cod }}</p>
+            <p><strong>TIPUS DOMICILI: </strong>{{ selectedAdreca.tipus_dom }}</p>
+            <p><strong>TIPUS LOCAL: </strong>{{ selectedAdreca.tipus_loc }}</p>
+            <p><strong>AMPLADA CARRER: </strong>{{ selectedAdreca.amplada_carrer }}</p>
+            <p><strong>COORD X: </strong>{{ selectedAdreca.coord_x }}</p>
+            <p><strong>COORD Y: </strong>{{ selectedAdreca.coord_y }}</p>
+            <p><strong>CODI ZONA: </strong>{{ selectedAdreca.codi_zona }}</p>
+            <p *ngIf="selectedAdreca.codi_area"><strong>CODI ÀREA: </strong>{{ selectedAdreca.codi_area }}</p>
+          </div>
+          <div class="dades_img">
+            <img *ngIf="selectedAdreca?.imatge" [src]="selectedAdreca?.imatge" alt="imatge del local">
+          </div>
+        </div>
       </div>
     </div>
   </div>
+
+  <!-- Modal per editar l'adreça -->
+  <div *ngIf="editantAdreca" class="modal">
+    <div class="modal-content">
+      <div class="button">
+        <button (click)="tancarModal()">X</button>
+      </div>
+      <h3>Editar adreça</h3>
+      <form (ngSubmit)="guardarCanvis()">
+        <div class="dades_adreca">
+          <div class="dades_text">
+            <p><strong>DOMCOD: </strong>{{ editantAdreca.DOMCOD }}</p>
+            <p><strong>ADREÇA: </strong>{{ editantAdreca.adreca }}</p>
+            <p><strong>NUCLICOD: </strong>{{ editantAdreca.nucli_cod }}</p>
+
+            <label><strong>TIPUS DOMICILI:</strong>
+              <select [(ngModel)]="editantAdreca.tipus_dom" name="tipus_dom">
+                <option *ngFor="let tipus of tipusDomOptions" [value]="tipus">{{ tipus }}</option>
+              </select>
+            </label>
+
+            <label><strong>TIPUS LOCAL:</strong>
+              <select [(ngModel)]="editantAdreca.tipus_loc" name="tipus_loc">
+                <option *ngFor="let tipus of tipusLocOptions" [value]="tipus">{{ tipus }}</option>
+              </select>
+            </label>
+
+            <label><strong>AMPLADA CARRER:</strong>
+              <input type="number" [(ngModel)]="editantAdreca.amplada_carrer" name="amplada_carrer"/>
+            </label>
+
+            <p><strong>COORD X: </strong>{{ editantAdreca.coord_x }}</p>
+            <p><strong>COORD Y: </strong>{{ editantAdreca.coord_y }}</p>
+            <p><strong>CODI ZONA: </strong>{{ editantAdreca.codi_zona }}</p>
+            <p *ngIf="editantAdreca.codi_area"><strong>CODI ÀREA: </strong>{{ editantAdreca.codi_area }}</p>
+
+            <label><strong>Imatge:</strong>
+              <input type="file" (change)="onImatgeSeleccionada($event)" accept="image/*">
+            </label>
+          </div>
+          <!-- Previsualització de la imatge -->
+          <div *ngIf="editantAdreca.imatge" class="dades_img">
+            <img [src]="editantAdreca?.imatge" alt="Previsualització de la imatge" />
+          </div>
+        </div>
+        <button type="submit">Desar canvis</button>
+      </form>
+    </div>
+  </div>
+
 </ul>

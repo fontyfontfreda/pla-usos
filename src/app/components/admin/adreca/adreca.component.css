@@ -10,7 +10,7 @@
   text-align: left;
 }
 
-button {
+.button button {
   padding: 5px 10px;
   background-color: #E62B01;
   color: white;
@@ -18,16 +18,8 @@ button {
   cursor: pointer;
 }
 
-button:hover {
+.button button:hover {
   background-color: red;
-}
-
-.button-detalls{
-  background-color: #E0AD03;
-}
-
-.button-detalls:hover {
-  background-color: #E0C702;
 }
 
 .modal {
@@ -46,7 +38,7 @@ button:hover {
   background-color: white;
   padding: 20px;
   border-radius: 5px;
-  width: 600px;
+  width: auto;
 }
 
 h3 {
@@ -74,3 +66,69 @@ h3 {
   display: flex;
   justify-content: end;
 }
+
+.dades_adreca {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  justify-content: center;
+}
+
+img {
+  width: 350px;
+}
+
+.button-detalls {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.button-detalls button{
+  padding: 5px 10px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+form label {
+  display: block;
+  margin-top: 0.8rem;
+}
+
+form input {
+  width: 100%;
+  padding: 0.4rem;
+  margin-top: 0.2rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+form button[type="submit"] {
+  margin-top: 1rem;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+form select {
+  width: 100%;
+  padding: 0.4rem;
+  margin-top: 0.2rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+  font-size: 1rem;
+  color: #333;
+  appearance: none; /* elimina l'estil del navegador */
+  background-image: url("data:image/svg+xml;utf8,<svg fill='%23666' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position-x: 100%;
+  background-position-y: 50%;
+  background-size: 1.5em;
+  padding-right: 2em;
+}
+

@@ -79,7 +79,7 @@ export class UsuariComponent {
       return;
     }
 
-    // Aquí hauries de cridar al teu servei per actualitzar la contrasenya
+    // servei per actualitzar la contrasenya
     this.usuariService.updateContrasenya(this.usuariSeleccionat.usuari, this.novaContrasenya)
       .then(response => {
         alert('Contrasenya actualitzada correctament.');

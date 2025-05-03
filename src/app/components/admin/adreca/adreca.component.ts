@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { Adreca } from '../../../models/adreca.model';
+import {FormsModule} from '@angular/forms';
+import {CommonModule} from '@angular/common';
+import {Adreca} from '../../../models/adreca.model';
 import {MatDialog} from '@angular/material/dialog';
 import {AdrecaService} from '../../../services/adreca.service';  // Importar el model Adreca
 
@@ -12,13 +12,41 @@ import {AdrecaService} from '../../../services/adreca.service';  // Importar el 
   templateUrl: './adreca.component.html',
   styleUrls: ['./adreca.component.css']
 })
+
+
 export class AdrecaComponent implements OnInit {
+  tipusDomOptions: string[] = [
+    'ADREÇA POSTAL',
+    'TRIBUTARI',
+    'FINCA',
+    'ALTRES',
+    'Via Pública'
+  ];
+
+  tipusLocOptions: string[] = [
+    'DOMICILI FAMILIAR',
+    'DOMICILI INHABITABLE',
+    'SEGONA RESIDÈNCIA',
+    'DOMICILI FAMILIAR TAPIAT',
+    'DOMICILI COL·LECTIU',
+    'LOCAL',
+    'FINCA',
+    'DOMICILI EN CONSTRUCCIÓ',
+    'DOMICILI TURISTIC',
+    'LOCAL EN CONSTRUCCIÓ',
+    'TRASTER',
+    'GARATGE',
+    'TRANSFORMADOR',
+    'VIA PÚBLICA'
+  ];
+
   isLoading: boolean = false;
   // Llista d'adreces amb el model Adreca
   adreces: Adreca[] = [];
 
   searchTerm: string = '';
   selectedAdreca: Adreca | null = null;
+  editantAdreca: any = null;
 
   constructor(private adrecaService: AdrecaService, public dialog: MatDialog) {
   }
@@ -38,7 +66,6 @@ export class AdrecaComponent implements OnInit {
     }
   }
 
-
   // Mètode per filtrar les adreces segons el terme de cerca
   filteredAdreces() {
     if (!this.searchTerm) {
@@ -52,11 +79,48 @@ export class AdrecaComponent implements OnInit {
 
   // Mètode per veure els detalls d'una adreça
   veureDetalls(adreca: Adreca) {
-    this.selectedAdreca = { ...adreca };  // Copiar les dades de l'adreça seleccionada
+    this.selectedAdreca = {...adreca};  // Copiar les dades de l'adreça seleccionada
   }
 
   // Mètode per tancar el modal
   tancarModal() {
     this.selectedAdreca = null;
+    this.editantAdreca = null;
+  }
+
+  editarAdreca(adreca: any) {
+    this.editantAdreca = { ...adreca }; // clonem per evitar mutació directa
+  }
+
+  onImatgeSeleccionada(event: Event): void {
+    const input = event.target as HTMLInputElement;
+
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        this.editantAdreca.imatge = reader.result as string;
+      };
+
+      reader.readAsDataURL(file); // converteix la imatge a base64
+    }
+  }
+
+  guardarCanvis() {
+    // Aquí pots fer una crida a un servei si cal persistir dades
+    const index = this.adreces.findIndex(a => a.DOMCOD === this.editantAdreca.DOMCOD);
+    if (index > -1) {
+      this.adreces[index] = { ...this.editantAdreca };
+      this.adrecaService.updateAdreca(this.editantAdreca)
+        .then(response => {
+          alert('Adreça actualitzada correctament.');
+        })
+        .catch(error => {
+          console.error('Error actualitzant l\'adreça:', error);
+          alert('Error actualitzant l\'adreça.');
+        });
+    }
+    this.tancarModal();
   }
 }
