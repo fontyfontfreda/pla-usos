@@ -14,10 +14,57 @@
 
         <ul *ngIf="subgrupSeleccionat === subgrup" class="activitat-list">
           <li *ngFor="let activitat of activitats[grup][subgrup]" class="activitat-item">
-            {{ activitat }}
+            <div class="activitat-title" (click)="veureActivitat(activitat)">
+              {{ activitat }}
+            </div>
           </li>
         </ul>
       </li>
     </ul>
   </li>
 </ul>
+
+<div class="modal" *ngIf="activitatSeleccionada" (click)="onBackdropClick($event)">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <button class="tancar-modal" (click)="tancarModal()">✖</button>
+    <h3>Edita l'epígraf: {{ activitatSeleccionada[0].DESCRIPCIO }}</h3>
+
+    <div class="condicions-grid">
+      <div *ngFor="let condicio of activitatSeleccionada" class="condicio">
+        <div>
+        <label *ngIf="condicio.IS_ZONA == 1">Condició per la zona: <strong>{{ condicio.CODI }}</strong></label>
+        <label *ngIf="condicio.IS_ZONA == 0">Condició per l'àrea: <strong>{{ condicio.CODI }}</strong></label>
+          <p *ngIf="!condicio.editant">{{condicio.CONDICIO}}</p>
+        <select [(ngModel)]="condicio.CONDICIO_ID" (change)="onCondicioChange(condicio)" *ngIf="condicio.editant">
+          <option [value]="1">No apte</option>
+          <option [value]="2">Apte</option>
+          <option [value]="3">Apte prioritari</option>
+          <option [value]="4">Distància 50m</option>
+          <option [value]="5">Distància 100m</option>
+          <option [value]="6">Densitat 50m</option>
+          <option [value]="7">Amplaria carrer</option>
+          <option [value]="8">Ubicacio ARE</option>
+          <option [value]="9">Ubicacio parcel·la</option>
+          <option [value]="10">Urbanistica</option>
+          <option [value]="11">Dimensio</option>
+        </select>
+        </div>
+
+        <div *ngIf="condicio.CONDICIO_ID == 6 || condicio.CONDICIO_ID == 7" class="valor-field">
+          <label>Valor:</label>
+          <p *ngIf="!condicio.editant">{{condicio.VALOR}}</p>
+
+          <input [(ngModel)]="condicio.VALOR" type="number" *ngIf="condicio.editant" />
+        </div>
+
+        <div class="modal-buttons">
+          <button (click)="guardarActivitat(condicio)" class="save" *ngIf="condicio.editant">Guardar</button>
+          <button (click)="cancelCondition(condicio)" class="cancel"  *ngIf="condicio.editant">Cancel·lar</button>
+          <button (click)="editCondition(condicio)" class="edit"  *ngIf="!condicio.editant">Editar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+

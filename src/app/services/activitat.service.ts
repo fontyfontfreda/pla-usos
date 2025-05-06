@@ -52,4 +52,37 @@ export class ActivitatService {
     }
   }
 
+  async getActivitat(activitat: string): Promise<any[]> {
+    try {
+      const token = this.authService.getToken();
+      const response: AxiosResponse<any[]> = await axios.get(this.API_URL+'/activitat/'+activitat,{
+        headers: {
+          Authorization: `Bearer ${token}` // Afegir el token a l'encapçalament
+        }
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error obtenint activitat: ' + activitat, error);
+      return [];
+    }
+  }
+
+  async updateCondicio(condicio: any): Promise<any> {
+    try {
+      const token = this.authService.getToken();
+      const response: AxiosResponse<any> = await axios.put(
+        this.API_URL+`/condicio`,
+        { condicio },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
 }
