@@ -43,3 +43,21 @@ form button:hover {
   justify-content: center;
   padding: 8px 0px;
 }
+
+.alerta {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 25px;
+}
+
+.div-alerta{
+  border: 2px solid #F09A74;
+  border-radius: 15px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: #F5B8A4;
+  background: linear-gradient(180deg,rgba(245, 184, 164, 1) 0%, rgba(242, 171, 150, 1) 50%, rgba(241, 144, 105, 1) 100%);
+}
