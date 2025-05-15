@@ -1,3 +1,5 @@
+<button (click)="iniciarNovaActivitat()" class="nou-boto">+ Nova activitat</button>
+
 <ul class="grup-list">
   <li *ngFor="let grup of objectKeys(activitats)">
     <div class="grup-title" (click)="toggleGrup(grup)">
@@ -27,42 +29,95 @@
 <div class="modal" *ngIf="activitatSeleccionada" (click)="onBackdropClick($event)">
   <div class="modal-content" (click)="$event.stopPropagation()">
     <button class="tancar-modal" (click)="tancarModal()">✖</button>
-    <h3>Edita l'epígraf: {{ activitatSeleccionada[0].DESCRIPCIO }}</h3>
+    <h3 *ngIf="!novaActivitatMode">Edita l'epígraf: {{ activitatSeleccionada[0]?.DESCRIPCIO }}</h3>
+    <h3 *ngIf="novaActivitatMode">Crea un nou epígraf</h3>
+
+    <!-- Només per nova activitat -->
+    <div *ngIf="novaActivitatMode" class="condicio condicio-grups">
+      <!-- Selecció de grup -->
+      <div class="grups">
+        <label>ÚS:</label>
+        <div>
+          <select (change)="onGrupSeleccionat($event)">
+            <option [value]="''" disabled selected>Selecciona un ús</option>
+            <option *ngFor="let grup of grupsDisponibles" [value]="grup">{{ grup }}</option>
+          </select>
+        </div>
+        <div>
+          <input [(ngModel)]="novaActivitat.GRUP" placeholder="O escriu un ús nou"/>
+        </div>
+        <div>
+          <input [(ngModel)]="novaActivitat.CODI_GRUP" placeholder="Codi de l'ús"  *ngIf="codiGrup"/>
+        </div>
+      </div>
+
+      <!-- Selecció de subgrup -->
+      <div class="subgrups">
+        <label>Grup:</label>
+        <div>
+          <select (change)="assignarSubgup($event)">
+            <option [value]="''" disabled selected>Selecciona un grup</option>
+            <option *ngFor="let subgrup of subgrupsDisponibles" [value]="subgrup">{{ subgrup }}</option>
+          </select>
+        </div>
+        <div>
+          <input [(ngModel)]="novaActivitat.SUBGRUP" placeholder="O escriu un grup nou"/>
+        </div>
+        <div>
+          <input [(ngModel)]="novaActivitat.CODI_SUBGRUP" placeholder="Codi del grup" *ngIf="codiSubgrup"/>
+        </div>
+      </div>
+      <div class="activitats">
+        <label>Descripció: </label>
+        <div>
+          <input [(ngModel)]="novaActivitat.DESCRIPCIO" placeholder="Escriu una activitat nova"/>
+        </div>
+        <div>
+          <input [(ngModel)]="novaActivitat.CODI_ACTIVITAT" placeholder="Codi de l'activitat"/>
+        </div>
+      </div>
+    </div>
+
+    br
 
     <div class="condicions-grid">
       <div *ngFor="let condicio of activitatSeleccionada" class="condicio">
         <div>
-        <label *ngIf="condicio.IS_ZONA == 1">Condició per la zona: <strong>{{ condicio.CODI }}</strong></label>
-        <label *ngIf="condicio.IS_ZONA == 0">Condició per l'àrea: <strong>{{ condicio.CODI }}</strong></label>
-          <p *ngIf="!condicio.editant">{{condicio.CONDICIO}}</p>
-        <select [(ngModel)]="condicio.CONDICIO_ID" (change)="onCondicioChange(condicio)" *ngIf="condicio.editant">
-          <option [value]="1">No apte</option>
-          <option [value]="2">Apte</option>
-          <option [value]="3">Apte prioritari</option>
-          <option [value]="4">Distància 50m</option>
-          <option [value]="5">Distància 100m</option>
-          <option [value]="6">Densitat 50m</option>
-          <option [value]="7">Amplaria carrer</option>
-          <option [value]="8">Ubicacio ARE</option>
-          <option [value]="9">Ubicacio parcel·la</option>
-          <option [value]="10">Urbanistica</option>
-          <option [value]="11">Dimensio</option>
-        </select>
+          <label *ngIf="condicio.IS_ZONA == 1">Condició per la zona: <strong>{{ condicio.CODI }}</strong></label>
+          <label *ngIf="condicio.IS_ZONA == 0">Condició per l'àrea: <strong>{{ condicio.CODI }}</strong></label>
+          <p *ngIf="!condicio.editant">{{ condicio.CONDICIO }}</p>
+          <select [(ngModel)]="condicio.CONDICIO_ID" (change)="onCondicioChange(condicio)" *ngIf="condicio.editant">
+            <option [value]="1">No apte</option>
+            <option [value]="2">Apte</option>
+            <option [value]="3">Apte prioritari</option>
+            <option [value]="4">Distància 50m</option>
+            <option [value]="5">Distància 100m</option>
+            <option [value]="6">Densitat 50m</option>
+            <option [value]="7">Amplaria carrer</option>
+            <option [value]="8">Ubicacio ARE</option>
+            <option [value]="9">Ubicacio parcel·la</option>
+            <option [value]="10">Urbanistica</option>
+            <option [value]="11">Dimensio</option>
+          </select>
         </div>
 
         <div *ngIf="condicio.CONDICIO_ID == 6 || condicio.CONDICIO_ID == 7" class="valor-field">
           <label>Valor:</label>
-          <p *ngIf="!condicio.editant">{{condicio.VALOR}}</p>
+          <p *ngIf="!condicio.editant">{{ condicio.VALOR }}</p>
 
-          <input [(ngModel)]="condicio.VALOR" type="number" *ngIf="condicio.editant" />
+          <input [(ngModel)]="condicio.VALOR" type="number" *ngIf="condicio.editant"/>
         </div>
 
-        <div class="modal-buttons">
+        <div class="modal-buttons" *ngIf="!novaActivitatMode">
           <button (click)="guardarActivitat(condicio)" class="save" *ngIf="condicio.editant">Guardar</button>
-          <button (click)="cancelCondition(condicio)" class="cancel"  *ngIf="condicio.editant">Cancel·lar</button>
-          <button (click)="editCondition(condicio)" class="edit"  *ngIf="!condicio.editant">Editar</button>
+          <button (click)="cancelCondition(condicio)" class="cancel" *ngIf="condicio.editant">Cancel·lar</button>
+          <button (click)="editCondition(condicio)" class="edit" *ngIf="!condicio.editant">Editar</button>
         </div>
       </div>
+    </div>
+    <div class="modal-buttons" *ngIf="novaActivitatMode">
+      <button (click)="guardarNovaActivitat()" class="save">Crear</button>
+      <button (click)="cancelarNovaActivitat()" class="cancel">Cancel·lar</button>
     </div>
   </div>
 </div>

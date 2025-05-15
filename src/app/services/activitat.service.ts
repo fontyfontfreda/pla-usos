@@ -85,4 +85,56 @@ export class ActivitatService {
     }
   }
 
+  async getZones() {
+    try {
+      const token = this.authService.getToken();
+      const response: AxiosResponse<any> = await axios.put(
+        this.API_URL+`/zones`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getArees() {
+    try {
+      const token = this.authService.getToken();
+      const response: AxiosResponse<any> = await axios.put(
+        this.API_URL+`/arees`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async createActivitat(dades: { SUBGRUP: string; GRUP: string; CONDICIONS: any; DESCRIPCIO: string }) {
+    try {
+      const token = this.authService.getToken();
+      const response: AxiosResponse<any> = await axios.post(
+        this.API_URL,
+        {dades: dades},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }}
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
 }

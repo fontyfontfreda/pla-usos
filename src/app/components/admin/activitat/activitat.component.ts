@@ -15,6 +15,7 @@ import {FormsModule} from '@angular/forms';
   templateUrl: './activitat.component.html',
   styleUrl: './activitat.component.css'
 })
+
 export class ActivitatComponent implements OnInit {
   activitats: Record<string, Record<string, string[]>> = {};
 
@@ -26,6 +27,14 @@ export class ActivitatComponent implements OnInit {
   activitatSeleccionada: any | null = null;
   backupCondicions: Record<number, any> = {};
 
+  novaActivitatMode: boolean = false;
+  novaActivitat: any | null = null;
+
+  grupsDisponibles: string[] = [];
+  subgrupsDisponibles: string[] = [];
+
+  codiGrup: boolean = true;
+  codiSubgrup: boolean = true;
 
   constructor(private activitatService: ActivitatService, public dialog: MatDialog) {}
 
@@ -36,6 +45,8 @@ export class ActivitatComponent implements OnInit {
   async loadActivitats() {
     try {
       this.activitats = await this.activitatService.getAllActivitats();
+      this.grupsDisponibles = Object.keys(this.activitats);
+
       console.log(this.activitats);
     } catch (error) {
       console.error('Error carregant les activitats', error);
@@ -63,6 +74,8 @@ export class ActivitatComponent implements OnInit {
 
   tancarModal() {
     this.activitatSeleccionada = null;
+    this.novaActivitatMode = false;
+    this.novaActivitat = null;
   }
 
   async guardarActivitat(condicio: any) {
@@ -82,7 +95,6 @@ export class ActivitatComponent implements OnInit {
       alert('Error actualitzant la condició.');
     }
   }
-
 
   onCondicioChange(condicio: any) {
     const opcions = {
@@ -121,4 +133,99 @@ export class ActivitatComponent implements OnInit {
     }
     condicio.editant = false;
   }
+
+  async iniciarNovaActivitat() {
+    const condicions = await this.carregarCondicionsInicials(); // per zones i àrees
+
+    this.novaActivitatMode = true;
+    this.novaActivitat = {
+      CODI_GRUP: '',
+      GRUP: '',
+      CODI_SUBGRUP: '',
+      SUBGRUP: '',
+      CODI_ACTIVITAT: '',
+      DESCRIPCIO: '',
+      CONDICIONS: condicions.map(c => ({
+        ...c,
+        editant: true
+      }))
+    };
+    this.activitatSeleccionada = this.novaActivitat.CONDICIONS;
+  }
+
+  async guardarNovaActivitat() {
+    const dades = {
+      GRUP: this.novaActivitat.GRUP,
+      CODI_GRUP: this.novaActivitat.CODI_GRUP,
+      SUBGRUP: this.novaActivitat.SUBGRUP,
+      CODI_SUBGRUP: this.novaActivitat.CODI_SUBGRUP,
+      DESCRIPCIO: this.novaActivitat.DESCRIPCIO,
+      CODI_ACTIVITAT: this.novaActivitat.CODI_ACTIVITAT,
+      CONDICIONS: this.activitatSeleccionada.map((c: any) => ({
+        CODI: c.CODI,
+        ID_ZONA: c.ID_ZONA,
+        IS_ZONA: c.IS_ZONA,
+        CONDICIO_ID: c.CONDICIO_ID,
+        VALOR: c.VALOR
+      }))
+    };
+
+    try {
+      console.log(dades)
+      await this.activitatService.createActivitat(dades);
+      alert('Activitat creada correctament.');
+      this.tancarModal();
+      this.loadActivitats();
+    } catch (error) {
+      console.error('Error creant activitat:', error);
+      alert('Error creant l\'activitat.');
+    }
+  }
+
+  cancelarNovaActivitat() {
+    this.tancarModal();
+  }
+
+  async carregarCondicionsInicials() {
+    const zones = await this.activitatService.getZones();
+    const arees = await this.activitatService.getArees();
+
+    return [
+      ...zones.map((z: { CODI: string, ID: string }) => ({
+        IS_ZONA: 1,
+        ID_ZONA: z.ID,
+        CODI: z.CODI,
+        CONDICIO_ID: null,
+        CONDICIO: '',
+        VALOR: null
+      })),
+      ...arees.map((a: { CODI: string, ID: string }) => ({
+        IS_ZONA: 0,
+        ID_ZONA: a.ID,
+        CODI: a.CODI,
+        CONDICIO_ID: null,
+        CONDICIO: '',
+        VALOR: null
+      }))
+    ];
+
+  }
+
+  onGrupSeleccionat(event: any) {
+    let grup = event.target.value
+    this.novaActivitat.GRUP = grup;
+    this.subgrupsDisponibles = Object.keys(this.activitats[grup] || {});
+    this.codiGrup = false;
+
+    this.novaActivitat.SUBGRUP = '';
+
+  }
+
+  assignarSubgup(event: any) {
+    this.novaActivitat.SUBGRUP = event.target.value;
+    this.codiSubgrup = false;
+  }
+
+  protected readonly event = event;
+
 }
