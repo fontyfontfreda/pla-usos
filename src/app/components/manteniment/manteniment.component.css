@@ -1,0 +1,22 @@
+.maintenance-container {
+  text-align: center;
+  padding: 4rem 2rem;
+  max-width: 600px;
+  margin: auto;
+}
+
+.maintenance-container img {
+  max-width: 100%;
+  height: auto;
+}
+
+.maintenance-container h1 {
+  font-size: 2rem;
+  margin-top: 1.5rem;
+  color: #444;
+}
+
+.maintenance-container p {
+  font-size: 1.2rem;
+  color: #666;
+}

@@ -9,6 +9,7 @@ import {Adreca} from '../../../models/adreca.model';
 import {PresentacioComponent} from '../presentacio/presentacio.component';
 import {Activitat} from '../../../models/activitat.model';
 import {ActivitatService} from '../../../services/activitat.service';
+import {MantenimentService} from '../../../services/manteniment.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
@@ -40,10 +41,11 @@ export class FormulariComponent implements OnInit {
 
   activitatSeleccionada: Activitat | null = null;
 
-  constructor(private activitatService: ActivitatService) {
+  constructor(private activitatService: ActivitatService, private mantenimentService: MantenimentService) {
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    await this.mantenimentService.health();
   }
 
   // Aquesta funció es crida quan es submiten la presentació

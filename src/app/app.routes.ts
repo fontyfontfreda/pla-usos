@@ -5,9 +5,11 @@ import {LoginComponent} from './components/admin/login/login.component';
 import {AuthGuard} from './guards/auth.guard';
 import {AdminComponent} from './components/admin/admin.component';
 import {LoginGuard} from './guards/login.guard';  // Importa el guard
+import {MantenimentComponent} from './components/manteniment/manteniment.component'
 
 export const routes: Routes = [
   {path: '', redirectTo: '/formulari', pathMatch: 'full'},
+  {path: 'manteniment', component: MantenimentComponent},
   {path: 'formulari', component: FormulariComponent},
   {
     path: 'login',
