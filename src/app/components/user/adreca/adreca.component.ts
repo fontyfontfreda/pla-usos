@@ -65,6 +65,7 @@ export class AdrecaComponent {
   }
 
   goBack() {
+    this.adreca = null;
     this.goBackEvent.emit(2);
   }
 

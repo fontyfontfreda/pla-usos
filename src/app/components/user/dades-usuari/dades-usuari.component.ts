@@ -52,6 +52,11 @@ export class DadesUsuariComponent {
 
 
   goBack() {
+    this.formData = {
+      nom: '',
+      dni: '',
+      actuaComA: 'propietari'
+    };
     this.goBackEvent.emit(1);
   }
 }
