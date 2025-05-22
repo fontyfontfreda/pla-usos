@@ -29,6 +29,15 @@
   </div>
 </div>
 
+<div *ngIf="dialogAltres" class="generant-pdf">
+  <div class="dialog-content">
+    <h3>Ha seleccionat l'epígraf "altres", per tant, no podem generar cap informe.</h3>
+    <p class="mt-2">Per més informació, enviï un correu electrònic a <strong>{{ correu }}</strong></p>
+    <p>O bé dirigiu-vos a les oficines ...</p>
+  <button (click)="dialogAltres = false;">Tancar</button>
+  </div>
+</div>
+
 <!-- Botó per pujar un fitxer Excel -->
 <!--<div class="upload-section">-->
 <!--  <label for="fileUpload">Puja un fitxer Excel:</label>-->

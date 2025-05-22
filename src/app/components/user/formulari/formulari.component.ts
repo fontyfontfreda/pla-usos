@@ -26,6 +26,7 @@ export class FormulariComponent implements OnInit {
   formAdreca: boolean = false;
   formActivitat: boolean = false;
   generantPDF: boolean = false;
+  dialogAltres: boolean = false;
 
   textNoti: string = '';
   tipusNoti: 'error' | 'ok' | 'info' = 'info';
@@ -37,6 +38,8 @@ export class FormulariComponent implements OnInit {
     dni: '',
     actuaEnNomDe: 'nomPropi'
   };
+
+  correu: string = 'correu@olot.cat'
 
   adrecaSeleccionada: Adreca | null = null;
 
@@ -72,6 +75,9 @@ export class FormulariComponent implements OnInit {
   // Aquesta funció es crida quan es selecciona una activitat
   onActivitatSubmit(activitat: Activitat) {
     this.activitatSeleccionada = activitat;
+    if(activitat.is_altres){
+      this.dialogAltres = true;
+    }else {
     this.generantPDF = true;
     this.activitatService.sendActivitat({
       "usuari": this.formDataUsuari,
@@ -96,8 +102,6 @@ export class FormulariComponent implements OnInit {
         this.timeOutNoti();
       })
       .catch(error => {
-        console.error("Error a l'enviar les dades:", error);
-
         // Si l'error ve del backend, mostrem el missatge
         if (error.response && error.response.data) {
           this.textNoti = error.response.data;
@@ -109,6 +113,7 @@ export class FormulariComponent implements OnInit {
           this.timeOutNoti();
         }
       });
+    }
   }
 
   onSubmit() {

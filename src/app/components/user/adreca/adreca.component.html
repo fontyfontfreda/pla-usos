@@ -3,7 +3,7 @@
   <img *ngIf="adreca?.imatge" [src]="adreca?.imatge" alt="imatge del local">
 
   <form (ngSubmit)="onSubmit()">
-    <p>*Text explicatiu formulari</p>
+    <p>Seleccioni l'adreça on vol l'activitat:</p>
     <div>
       <label for="adreca">Adreça del local d'interès:</label>
       <input
@@ -23,8 +23,8 @@
 
 
     <div class="buttons">
-      <button (click)="goBack()">*Tornar enrera</button>
-      <button type="submit">*Següent</button>
+      <button (click)="goBack()">Tornar enrera</button>
+      <button type="submit">Següent</button>
     </div>
   </form>
 

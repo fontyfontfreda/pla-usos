@@ -1,7 +1,7 @@
 <!-- Formulari de dades d'usuari -->
 <form (ngSubmit)="onSubmit()">
   <p *ngIf="error != ''" class="error">{{error}}</p>
-  <p>*Text explciatiu del formulari.</p>
+  <p>Introdueix les següents dades:</p>
   <div>
     <label for="nom">Nom:</label>
     <input type="text" id="nom" [(ngModel)]="formData.nom" name="nom" required/>
@@ -21,7 +21,7 @@
     </select>
   </div>
   <div class="buttons">
-    <button (click)="goBack()">*Tornar enrera</button>
-    <button type="submit">*Següent</button>
+    <button (click)="goBack()">Tornar enrera</button>
+    <button type="submit">Següent</button>
   </div>
 </form>
