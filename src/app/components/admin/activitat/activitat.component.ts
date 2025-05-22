@@ -3,6 +3,7 @@ import { ActivitatService } from '../../../services/activitat.service';
 import { MatDialog } from '@angular/material/dialog';
 import {NgForOf, NgIf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
+import {NotificacioComponent} from '../../shared/notificacio/notificacio.component';
 
 @Component({
   selector: 'app-activitat',
@@ -10,7 +11,8 @@ import {FormsModule} from '@angular/forms';
   imports: [
     NgForOf,
     NgIf,
-    FormsModule
+    FormsModule,
+    NotificacioComponent
   ],
   templateUrl: './activitat.component.html',
   styleUrl: './activitat.component.css'
@@ -36,6 +38,9 @@ export class ActivitatComponent implements OnInit {
   codiGrup: boolean = true;
   codiSubgrup: boolean = true;
 
+  textNoti: string = '';
+  tipusNoti: 'error' | 'ok' | 'info' = 'info';
+
   constructor(private activitatService: ActivitatService, public dialog: MatDialog) {}
 
   ngOnInit(): void {
@@ -46,10 +51,10 @@ export class ActivitatComponent implements OnInit {
     try {
       this.activitats = await this.activitatService.getAllActivitats();
       this.grupsDisponibles = Object.keys(this.activitats);
-
-      console.log(this.activitats);
     } catch (error) {
-      console.error('Error carregant les activitats', error);
+      this.textNoti = 'Error carregant les activitats';
+      this.tipusNoti = 'error';
+      this.timeOutNoti();
     }
   }
 
@@ -66,9 +71,10 @@ export class ActivitatComponent implements OnInit {
     try {
       this.activitatSeleccionada = await this.activitatService.getActivitat(activitat);
       this.activitatSeleccionada.forEach((c: { editant: boolean; }) => c.editant = false);
-      console.log(this.activitatSeleccionada);
     } catch (error) {
-      console.error('Error carregant l\'activitat: ' + activitat, error);
+      this.textNoti = 'Error carregant l\'activitat: ' + activitat;
+      this.tipusNoti = 'error';
+      this.timeOutNoti();
     }
   }
 
@@ -83,16 +89,18 @@ export class ActivitatComponent implements OnInit {
       ID: condicio.ID,
       CONDICIO_ID: condicio.CONDICIO_ID,
       VALOR: condicio.VALOR
-      // afegeix aquí només les propietats que el backend necessita
     };
 
     try {
       await this.activitatService.updateCondicio(condicioPlana);
-      alert('Condició actualitzada correctament.');
+      this.textNoti = 'Condició actualitzada correctament.';
+      this.tipusNoti = 'ok';
+      this.timeOutNoti();
       condicio.editant = false;
     } catch (error) {
-      console.error('Error actualitzant la condició:', error);
-      alert('Error actualitzant la condició.');
+      this.textNoti = 'Error actualitzant la condició.';
+      this.tipusNoti = 'error';
+      this.timeOutNoti();
     }
   }
 
@@ -173,12 +181,15 @@ export class ActivitatComponent implements OnInit {
     try {
       console.log(dades)
       await this.activitatService.createActivitat(dades);
-      alert('Activitat creada correctament.');
+      this.textNoti = 'Activitat creada correctament.';
+      this.tipusNoti = 'ok';
+      this.timeOutNoti();
       this.tancarModal();
       this.loadActivitats();
     } catch (error) {
-      console.error('Error creant activitat:', error);
-      alert('Error creant l\'activitat.');
+      this.textNoti = 'Error creant activitat';
+      this.tipusNoti = 'error';
+      this.timeOutNoti();
     }
   }
 
@@ -224,6 +235,12 @@ export class ActivitatComponent implements OnInit {
   assignarSubgup(event: any) {
     this.novaActivitat.SUBGRUP = event.target.value;
     this.codiSubgrup = false;
+  }
+
+  timeOutNoti() {
+    setTimeout(() => {
+      this.textNoti = '';
+    }, 2500);
   }
 
   protected readonly event = event;

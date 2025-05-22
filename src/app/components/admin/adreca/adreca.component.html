@@ -1,4 +1,6 @@
 <!-- adreca.component.html -->
+<app-notificacio *ngIf="textNoti != ''" [text]="textNoti" [tipus]="tipusNoti"></app-notificacio>
+
 <div *ngIf="isLoading" class="loader">
   🔄 Carregant adreces...
 </div>

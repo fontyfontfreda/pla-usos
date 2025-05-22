@@ -1,12 +1,5 @@
+<app-notificacio *ngIf="textNoti != ''" [text]="textNoti" [tipus]="tipusNoti"></app-notificacio>
 <div class="zona-container">
-  <div *ngIf="missatgeError" class="alert alert-danger">
-    {{ missatgeError }}
-  </div>
-
-  <div *ngIf="missatge" class="alert alert-success">
-    {{ missatge }}
-  </div>
-
   <div class="taules-grup">
     <div class="div-taula">
       <h2>Zones</h2>

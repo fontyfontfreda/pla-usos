@@ -11,11 +11,12 @@ import {Activitat} from '../../../models/activitat.model';
 import {ActivitatService} from '../../../services/activitat.service';
 import {MantenimentService} from '../../../services/manteniment.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import {NotificacioComponent} from '../../shared/notificacio/notificacio.component';
 
 @Component({
   selector: 'app-formulari',
   standalone: true,
-  imports: [FormsModule, CommonModule, DadesUsuariComponent, AdrecaComponent, ActivitatComponent, RouterModule, PresentacioComponent, MatProgressSpinnerModule],
+  imports: [FormsModule, CommonModule, DadesUsuariComponent, AdrecaComponent, ActivitatComponent, RouterModule, PresentacioComponent, MatProgressSpinnerModule, NotificacioComponent],
   templateUrl: './formulari.component.html',
   styleUrls: ['./formulari.component.css']
 })
@@ -26,8 +27,8 @@ export class FormulariComponent implements OnInit {
   formActivitat: boolean = false;
   generantPDF: boolean = false;
 
-  missatge: string = "";
-  missatgeError: string = "";
+  textNoti: string = '';
+  tipusNoti: 'error' | 'ok' | 'info' = 'info';
 
   selectedFile: File | null = null;
 
@@ -90,16 +91,22 @@ export class FormulariComponent implements OnInit {
         a.click();  // Simula el clic per descarregar-lo
         document.body.removeChild(a);
 
-        this.missatge = `Dades enviades correctament i el fitxer s'ha descarregat.`;
+        this.textNoti = `Dades enviades correctament i el fitxer s'ha descarregat.`;
+        this.tipusNoti = 'ok';
+        this.timeOutNoti();
       })
       .catch(error => {
         console.error("Error a l'enviar les dades:", error);
 
         // Si l'error ve del backend, mostrem el missatge
         if (error.response && error.response.data) {
-          this.missatgeError = error.response.data;
+          this.textNoti = error.response.data;
+          this.tipusNoti = 'error';
+          this.timeOutNoti();
         } else {
-          this.missatgeError = "S'ha produït un error a l'enviar les dades.";
+          this.textNoti = "S'ha produït un error a l'enviar les dades.";
+          this.tipusNoti = 'error';
+          this.timeOutNoti();
         }
       });
   }
@@ -156,5 +163,11 @@ export class FormulariComponent implements OnInit {
         console.error('Error carregant el fitxer:', error);
         alert('Error en carregar el fitxer.');
       });
+  }
+
+  private timeOutNoti() {
+    setTimeout(() => {
+      this.textNoti = '';
+    }, 2500);
   }
 }

@@ -1,0 +1,20 @@
+.notificacio {
+  padding: 1rem;
+  border-radius: 5px;
+  margin: 1rem 0;
+  color: white;
+  font-weight: bold;
+}
+
+/* Estils segons el tipus */
+.error {
+  background-color: #f44336; /* vermell */
+}
+
+.ok {
+  background-color: #4caf50; /* verd */
+}
+
+.info {
+  background-color: #ff9800; /* groc */
+}

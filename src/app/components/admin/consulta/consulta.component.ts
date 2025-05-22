@@ -5,6 +5,7 @@ import {Consulta} from '../../../models/constulta.model';
 import {NgForOf, NgIf} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import {NotificacioComponent} from '../../shared/notificacio/notificacio.component';
 
 @Component({
   selector: 'app-consulta',
@@ -14,7 +15,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     NgIf,
     ReactiveFormsModule,
     FormsModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    NotificacioComponent
   ],
   templateUrl: './consulta.component.html',
   styleUrl: './consulta.component.css'
@@ -26,6 +28,9 @@ export class ConsultaComponent implements OnInit {
 
   generantPDF: boolean = false;
 
+  textNoti: string = '';
+  tipusNoti: 'error' | 'ok' | 'info' = 'info';
+
   constructor(private consultaService: ConsultaService, public dialog: MatDialog) {
   }
 
@@ -36,9 +41,10 @@ export class ConsultaComponent implements OnInit {
   async loadConsultes() {
     try {
       this.consultes = await this.consultaService.getConsultes();
-      console.log(this.consultes)
     } catch (error) {
-      console.error('Error carregant les adreces', error);
+      this.textNoti = 'Error carregant les consultes';
+      this.tipusNoti = 'error';
+      this.timeOutNoti();
     }
   }
 
@@ -77,12 +83,20 @@ export class ConsultaComponent implements OnInit {
 
       })
       .catch(error => {
-        console.error("Error a l'enviar les dades:", error);
+        this.textNoti = 'Error a l\'enviar les dades: ' + error;
+        this.tipusNoti = 'error';
+        this.timeOutNoti();
       });
   }
 
   // Mètode per tancar el modal
   tancarModal() {
     this.selectedConsulta = null;
+  }
+
+  private timeOutNoti() {
+    setTimeout(() => {
+      this.textNoti = '';
+    }, 2500);
   }
 }

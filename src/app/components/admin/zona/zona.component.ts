@@ -4,6 +4,7 @@ import {CommonModule} from '@angular/common';
 import {ZonaService} from '../../../services/zona.service';
 import {MatDialog} from '@angular/material/dialog';
 import {DialogAddComponent} from './dialog-add/dialog-add.component';
+import {NotificacioComponent} from '../../shared/notificacio/notificacio.component';
 
 interface Area {
   codi_area: string;
@@ -19,15 +20,16 @@ interface Zona {
 @Component({
   selector: 'app-zona',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, NotificacioComponent],
   templateUrl: './zona.component.html',
   styleUrl: './zona.component.css'
 })
 
 export class ZonaComponent {
   zones: Zona[] = [];
-  missatge: string = "";
-  missatgeError: string = "";
+
+  textNoti: string = '';
+  tipusNoti: 'error' | 'ok' | 'info' = 'info';
 
   constructor(private zonaService: ZonaService, public dialog: MatDialog) {
   }
@@ -37,7 +39,13 @@ export class ZonaComponent {
   }
 
   async loadZones() {
+    try {
     this.zones = await this.zonaService.getZones();
+    } catch (error) {
+      this.textNoti = 'Error carregant les zones';
+      this.tipusNoti = 'error';
+      this.timeOutNoti();
+    }
   }
 
   addZona(): void {
@@ -51,16 +59,21 @@ export class ZonaComponent {
         this.zonaService.addZona({codi_zona: result.codi, descripcio_zona: result.descripcio, arees: []})
           .then(r => {
             this.zones.push({codi_zona: result.codi, descripcio_zona: result.descripcio, arees: []});
-            this.missatge = `Zona ${result.codi} - ${result.descripcio} creada correctament.`;
+            this.textNoti = `Zona ${result.codi} - ${result.descripcio} creada correctament.`;
+            this.tipusNoti = 'ok';
+            this.timeOutNoti();
           })
           .catch(error => {
             console.error("Error al crear la zona:", error);
-
             // Si l'error ve del backend, mostrem el missatge
             if (error.response && error.response.data) {
-              this.missatgeError = error.response.data;
+              this.textNoti = `error.response.data`;
+              this.tipusNoti = 'error';
+              this.timeOutNoti();
             } else {
-              this.missatgeError = "S'ha produït un error en crear la zona.";
+              this.textNoti = "S'ha produït un error en crear la zona.";
+              this.tipusNoti = 'error';
+              this.timeOutNoti();
             }
           });
       }
@@ -69,7 +82,9 @@ export class ZonaComponent {
 
   addArea(): void {
     if (this.zones.length === 0) {
-      alert("No hi ha zones disponibles. Crea una zona primer.");
+      this.textNoti = "No hi ha zones disponibles. Crea una zona primer.";
+      this.tipusNoti = 'info';
+      this.timeOutNoti();
       return;
     }
 
@@ -84,23 +99,31 @@ export class ZonaComponent {
         console.log(zona)
         if (zona) {
           const mateixCodi = zona.arees.find(a => a.codi_area === zona.codi_zona + '.' + result.codi);
-          if (mateixCodi)
-            this.missatgeError = "Ja hi ha una zona amb aquest codi dins la zona " + zona.codi_zona + " - " +
+          if (mateixCodi){
+            this.textNoti = "Ja hi ha una zona amb aquest codi dins la zona " + zona.codi_zona + " - " +
               zona.descripcio_zona + ": " + mateixCodi.codi_area + " - " + mateixCodi.descripcio_area;
+            this.tipusNoti = 'error';
+            this.timeOutNoti();
+          }
           else {
             this.zonaService.addArea({codi_area: result.zonaCodi + '.' + result.codi, descripcio_area: result.descripcio})
               .then(r => {
                 zona.arees.push({codi_area: zona.codi_zona + '.' + result.codi, descripcio_area: result.descripcio});
-                this.missatge = `Àrea ${zona.codi_zona + '.' + result.codi} - ${result.descripcio} creada correctament.`;
+                this.textNoti = `Àrea ${zona.codi_zona + '.' + result.codi} - ${result.descripcio} creada correctament.`;
+                this.tipusNoti = 'ok';
+                this.timeOutNoti();
               })
               .catch(error => {
                 console.error("Error al crear l'àrea':", error);
-
                 // Si l'error ve del backend, mostrem el missatge
                 if (error.response && error.response.data) {
-                  this.missatgeError = error.response.data;
+                  this.textNoti = error.response.data;
+                  this.tipusNoti = 'error';
+                  this.timeOutNoti();
                 } else {
-                  this.missatgeError = "S'ha produït un error en crear l'àrea.";
+                  this.textNoti = "S'ha produït un error en crear l'àrea.";
+                  this.tipusNoti = 'error';
+                  this.timeOutNoti();
                 }
               });
           }
@@ -117,12 +140,11 @@ export class ZonaComponent {
       return; // Si l'usuari cancel·la, no fem res
     }
 
-    // Inicialitzem el missatge d'error a buit
-    this.missatgeError = "";
-
     this.zonaService.deleteZona(zona.codi_zona)
       .then(r => {
-        this.missatge = `Zona ${zona.codi_zona} ${zona.descripcio_zona} eliminada correctament.`;
+        this.textNoti = `Zona ${zona.codi_zona} ${zona.descripcio_zona} eliminada correctament.`;
+        this.tipusNoti = 'ok';
+        this.timeOutNoti();
         this.loadZones()
       })
       .catch(error => {
@@ -130,9 +152,13 @@ export class ZonaComponent {
 
         // Si l'error ve del backend, mostrem el missatge
         if (error.response && error.response.data) {
-          this.missatgeError = error.response.data;
+          this.textNoti = error.response.data;
+          this.tipusNoti = 'error';
+          this.timeOutNoti();
         } else {
-          this.missatgeError = "S'ha produït un error en eliminar la zona.";
+          this.textNoti = "S'ha produït un error en eliminar la zona.";
+          this.tipusNoti = 'error';
+          this.timeOutNoti();
         }
       });
   }
@@ -145,12 +171,11 @@ export class ZonaComponent {
       return; // Si l'usuari cancel·la, no fem res
     }
 
-    // Inicialitzem el missatge d'error a buit
-    this.missatgeError = "";
-
     this.zonaService.deleteArea(area.codi_area)
       .then(r => {
-        this.missatge = `Àrea ${area.codi_area} ${area.descripcio_area} eliminada correctament.`;
+        this.textNoti = `Àrea ${area.codi_area} ${area.descripcio_area} eliminada correctament.`;
+        this.tipusNoti = 'error';
+        this.timeOutNoti();
         this.loadZones()
       })
       .catch(error => {
@@ -158,10 +183,20 @@ export class ZonaComponent {
 
         // Si l'error ve del backend, mostrem el missatge
         if (error.response && error.response.data) {
-          this.missatgeError = error.response.data;
+          this.textNoti = error.response.data;
+          this.tipusNoti = 'error';
+          this.timeOutNoti();
         } else {
-          this.missatgeError = "S'ha produït un error en eliminar l'àrea.";
+          this.textNoti = "S'ha produït un error en eliminar l'àrea.";
+          this.tipusNoti = 'error';
+          this.timeOutNoti();
         }
       });
+  }
+
+  private timeOutNoti() {
+    setTimeout(() => {
+      this.textNoti = '';
+    }, 2500);
   }
 }

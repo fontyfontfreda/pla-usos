@@ -1,4 +1,5 @@
 <!-- src/app/components/login/login.component.html -->
+<app-notificacio *ngIf="textNoti != ''" [text]="textNoti" [tipus]="tipusNoti"></app-notificacio>
 <h2>Iniciar Sessió</h2>
 <form (ngSubmit)="onSubmit()">
   <label for="username">Usuari:</label>

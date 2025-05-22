@@ -4,6 +4,8 @@ import {UsuariService} from '../../../services/usuari.service';
 import {MatDialog} from '@angular/material/dialog';
 import {NgForOf, NgIf} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {NotificacioComponent} from '../../shared/notificacio/notificacio.component';
+
 
 @Component({
   selector: 'app-usuari',
@@ -12,7 +14,8 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
     NgForOf,
     NgIf,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    NotificacioComponent
   ],
   templateUrl: './usuari.component.html',
   styleUrl: './usuari.component.css'
@@ -29,6 +32,9 @@ export class UsuariComponent {
   novaContrasenya: string = '';
   canviContrasenyaDialog: boolean = false;
 
+  textNoti: string = '';
+  tipusNoti: 'error' | 'ok' | 'info' = 'info';
+
   constructor(private usuariService: UsuariService, public dialog: MatDialog) {
   }
 
@@ -41,7 +47,9 @@ export class UsuariComponent {
     try {
       this.usuaris = await this.usuariService.getUsuaris();
     } catch (error) {
-      console.error('Error carregant les adreces', error);
+      this.textNoti = 'Error carregant els usuaris:' + error;
+      this.tipusNoti = 'error';
+      this.timeOutNoti();
     } finally {
       this.isLoading = false; // Desactiva el loader quan acaba
     }
@@ -49,21 +57,25 @@ export class UsuariComponent {
 
   guardarUsuari() {
     if (!this.nouUsuari.usuari || !this.nouUsuari.contrasenya) {
-      alert('Cal omplir tots els camps!');
+      this.textNoti = 'Cal omplir tots els camps!';
+      this.tipusNoti = 'info';
+      this.timeOutNoti();
       return;
     }
 
     this.usuariService.addUsuari(this.nouUsuari)
       .then(response => {
-        console.log('✅ Usuari creat correctament:', response);
-        alert('Usuari creat correctament!');
+        this.textNoti = 'Usuari creat correctament!';
+        this.tipusNoti = 'ok';
+        this.timeOutNoti();
         this.usuariDialog = false;
         this.nouUsuari = new Usuari('', '');
         this.loadUsuaris(); // Tornar a carregar la taula d'usuaris (si tens aquesta funció)
       })
       .catch(error => {
-        console.error('❌ Error creant usuari:', error);
-        alert('Error creant l\'usuari');
+        this.textNoti = 'Error creant usuari: '+ error;
+        this.tipusNoti = 'error';
+        this.timeOutNoti();
       });
   }
 
@@ -75,19 +87,24 @@ export class UsuariComponent {
 
   guardarNovaContrasenya() {
     if (!this.novaContrasenya) {
-      alert('Cal introduir una nova contrasenya.');
+      this.textNoti = 'Cal introduir una nova contrasenya.';
+      this.tipusNoti = 'info';
+      this.timeOutNoti();
       return;
     }
 
     // servei per actualitzar la contrasenya
     this.usuariService.updateContrasenya(this.usuariSeleccionat.usuari, this.novaContrasenya)
       .then(response => {
-        alert('Contrasenya actualitzada correctament.');
+        this.textNoti = 'Contrasenya actualitzada correctament.';
+        this.tipusNoti = 'ok';
+        this.timeOutNoti();
         this.canviContrasenyaDialog = false;
       })
       .catch(error => {
-        console.error('Error actualitzant contrasenya:', error);
-        alert('Error actualitzant la contrasenya.');
+        this.textNoti = 'Error actualitzant la contrasenya: ' + error;
+        this.tipusNoti = 'error';
+        this.timeOutNoti();
       });
   }
 
@@ -95,13 +112,23 @@ export class UsuariComponent {
     if (confirm(`Estàs segur que vols esborrar l'usuari ${usuari.usuari}?`)) {
       this.usuariService.deleteUsuari(usuari.usuari)
         .then(response => {
+          this.textNoti = 'Usuari esborrat correctament.';
+          this.tipusNoti = 'ok';
+          this.timeOutNoti();
           alert('Usuari esborrat correctament.');
           this.loadUsuaris(); // Torna a carregar la taula
         })
         .catch(error => {
-          console.error('Error esborrant usuari:', error);
-          alert('Error esborrant l\'usuari.');
+          this.textNoti = 'Error esborrant usuari: ' + error;
+          this.tipusNoti = 'error';
+          this.timeOutNoti();
         });
     }
+  }
+
+  private timeOutNoti() {
+    setTimeout(() => {
+      this.textNoti = '';
+    }, 2500);
   }
 }

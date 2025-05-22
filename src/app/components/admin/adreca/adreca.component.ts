@@ -4,11 +4,12 @@ import {CommonModule} from '@angular/common';
 import {Adreca} from '../../../models/adreca.model';
 import {MatDialog} from '@angular/material/dialog';
 import {AdrecaService} from '../../../services/adreca.service';  // Importar el model Adreca
+import {NotificacioComponent} from '../../shared/notificacio/notificacio.component';
 
 @Component({
   selector: 'app-adreca',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, NotificacioComponent],
   templateUrl: './adreca.component.html',
   styleUrls: ['./adreca.component.css']
 })
@@ -48,6 +49,9 @@ export class AdrecaComponent implements OnInit {
   selectedAdreca: Adreca | null = null;
   editantAdreca: any = null;
 
+  textNoti: string = '';
+  tipusNoti: 'error' | 'ok' | 'info' = 'info';
+
   constructor(private adrecaService: AdrecaService, public dialog: MatDialog) {
   }
 
@@ -60,7 +64,9 @@ export class AdrecaComponent implements OnInit {
     try {
       this.adreces = await this.adrecaService.getAdreces();
     } catch (error) {
-      console.error('Error carregant les adreces', error);
+      this.textNoti = 'Error carregant les adreces';
+      this.tipusNoti = 'error';
+      this.timeOutNoti();
     } finally {
       this.isLoading = false; // Desactiva el loader quan acaba
     }
@@ -114,13 +120,22 @@ export class AdrecaComponent implements OnInit {
       this.adreces[index] = { ...this.editantAdreca };
       this.adrecaService.updateAdreca(this.editantAdreca)
         .then(response => {
-          alert('Adreça actualitzada correctament.');
+          this.textNoti = 'Adreça actualitzada correctament.';
+          this.tipusNoti = 'ok';
+          this.timeOutNoti();
         })
         .catch(error => {
-          console.error('Error actualitzant l\'adreça:', error);
-          alert('Error actualitzant l\'adreça.');
+          this.textNoti = 'Error actualitzant l\'adreça.';
+          this.tipusNoti = 'error';
+          this.timeOutNoti();
         });
     }
     this.tancarModal();
+  }
+
+  timeOutNoti() {
+    setTimeout(() => {
+      this.textNoti = '';
+    }, 2500);
   }
 }
