@@ -2,13 +2,14 @@
 import {Injectable} from '@angular/core';
 import axios, {AxiosResponse} from 'axios';
 import {AuthService} from './auth.service';
-import {Usuari} from '../models/usuari.model'; // Per obtenir el token
+import {Usuari} from '../models/usuari.model';
+import {environment} from '../../environments/environment'; // Per obtenir el token
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsuariService {
-  private API_URL = 'http://localhost:3000/api/usuaris'; // Enllaç al backend
+  private API_URL = `${environment.apiUrl}/usuaris`; // Enllaç al backend
 
   constructor(private authService: AuthService) {
   }
@@ -31,7 +32,7 @@ export class UsuariService {
   async addUsuari(usuari: Usuari): Promise<any> {
     try {
       const response: AxiosResponse<any> = await axios.post(
-        `http://localhost:3000/api/register`,
+        `${environment.apiUrl}/register`,
         {username: usuari.usuari, password: usuari.contrasenya}, // <-- Aquest és el body
       );
       return response.data;

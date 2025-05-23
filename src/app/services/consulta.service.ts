@@ -3,13 +3,14 @@ import {Injectable} from '@angular/core';
 import axios, {AxiosResponse} from 'axios';
 import { AuthService } from './auth.service';
 import {Consulta} from '../models/constulta.model';
+import {environment} from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class ConsultaService {
-  private API_URL = 'http://localhost:3000/api/consultes'; // Enllaç al backend
+  private API_URL = `${environment.apiUrl}/consultes`; // Enllaç al backend
 
   constructor(private authService: AuthService) {}
 

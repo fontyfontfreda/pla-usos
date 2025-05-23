@@ -2,13 +2,14 @@
 import { Injectable } from '@angular/core';
 import axios, { AxiosResponse } from 'axios';
 import { Router } from '@angular/router';
+import {environment} from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private loggedIn: boolean = false;
-  private API_URL = 'http://localhost:3000/api/login'; // URL del login
+  private API_URL = `${environment.apiUrl}/login`; // URL del login
 
   constructor(private router: Router) {}
 

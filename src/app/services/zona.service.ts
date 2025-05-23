@@ -2,6 +2,7 @@
 import {Injectable} from '@angular/core';
 import axios, {AxiosResponse} from 'axios';
 import { AuthService } from './auth.service';
+import {environment} from '../../environments/environment';
 
 interface Area {
   codi_area: string;
@@ -19,7 +20,7 @@ interface Zona {
 })
 
 export class ZonaService {
-  private API_URL = 'http://localhost:3000/api/zones'; // Enllaç al backend
+  private API_URL = `${environment.apiUrl}/zones`; // Enllaç al backend
 
   constructor(private authService: AuthService) {}
 

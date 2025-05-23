@@ -3,12 +3,13 @@ import { Injectable } from '@angular/core';
 import axios, { AxiosResponse } from 'axios';
 import {Adreca} from '../models/adreca.model';
 import {AuthService} from './auth.service';
+import {environment} from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdrecaService {
-  private API_URL = 'http://localhost:3000/api/adreces'; // Enllaç al backend
+  private API_URL = `${environment.apiUrl}/adreces`; // Enllaç al backend
 
   constructor(private authService: AuthService) {
   }

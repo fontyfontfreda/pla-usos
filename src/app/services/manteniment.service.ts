@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import axios, {AxiosResponse} from 'axios';
+import {environment} from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MantenimentService {
-  private API_URL = 'http://localhost:3000/api/health'; // Enllaç al backend
+  private API_URL = `${environment.apiUrl}/health`; // Enllaç al backend
 
   constructor(private router: Router) { }
 

@@ -3,13 +3,14 @@ import axios, {AxiosResponse} from 'axios';
 import {Adreca} from '../models/adreca.model';
 import {Activitat} from '../models/activitat.model';
 import {AuthService} from './auth.service';
+import {environment} from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ActivitatService {
 
-  private API_URL = 'http://localhost:3000/api/activitats'; // Enllaç al backend
+  private API_URL = `${environment.apiUrl}/activitats`; // Enllaç al backend
 
   constructor(private authService: AuthService) {}
 
