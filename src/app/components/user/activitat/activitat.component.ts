@@ -44,8 +44,7 @@ export class ActivitatComponent {
   ngOnInit() {
     this.activitatService.getActivitats(this.adreca).then(data => {
       this.activitats = data;
-      console.log(this.activitats);
-      
+
       this.grups = [...new Set(this.activitats.map(a => a.descripcio_grup))];
       this.subgrups = [...new Set(this.activitats.map(a => a.descripcio_subgrup))];
       this.activitatsFiltrades = [...new Set(this.activitats.map(a => a.descripcio_descripcio_activitat)), "Altres"]
@@ -139,8 +138,9 @@ export class ActivitatComponent {
       this.activitatsFiltrades = [...new Set(this.activitats
         .filter(a => a.descripcio_grup === this.selectedGrup && a.descripcio_subgrup === this.selectedSubgrup)
         .map(a => a.descripcio_descripcio_activitat)), "Altres"];
-    } else
+    } else {
       this.altres = true;
+    }
   }
 
   filterDescripcio(event: any) {
@@ -171,10 +171,14 @@ export class ActivitatComponent {
 
   onSubmit() {
     let activitat = this.activitats.find(a => a.descripcio_descripcio_activitat === this.selectedActivitat);
+
     if (this.altres) {
       activitat = this.activitats[0];
       activitat["is_altres"] = true;
       activitat["descripcio_activitat"] = this.descripcioActivitat;
+    }else {
+      if (activitat != undefined)
+        activitat["is_altres"] = false;
     }
     this.activitatSubmit.emit(activitat);
   }

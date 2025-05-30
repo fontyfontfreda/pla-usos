@@ -10,7 +10,7 @@ import {PresentacioComponent} from '../presentacio/presentacio.component';
 import {Activitat} from '../../../models/activitat.model';
 import {ActivitatService} from '../../../services/activitat.service';
 import {MantenimentService} from '../../../services/manteniment.service';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {NotificacioComponent} from '../../shared/notificacio/notificacio.component';
 
 @Component({
@@ -75,44 +75,44 @@ export class FormulariComponent implements OnInit {
   // Aquesta funció es crida quan es selecciona una activitat
   onActivitatSubmit(activitat: Activitat) {
     this.activitatSeleccionada = activitat;
-    if(activitat.is_altres){
+    if (activitat.is_altres) {
       this.dialogAltres = true;
-    }else {
-    this.generantPDF = true;
-    this.activitatService.sendActivitat({
-      "usuari": this.formDataUsuari,
-      "adreca": this.adrecaSeleccionada,
-      "activitat": this.activitatSeleccionada
-    })
-      .then(response => {
-        this.generantPDF = false;
-        // Crear un URL per al fitxer blob rebut
-        const fileURL = URL.createObjectURL(response);
-
-        // Crear un enllaç per la descàrrega del fitxer
-        const a = document.createElement('a');
-        a.href = fileURL;
-        a.download = 'informe_final.pdf';  // Nom del fitxer a descarregar
-        document.body.appendChild(a);
-        a.click();  // Simula el clic per descarregar-lo
-        document.body.removeChild(a);
-
-        this.textNoti = `Dades enviades correctament i el fitxer s'ha descarregat.`;
-        this.tipusNoti = 'ok';
-        this.timeOutNoti();
+    } else {
+      this.generantPDF = true;
+      this.activitatService.sendActivitat({
+        "usuari": this.formDataUsuari,
+        "adreca": this.adrecaSeleccionada,
+        "activitat": this.activitatSeleccionada
       })
-      .catch(error => {
-        // Si l'error ve del backend, mostrem el missatge
-        if (error.response && error.response.data) {
-          this.textNoti = error.response.data;
-          this.tipusNoti = 'error';
+        .then(response => {
+          this.generantPDF = false;
+          // Crear un URL per al fitxer blob rebut
+          const fileURL = URL.createObjectURL(response);
+
+          // Crear un enllaç per la descàrrega del fitxer
+          const a = document.createElement('a');
+          a.href = fileURL;
+          a.download = 'informe_final.pdf';  // Nom del fitxer a descarregar
+          document.body.appendChild(a);
+          a.click();  // Simula el clic per descarregar-lo
+          document.body.removeChild(a);
+
+          this.textNoti = `Dades enviades correctament i el fitxer s'ha descarregat.`;
+          this.tipusNoti = 'ok';
           this.timeOutNoti();
-        } else {
-          this.textNoti = "S'ha produït un error a l'enviar les dades.";
-          this.tipusNoti = 'error';
-          this.timeOutNoti();
-        }
-      });
+        })
+        .catch(error => {
+          // Si l'error ve del backend, mostrem el missatge
+          if (error.response && error.response.data) {
+            this.textNoti = error.response.data;
+            this.tipusNoti = 'error';
+            this.timeOutNoti();
+          } else {
+            this.textNoti = "S'ha produït un error a l'enviar les dades.";
+            this.tipusNoti = 'error';
+            this.timeOutNoti();
+          }
+        });
     }
   }
 

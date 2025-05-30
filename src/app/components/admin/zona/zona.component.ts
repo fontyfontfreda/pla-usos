@@ -174,7 +174,7 @@ export class ZonaComponent {
     this.zonaService.deleteArea(area.codi_area)
       .then(r => {
         this.textNoti = `Àrea ${area.codi_area} ${area.descripcio_area} eliminada correctament.`;
-        this.tipusNoti = 'error';
+        this.tipusNoti = 'ok';
         this.timeOutNoti();
         this.loadZones()
       })
