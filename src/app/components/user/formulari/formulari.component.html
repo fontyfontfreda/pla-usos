@@ -30,11 +30,17 @@
 </div>
 
 <div *ngIf="dialogAltres" class="generant-pdf">
-  <div class="dialog-content">
-    <h3>Ha seleccionat l'epígraf "altres", per tant, no podem generar cap informe.</h3>
-    <p class="mt-2">Per més informació, enviï un correu electrònic a <strong>{{ correu }}</strong></p>
-    <p>O bé dirigiu-vos a les oficines ...</p>
-  <button (click)="dialogAltres = false;">Tancar</button>
+  <div class="dialog-content altres">
+    <p class="mt-2">Per tal de donar-te resposta a la teva situació concreta, pots trucar a l’Espai Cooperatiu al telèfon <strong>972279100</strong> o bé enviar un correu a <strong>{{correu}}</strong>. En el cas que enviïs un correu, necessitem que concretis la següent informació:</p>
+    <ul class="llista-altres">
+      <li>Nom i cognoms</li>
+      <li>Telèfon de contacte</li>
+      <li>Adreça del local que t’interessa llogar</li>
+      <li>Especificar la tipologia d’activitat econòmica</li>
+    </ul>
+    <div class="boto-altres">
+      <button (click)="dialogAltres = false;" >Tancar</button>
+    </div>
   </div>
 </div>
 

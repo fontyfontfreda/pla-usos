@@ -39,7 +39,7 @@ export class FormulariComponent implements OnInit {
     actuaEnNomDe: 'nomPropi'
   };
 
-  correu: string = 'correu@olot.cat'
+  correu: string = 'espaicooperatiu@olot.cat'
 
   adrecaSeleccionada: Adreca | null = null;
 
