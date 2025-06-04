@@ -27,6 +27,8 @@ export class FormulariComponent implements OnInit {
   formActivitat: boolean = false;
   generantPDF: boolean = false;
   dialogAltres: boolean = false;
+  dialogCondicio: boolean = false;
+  isCondicio: boolean = false;
 
   textNoti: string = '';
   tipusNoti: 'error' | 'ok' | 'info' = 'info';
@@ -40,6 +42,7 @@ export class FormulariComponent implements OnInit {
   };
 
   correu: string = 'espaicooperatiu@olot.cat'
+  correuCondicio: string = 'aculebras@consorcisigma.org'
 
   adrecaSeleccionada: Adreca | null = null;
 
@@ -78,43 +81,56 @@ export class FormulariComponent implements OnInit {
     if (activitat.is_altres) {
       this.dialogAltres = true;
     } else {
-      this.generantPDF = true;
-      this.activitatService.sendActivitat({
-        "usuari": this.formDataUsuari,
-        "adreca": this.adrecaSeleccionada,
-        "activitat": this.activitatSeleccionada
-      })
-        .then(response => {
-          this.generantPDF = false;
-          // Crear un URL per al fitxer blob rebut
-          const fileURL = URL.createObjectURL(response);
-
-          // Crear un enllaç per la descàrrega del fitxer
-          const a = document.createElement('a');
-          a.href = fileURL;
-          a.download = 'informe_final.pdf';  // Nom del fitxer a descarregar
-          document.body.appendChild(a);
-          a.click();  // Simula el clic per descarregar-lo
-          document.body.removeChild(a);
-
-          this.textNoti = `Dades enviades correctament i el fitxer s'ha descarregat.`;
-          this.tipusNoti = 'ok';
-          this.timeOutNoti();
-        })
-        .catch(error => {
-          // Si l'error ve del backend, mostrem el missatge
-          if (error.response && error.response.data) {
-            this.textNoti = error.response.data;
-            this.tipusNoti = 'error';
-            this.timeOutNoti();
-          } else {
-            this.textNoti = "S'ha produït un error a l'enviar les dades.";
-            this.tipusNoti = 'error';
-            this.timeOutNoti();
-          }
-        });
+      if (!(activitat.id_condicio == 1 || activitat.id_condicio == 2 || activitat.id_condicio == 3)) {
+        this.isCondicio = true;
+        this.dialogCondicio = true;
+      }
+      this.generarPDF();
     }
   }
+
+  generarPDF() {
+    this.dialogCondicio = false;
+    this.generantPDF = true;
+
+    this.activitatService.sendActivitat({
+      usuari: this.formDataUsuari,
+      adreca: this.adrecaSeleccionada,
+      activitat: this.activitatSeleccionada
+    })
+      .then(({blob, is_apte}) => {
+        this.generantPDF = false;
+
+        const fileURL = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = fileURL;
+        a.download = 'informe_final.pdf';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(fileURL); // Bona pràctica: netejar URL temporal
+
+        this.textNoti = `Dades enviades correctament i el fitxer s'ha descarregat.`;
+        this.tipusNoti = 'ok';
+        this.timeOutNoti();
+        if (this.isCondicio && is_apte)
+          this.dialogCondicio = true;
+      })
+      .catch(error => {
+        this.generantPDF = false;
+        console.log(error)
+
+        if (error.response && error.response.data) {
+          this.textNoti = error.response.data;
+        } else {
+          this.textNoti = "S'ha produït un error a l'enviar les dades.";
+        }
+
+        this.tipusNoti = 'error';
+        this.timeOutNoti();
+      });
+  }
+
 
   onSubmit() {
     console.log('Form Data Final:', {

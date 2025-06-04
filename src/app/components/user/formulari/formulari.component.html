@@ -44,6 +44,18 @@
   </div>
 </div>
 
+<div *ngIf="dialogCondicio" class="generant-pdf">
+  <div class="dialog-content altres">
+    <p class="mt-2">Si vols crear una reserva d’aquest local amb la teva activitat, has d’enviar un correu a SIGMA a la
+      següent adreça <strong>{{correuCondicio}}</strong> adjuntant el teu informe final generat pel visor del Pla d’Usos i demanant la teva reserva,
+      la qual tindrà una durada de <strong>15 dies</strong>. </p>
+    <p><strong>IMPORTANT:</strong> si durant aquest període de 15 dies SIGMA no rep la teva tramitació de documentació per gestionar la llicència d’activitat, la teva reserva s’anul·larà.</p>
+    <div class="boto-altres">
+      <button (click)="dialogCondicio = false; isCondicio = false;">Tancar</button>
+    </div>
+  </div>
+</div>
+
 <!-- Botó per pujar un fitxer Excel -->
 <!--<div class="upload-section">-->
 <!--  <label for="fileUpload">Puja un fitxer Excel:</label>-->

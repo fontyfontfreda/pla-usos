@@ -24,16 +24,41 @@ export class ActivitatService {
     }
   }
 
-  async sendActivitat(dades: any): Promise<any> {
+  async sendActivitat(dades: any): Promise<{ blob: Blob, is_apte: boolean }> {
     try {
-      const response: AxiosResponse<Blob> = await axios.post(`${this.API_URL}/consulta`, {
-        dades: { dades }, // Enviem les dades al cos de la sol·licitud
-      }, {
-        responseType: 'blob'  // Indiquem que esperem una resposta com a blob (fitxer)
+      const response = await axios.post(`${this.API_URL}/consulta`, {
+        dades: { dades }
       });
 
-      return response.data; // Retorna el fitxer en forma de Blob
+      console.log('response.data:', response.data); // Per veure què retorna el backend
+
+      let { pdf, is_apte } = response.data;
+
+      // Comprovem que pdf existeix i és una cadena
+      if (typeof pdf !== 'string') {
+        throw new Error('El camp pdf no és una cadena vàlida o no existeix.');
+      }
+
+      // Elimina el prefix si hi és (opcional, segons com ho retorni el backend)
+      if (pdf.startsWith('data:application/pdf;base64,')) {
+        pdf = pdf.replace(/^data:application\/pdf;base64,/, '');
+      }
+
+      // Convertim el base64 a binari
+      const binary = atob(pdf);
+      const len = binary.length;
+      const buffer = new Uint8Array(len);
+      for (let i = 0; i < len; i++) {
+        buffer[i] = binary.charCodeAt(i);
+      }
+
+      // Creem el Blob PDF
+      const blob = new Blob([buffer], { type: 'application/pdf' });
+
+      return { blob, is_apte };
+
     } catch (error) {
+      console.error('Error al processar pdf:', error);
       throw error;
     }
   }
