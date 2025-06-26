@@ -44,7 +44,7 @@
       <p><strong>DNI INTERESSAT: </strong>{{ selectedConsulta.dni_interessat }}</p>
       <p><strong>NOM INTERESSAT: </strong>{{ selectedConsulta.nom_interessat }}</p>
       <p><strong>ACTUACIÓ INTERESSAT: </strong>{{ selectedConsulta.actuacio_interessat }}</p>
-      <p><strong>ADREÇA: </strong>{{ selectedConsulta.adreca }}</p>
+      <p><strong>ADREÇA: </strong>{{ !selectedConsulta.adreca ? "Adreça no disponible" : selectedConsulta.adreca }}</p>
       <p *ngIf="!selectedConsulta.is_altres"><strong>ÚS: </strong>{{ selectedConsulta.grup }}</p>
       <p *ngIf="!selectedConsulta.is_altres"><strong>GRUP: </strong>{{ selectedConsulta.subgrup }}</p>
       <p *ngIf="!selectedConsulta.is_altres"><strong>EPÍGRAF: </strong>{{ selectedConsulta.activitat }}</p>
