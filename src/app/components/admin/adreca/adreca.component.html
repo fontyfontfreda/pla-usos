@@ -77,22 +77,25 @@
             <p><strong>DOMCOD: </strong>{{ editantAdreca.DOMCOD }}</p>
             <p><strong>ADREÇA: </strong>{{ editantAdreca.adreca }}</p>
             <p><strong>NUCLICOD: </strong>{{ editantAdreca.nucli_cod }}</p>
+            <p><strong>TIPUS DOMICILI: </strong>{{ editantAdreca.tipus_dom }}</p>
+            <p><strong>TIPUS LOCAL: </strong>{{ editantAdreca.tipus_loc }}</p>
+            <p><strong>AMPLADA CARRER:: </strong>{{ editantAdreca.amplada_carrer }}</p>
 
-            <label><strong>TIPUS DOMICILI:</strong>
-              <select [(ngModel)]="editantAdreca.tipus_dom" name="tipus_dom">
-                <option *ngFor="let tipus of tipusDomOptions" [value]="tipus">{{ tipus }}</option>
-              </select>
-            </label>
+<!--            <label><strong>TIPUS DOMICILI:</strong>-->
+<!--              <select [(ngModel)]="editantAdreca.tipus_dom" name="tipus_dom">-->
+<!--                <option *ngFor="let tipus of tipusDomOptions" [value]="tipus">{{ tipus }}</option>-->
+<!--              </select>-->
+<!--            </label>-->
 
-            <label><strong>TIPUS LOCAL:</strong>
-              <select [(ngModel)]="editantAdreca.tipus_loc" name="tipus_loc">
-                <option *ngFor="let tipus of tipusLocOptions" [value]="tipus">{{ tipus }}</option>
-              </select>
-            </label>
+<!--            <label><strong>TIPUS LOCAL:</strong>-->
+<!--              <select [(ngModel)]="editantAdreca.tipus_loc" name="tipus_loc">-->
+<!--                <option *ngFor="let tipus of tipusLocOptions" [value]="tipus">{{ tipus }}</option>-->
+<!--              </select>-->
+<!--            </label>-->
 
-            <label><strong>AMPLADA CARRER:</strong>
-              <input type="number" [(ngModel)]="editantAdreca.amplada_carrer" name="amplada_carrer"/>
-            </label>
+<!--            <label><strong>AMPLADA CARRER:</strong>-->
+<!--              <input type="number" [(ngModel)]="editantAdreca.amplada_carrer" name="amplada_carrer"/>-->
+<!--            </label>-->
 
             <p><strong>COORD X: </strong>{{ editantAdreca.coord_x }}</p>
             <p><strong>COORD Y: </strong>{{ editantAdreca.coord_y }}</p>
