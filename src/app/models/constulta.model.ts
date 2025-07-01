@@ -4,6 +4,7 @@ export class Consulta {
   dni_interessat: string;
   nom_interessat: string;
   actuacio_interessat: string;
+  DOMCOD: number;
   adreca: string;
   is_altres: number;
   grup: string;
@@ -21,6 +22,7 @@ export class Consulta {
     dni_interessat: string,
     nom_interessat: string,
     actuacio_interessat: string,
+    DOMCOD: number,
     adreca: string,
     is_altres: number,
     grup: string,
@@ -36,6 +38,7 @@ export class Consulta {
     this.dni_interessat = dni_interessat;
     this.nom_interessat = nom_interessat;
     this.actuacio_interessat = actuacio_interessat;
+    this.DOMCOD = DOMCOD;
     this.adreca = adreca;
     this.is_altres = is_altres;
     this.grup = grup;
