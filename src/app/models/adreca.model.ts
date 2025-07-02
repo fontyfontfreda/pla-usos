@@ -2,7 +2,7 @@
 export class Adreca {
   DOMCOD: number;
   adreca: string;
-  nucli_cod: string;
+  NUCLICOD: string;
   codi_carrer: number;
   carrer: string;
   numero: string;
@@ -24,7 +24,7 @@ export class Adreca {
   constructor(
     DOMCOD: number,
     adreca: string,
-    nucli_cod: string,
+    NUCLICOD: string,
     codi_carrer: number,
     carrer: string,
     numero: string,
@@ -45,7 +45,7 @@ export class Adreca {
   ) {
     this.DOMCOD = DOMCOD;
     this.adreca = adreca;
-    this.nucli_cod = nucli_cod;
+    this.NUCLICOD = NUCLICOD;
     this.codi_carrer = codi_carrer;
     this.carrer = carrer;
     this.numero = numero;
