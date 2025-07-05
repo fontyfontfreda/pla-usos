@@ -5,17 +5,15 @@ import {AdrecaComponent} from './adreca/adreca.component';
 import {UsuariComponent} from './usuari/usuari.component';
 import {ConsultaComponent} from './consulta/consulta.component';
 import {ActivitatComponent} from './activitat/activitat.component';
-import {MantenimentComponent} from '../manteniment/manteniment.component';
+import {EpigrafComponent} from './epigrafs/epigraf.component';
 import {NgIf} from '@angular/common';
-import {AuthService} from '../../services/auth.service';
-import {Router} from '@angular/router';
 import {MantenimentService} from '../../services/manteniment.service';
 
 
 @Component({
   selector: 'app-admin',
   standalone: true,
-  imports: [SidebarComponent, ZonaComponent, AdrecaComponent, UsuariComponent, NgIf, ConsultaComponent, ActivitatComponent],
+  imports: [SidebarComponent, ZonaComponent, AdrecaComponent, UsuariComponent, NgIf, ConsultaComponent, ActivitatComponent, EpigrafComponent],
   templateUrl: './admin.component.html',
   styleUrl: './admin.component.css'
 })
@@ -25,6 +23,7 @@ export class AdminComponent implements OnInit{
   usuariComponent: boolean = false;
   consultaComponent: boolean = false;
   activitatComponent: boolean = false;
+  epigrafComponent: boolean = false;
 
   constructor(private mantenimentService: MantenimentService) {
   }
@@ -51,6 +50,9 @@ export class AdminComponent implements OnInit{
       case 5:
         this.activitatComponent = true;
         break;
+      case 6:
+        this.epigrafComponent = true;
+        break;
       default:
         break;
     }
@@ -62,5 +64,6 @@ export class AdminComponent implements OnInit{
     this.usuariComponent = false;
     this.consultaComponent = false;
     this.activitatComponent = false;
+    this.epigrafComponent = false;
   }
 }
