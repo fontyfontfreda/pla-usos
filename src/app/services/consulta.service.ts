@@ -2,7 +2,7 @@
 import {Injectable} from '@angular/core';
 import axios, {AxiosResponse} from 'axios';
 import { AuthService } from './auth.service';
-import {Consulta} from '../models/constulta.model';
+import {Consulta} from '../models/consulta.model';
 import {environment} from '../../environments/environment';
 
 @Injectable({

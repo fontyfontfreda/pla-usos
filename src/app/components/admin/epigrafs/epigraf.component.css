@@ -1,214 +1,97 @@
-/* Llistes base */
-ul {
-  list-style-type: none;
-  padding-left: 0;
+/* epigraf.component.css */
+.epigraf-table table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
-/* Estil grups */
-.grup-title {
-  background-color: #f0f0f0;
-  padding: 10px;
-  margin: 5px 0;
-  cursor: pointer;
-  font-weight: bold;
-  border-radius: 8px;
-  transition: background-color 0.3s;
-}
-
-.grup-title:hover {
-  background-color: #e0e0e0;
-}
-
-/* Estil subgrups */
-.subgrup-title {
-  background-color: #e8f4fc;
+.epigraf-table th, .epigraf-table td {
+  border: 1px solid #ccc;
   padding: 8px;
-  margin: 4px 0 0 20px;
+  text-align: left;
+}
+
+.button-detalls {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.button-detalls button{
+  padding: 5px 10px;
+  background-color: transparent;
+  border: none;
   cursor: pointer;
-  font-weight: 500;
-  border-radius: 6px;
-  transition: background-color 0.3s;
 }
 
-.subgrup-title:hover {
-  background-color: #d0e8f9;
-}
-
-/* Estil activitats */
-.activitat-list {
-  padding-left: 40px;
-  margin-top: 5px;
-  animation: fadeIn 0.3s ease-in;
-}
-
-.activitat-item {
-  padding: 5px 0;
-  font-size: 14px;
-}
-
-.activitat-title {
-  background-color: #EBFDD9;
-  padding: 8px;
-  margin: 4px 0 0 20px;
+.modal button {
+  padding: 5px 10px;
+  background-color: #E62B01;
+  color: white;
+  border: none;
   cursor: pointer;
-  font-weight: 500;
-  border-radius: 6px;
-  transition: background-color 0.3s;
 }
 
-.activitat-title:hover {
-  background-color: #DCFCD9;
+.modal button:hover {
+  background-color: red;
 }
 
-/* Fletxa */
-.arrow {
-  float: right;
-  font-size: 12px;
-}
-
-/* Petita animació de desplegament */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
 
 .modal {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  right: 0;
+  bottom: 0;
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
-  align-items: center;
   justify-content: center;
-  z-index: 1000;
+  align-items: center;
 }
 
 .modal-content {
-  position: relative;
   background-color: white;
-  padding: 20px 24px;
-  border-radius: 10px;
-  max-height: 80vh;
-  overflow-y: auto;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-  width: 90%;
+  padding: 20px;
+  border-radius: 5px;
+  width: 600px;
 }
 
-.modal-content h3 {
-  margin-top: 0;
-  margin-bottom: 16px;
-  font-size: 18px;
+h3 {
+  margin-bottom: 20px;
+  text-align: center;
+  text-transform: uppercase;
+  text-decoration: underline;
 }
 
-.condicions-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-}
-
-.condicio {
-  background-color: #f9f9f9;
-  padding: 8px;
-  border-radius: 6px;
-  border: 1px solid #ddd;
+/* Estil per al cercador */
+.search-container {
+  margin-bottom: 10px;
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
+  align-items: center;
 }
 
-.condicio label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 4px;
+.search-container input {
+  margin-left: 10px;
+  padding: 8px;
+  width: 250px;
 }
 
-.condicio select,
-.condicio input {
-  width: 100%;
-  padding: 4px 8px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-}
-
-.valor-field {
-  margin-top: 8px;
-  width: 10%;
-}
-
-.modal-buttons {
-  margin-top: 20px;
+.button{
   display: flex;
   justify-content: end;
-  gap: 20px;
 }
 
-.modal-buttons button {
-  padding: 6px 12px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+.dialog-content {
+  background-color: #ffffff;
+  padding: 20px 30px;
+  border-radius: 8px;
+  text-align: center;
+  width: 20%;
 }
 
-.save {
-  background-color: green;
-  color: white;
-}
-
-.save:hover {
-  background-color: darkgreen;
-}
-
-.cancel {
-  background-color: lightgray;
-}
-
-.cancel:hover {
-  background-color: grey;
-}
-
-.tancar-modal {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: transparent;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-  color: #888;
-  transition: color 0.2s;
-}
-
-.tancar-modal:hover {
-  color: #000;
-}
-
-.condicio-grups {
+.spinner {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
-}
-
-.grups, .subgrups, .activitats {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.nou-boto {
-  padding: 6px 12px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  background-color: green;
-  color: white;
-}
-
-.nou-boto:hover {
-  background-color: darkgreen;
+  justify-content: center;
+  margin-bottom: 25px;
 }

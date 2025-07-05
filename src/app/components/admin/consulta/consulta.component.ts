@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {ConsultaService} from '../../../services/consulta.service';
-import {Consulta} from '../../../models/constulta.model';
+import {Consulta} from '../../../models/consulta.model';
 import {NgForOf, NgIf} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
