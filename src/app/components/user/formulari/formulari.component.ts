@@ -12,11 +12,12 @@ import {ActivitatService} from '../../../services/activitat.service';
 import {MantenimentService} from '../../../services/manteniment.service';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {NotificacioComponent} from '../../shared/notificacio/notificacio.component';
+import {FooterComponent} from '../../shared/footer/footer.component'
 
 @Component({
   selector: 'app-formulari',
   standalone: true,
-  imports: [FormsModule, CommonModule, DadesUsuariComponent, AdrecaComponent, ActivitatComponent, RouterModule, PresentacioComponent, MatProgressSpinnerModule, NotificacioComponent],
+  imports: [FormsModule, CommonModule, DadesUsuariComponent, AdrecaComponent, ActivitatComponent, RouterModule, PresentacioComponent, MatProgressSpinnerModule, NotificacioComponent, FooterComponent],
   templateUrl: './formulari.component.html',
   styleUrls: ['./formulari.component.css']
 })
@@ -131,13 +132,6 @@ export class FormulariComponent implements OnInit {
       });
   }
 
-
-  onSubmit() {
-    console.log('Form Data Final:', {
-      ...this.formDataUsuari,
-    });
-  }
-
   // Funció per tornar enrere al formulari de dades d'usuari
   goBack(page: number) {
     switch (page) {
@@ -154,36 +148,6 @@ export class FormulariComponent implements OnInit {
         this.formActivitat = false;
         break;
     }
-  }
-
-  onFileSelected(event: any) {
-    if (event.target.files.length > 0) {
-      this.selectedFile = event.target.files[0];
-    }
-  }
-
-  uploadFile() {
-    if (!this.selectedFile) {
-      alert('Si us plau, selecciona un fitxer abans de carregar-lo.');
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append('file', this.selectedFile);
-
-    fetch('http://localhost:3000/api/upload', {
-      method: 'POST',
-      body: formData
-    })
-      .then(response => response.text())
-      .then(data => {
-        console.log('Resposta del servidor:', data);
-        alert('Fitxer carregat correctament.');
-      })
-      .catch(error => {
-        console.error('Error carregant el fitxer:', error);
-        alert('Error en carregar el fitxer.');
-      });
   }
 
   private timeOutNoti() {

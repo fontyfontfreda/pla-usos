@@ -71,3 +71,19 @@ button:hover {
 .llista-altres {
   margin-top: -5px;
 }
+
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+.page-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.content-wrapper {
+  flex: 1;
+}
