@@ -1,10 +1,23 @@
 .container {
-  margin: 0 100px;
+  margin: 0 auto;
+  padding: 0 20px;
+  max-width: 1200px;
   text-align: justify;
 }
 
 h1 {
   text-align: center;
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+}
+
+h2 {
+  font-size: 1.3rem;
+  margin-bottom: 15px;
+}
+
+p, li {
+  font-size: 1rem;
 }
 
 .punt {
@@ -13,12 +26,18 @@ h1 {
 
 .imatge {
   display: flex;
-  flex-direction: row;
   justify-content: center;
+  flex-wrap: wrap;
+  margin: 20px 0;
+}
+
+.imatge img {
+  max-width: 100%;
+  height: auto;
 }
 
 li {
-  margin-bottom: 8px; /* ajusta-ho segons necessitis */
+  margin-bottom: 8px;
 }
 
 button {
@@ -29,7 +48,8 @@ button {
   border-radius: 4px;
   font-size: 16px;
   cursor: pointer;
-  width: 30%;
+  width: 100%;
+  max-width: 300px;
   transition: background-color 0.3s;
 }
 
@@ -39,7 +59,6 @@ form button:hover {
 
 .boto {
   display: flex;
-  flex-direction: row;
   justify-content: center;
   padding: 8px 0px;
 }
@@ -47,17 +66,56 @@ form button:hover {
 .alerta {
   display: flex;
   flex-direction: row;
+  align-items: center;
   justify-content: center;
-  gap: 25px;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin: 20px 0;
 }
 
-.div-alerta{
+.alerta img {
+  width: 50px;
+  height: auto;
+}
+
+.div-alerta {
   border: 2px solid #F09A74;
   border-radius: 15px;
   padding: 10px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background: #F5B8A4;
-  background: linear-gradient(180deg,rgba(245, 184, 164, 1) 0%, rgba(242, 171, 150, 1) 50%, rgba(241, 144, 105, 1) 100%);
+  background: linear-gradient(180deg, rgba(245, 184, 164, 1) 0%, rgba(242, 171, 150, 1) 50%, rgba(241, 144, 105, 1) 100%);
+  max-width: 800px;
+  width: 100%;
+}
+
+/* 🌐 Media Queries per a dispositius petits (mòbils i tauletes) */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.2rem;
+  }
+
+  .container {
+    padding: 0 15px;
+  }
+
+  .alerta {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .alerta img {
+    width: 40px;
+  }
+
+  button {
+    font-size: 14px;
+    padding: 10px;
+    width: 90%;
+  }
 }
