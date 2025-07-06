@@ -4,25 +4,25 @@
     <div class="div-taula">
       <h2>Zones</h2>
       <!-- Formulari per afegir una nova zona -->
-      <div>
-        <button (click)="addZona()">Afegir Zona</button>
-      </div>
+<!--      <div>-->
+<!--        <button (click)="addZona()">Afegir Zona</button>-->
+<!--      </div>-->
 
       <table>
         <thead>
         <tr>
           <th>Codi Zona</th>
           <th>Descripció Zona</th>
-          <th>Accions</th>
+<!--          <th>Accions</th>-->
         </tr>
         </thead>
         <tbody>
         <tr *ngFor="let zona of zones">
           <td>{{ zona.codi_zona }}</td>
           <td>{{ zona.descripcio_zona }}</td>
-          <td>
-            <button (click)="deleteZona(zona)" class="button-delete">Eliminar</button>
-          </td>
+<!--          <td>-->
+<!--            <button (click)="deleteZona(zona)" class="button-delete">Eliminar</button>-->
+<!--          </td>-->
         </tr>
         </tbody>
       </table>
@@ -30,25 +30,25 @@
     <div class="div-taula">
       <h2>Àrees</h2>
       <!-- Formulari per afegir una nova àrea a una zona -->
-      <div>
-        <button (click)="addArea()">Afegir Àrea</button>
-      </div>
+<!--      <div>-->
+<!--        <button (click)="addArea()">Afegir Àrea</button>-->
+<!--      </div>-->
 
       <table *ngIf="zones.length > 0">
         <thead>
         <tr>
           <th>Codi Àrea</th>
           <th>Descripció Àrea</th>
-          <th>Accions</th>
+<!--          <th>Accions</th>-->
         </tr>
         </thead>
         <tbody *ngFor="let zona of zones">
         <tr *ngFor="let area of zona.arees">
           <td>{{ area.codi_area }}</td>
           <td>{{ area.descripcio_area }}</td>
-          <td>
-            <button (click)="deleteArea(area)" class="button-delete">Eliminar</button>
-          </td>
+<!--          <td>-->
+<!--            <button (click)="deleteArea(area)" class="button-delete">Eliminar</button>-->
+<!--          </td>-->
         </tr>
         </tbody>
       </table>

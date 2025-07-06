@@ -155,7 +155,8 @@ export class EpigrafComponent implements OnInit {
     const condicioPlana = {
       ID: condicio.ID,
       CONDICIO_ID: condicio.CONDICIO_ID,
-      VALOR: condicio.VALOR
+      VALOR: condicio.VALOR,
+      IS_ZONA: condicio.IS_ZONA
     };
 
     try {

@@ -120,7 +120,6 @@ export class FormulariComponent implements OnInit {
       .catch(error => {
         this.generantPDF = false;
         console.log(error)
-
         if (error.response && error.response.data) {
           this.textNoti = error.response.data;
         } else {

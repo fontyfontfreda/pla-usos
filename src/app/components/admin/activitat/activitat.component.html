@@ -32,6 +32,11 @@
           <li *ngFor="let activitat of activitats[grup][subgrup]" class="activitat-item">
             <div class="activitat-title" (click)="veureActivitat(activitat, subgrup, grup)">
               {{ activitat }}
+              <div class="title-buttons">
+                <span class="arrow" (click)="veureActivitat(activitat, subgrup, grup); $event.stopPropagation()">
+                  <i class="fa fa-pencil"></i>
+                </span>
+              </div>
             </div>
           </li>
         </ul>
@@ -138,8 +143,8 @@
     <app-notificacio *ngIf="textNoti != ''" [text]="textNoti" [tipus]="tipusNoti"></app-notificacio>
     <button class="tancar-modal" (click)="tancarModal()">✖</button>
 
-    <h3 *ngIf="!creant">Edita el subgrup: {{ subgrupEditar.descripcio_subgrup }}</h3>
-    <h3 *ngIf="creant">Crea una nou subgrup</h3>
+    <h3 *ngIf="!creant">Edita el grup: {{ subgrupEditar.descripcio_subgrup }}</h3>
+    <h3 *ngIf="creant">Crea una nou grup</h3>
 
     <div *ngIf="!creant" class="condicio condicio-grups">
       <div class="activitats_box">

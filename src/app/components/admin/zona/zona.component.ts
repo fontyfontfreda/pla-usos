@@ -96,7 +96,6 @@ export class ZonaComponent {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         const zona = this.zones.find(z => z.codi_zona === +result.zonaCodi);
-        console.log(zona)
         if (zona) {
           const mateixCodi = zona.arees.find(a => a.codi_area === zona.codi_zona + '.' + result.codi);
           if (mateixCodi){

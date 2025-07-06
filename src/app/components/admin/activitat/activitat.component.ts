@@ -204,7 +204,6 @@ export class ActivitatComponent implements OnInit {
 
   canviEpigraf(event: Event) {
     const valor = (event.target as HTMLInputElement).value;
-    console.log(valor)
   }
 
   iniciarNouGrup() {

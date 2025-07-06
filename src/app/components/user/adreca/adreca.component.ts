@@ -29,7 +29,6 @@ export class AdrecaComponent {
   }
 
   safeUrl(x: string, y: string) {
-    console.log(x, y)
     if (x !== "0" && y !== "0") {
       const url = `https://sig.olot.cat/minimapa/Pla-usos.asp?X=${x}&Y=${y}`;
       this.srcUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
