@@ -179,7 +179,6 @@ export class ActivitatComponent implements OnInit {
     };
 
     try {
-      console.log(dades)
       await this.activitatService.createActivitat(dades);
       this.textNoti = 'Activitat creada correctament.';
       this.tipusNoti = 'ok';

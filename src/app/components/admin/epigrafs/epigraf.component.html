@@ -1,10 +1,14 @@
 <!-- epigraf.component.html -->
-<app-notificacio *ngIf="textNoti != ''" [text]="textNoti" [tipus]="tipusNoti"></app-notificacio>
 <div class="epigraf-table">
   <!-- Input de cerca -->
   <div class="search-container">
-    <label for="search">Cerca:</label>
-    <input [(ngModel)]="searchTerm" id="search" placeholder="Cerca per descripcio d'epígraf"/>
+    <div>
+      <label for="search">Cerca:</label>
+      <input [(ngModel)]="searchTerm" id="search" placeholder="Cerca per descripcio d'epígraf"/>
+    </div>
+    <div>
+      <button (click)="iniciarNouEpigraf()" class="nou-boto">+ Nou epígraf</button>
+    </div>
   </div>
 
   <!-- Taula de els epigrafs -->
@@ -19,40 +23,109 @@
     </thead>
     <tbody>
     <tr *ngFor="let epigraf of filteredEpigrafs()">
-      <td>{{ epigraf.codi1 + '.' + epigraf.codi2 + '.' + epigraf.codi3}}</td>
+      <td>{{ epigraf.codi1 + '.' + epigraf.codi2 + '.' + epigraf.codi3 }}</td>
       <td>{{ epigraf.descripcio }}</td>
       <td>{{ epigraf.mostrar ? "Sí" : "No" }}</td>
       <td>
         <div class="button-detalls">
-          <button (click)="veureDetalls(epigraf)"><i class="fa fa-eye"></i></button>
+          <button (click)="editarEpigraf(epigraf)"><i class="fa fa-pencil"></i></button>
         </div>
       </td>
     </tr>
     </tbody>
   </table>
 
-  <!-- Modal per veure el detall de la epigraf -->
-<!--  <div *ngIf="selectedEpigraf" class="modal">-->
-<!--    <div class="modal-content">-->
-<!--      <div class="button">-->
-<!--        <button (click)="tancarModal()">X</button>-->
-<!--      </div>-->
-<!--      <h3>Detalls de la epigraf</h3>-->
-<!--      <p><strong>DNI INTERESSAT: </strong>{{ selectedepigraf.dni_interessat }}</p>-->
-<!--      <p><strong>NOM INTERESSAT: </strong>{{ selectedepigraf.nom_interessat }}</p>-->
-<!--      <p><strong>ACTUACIÓ INTERESSAT: </strong>{{ selectedepigraf.actuacio_interessat }}</p>-->
-<!--      <p><strong>DOMCOD: </strong>{{ selectedepigraf.DOMCOD }}</p>-->
-<!--      <p><strong>ADREÇA: </strong>{{ !selectedepigraf.adreca ? "Adreça no disponible" : selectedepigraf.adreca }}</p>-->
-<!--      <p *ngIf="!selectedepigraf.is_altres"><strong>ÚS: </strong>{{ selectedepigraf.grup }}</p>-->
-<!--      <p *ngIf="!selectedepigraf.is_altres"><strong>GRUP: </strong>{{ selectedepigraf.subgrup }}</p>-->
-<!--      <p *ngIf="!selectedepigraf.is_altres"><strong>EPÍGRAF: </strong>{{ selectedepigraf.activitat }}</p>-->
-<!--      <p *ngIf="selectedepigraf.is_altres"><strong>EPÍGRAF ALTRES: </strong>{{ selectedepigraf.descripcio_altres }}-->
-<!--      </p>-->
-<!--      <p><strong>ÉS VÀLID(provisional): </strong>{{ selectedepigraf.is_valid == 1 ? "SÍ" : "NO" }}</p>-->
-<!--      <p><strong>CONDICIÓ: </strong>{{ selectedepigraf.condicio }}</p>-->
-<!--      <p *ngIf="selectedepigraf.valor_condicio"><strong>VALOR CONDICIÓ: </strong>{{ selectedepigraf.valor_condicio }}-->
-<!--      </p>-->
-<!--      <p><strong>DATA: </strong>{{ selectedepigraf.data }}</p>-->
-<!--    </div>-->
-<!--  </div>-->
+  <div class="modal" *ngIf="epigrafSeleccionat" (click)="onBackdropClick($event)">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <app-notificacio *ngIf="textNoti != ''" [text]="textNoti" [tipus]="tipusNoti"></app-notificacio>
+      <button class="tancar-modal" (click)="tancarModal()">✖</button>
+      <h3 *ngIf="!nouEpigrafMode">Edita l'epígraf: {{ epigrafEdit.DESCRIPCIO }}</h3>
+      <h3 *ngIf="nouEpigrafMode">Crea un nou epígraf</h3>
+
+      <!-- Només per nova activitat -->
+      <div *ngIf="nouEpigrafMode" class="condicio condicio-grups">
+        <div class="epigrafs">
+          <div class="epigraf">
+            <label>Codi: </label>
+            <div>
+              <input [(ngModel)]="nouEpigraf.codi" placeholder="Codi de l'epígraf (ex. 4.1.3)"/>
+            </div>
+          </div>
+          <div class="epigraf">
+            <label>Descripció: </label>
+            <div>
+              <input [(ngModel)]="nouEpigraf.descripcio" placeholder="Escriu un epígraf nou"/>
+            </div>
+          </div>
+          <div>
+            <label style="display: flex; align-items: center; gap: 0.5rem;">
+              Actiu
+              <input type="checkbox" [(ngModel)]="nouEpigraf.mostrar"/>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="!nouEpigrafMode" class="condicio condicio-grups">
+        <div class="epigrafs">
+          <div class="epigraf">
+            <label>Descripció: </label>
+            <div>
+              <input [(ngModel)]="epigrafEdit.DESCRIPCIO" placeholder="Escriu una nova descripció" (change)="onChangeEpigraf($event, 1)"/>
+            </div>
+          </div>
+          <div>
+            <label style="display: flex; align-items: center; gap: 0.5rem;">
+              Actiu
+              <input type="checkbox" [(ngModel)]="epigrafEdit.MOSTRAR" (click)="onChangeEpigraf($event, 2)"/>
+            </label>
+          </div>
+        </div>
+      </div>
+
+
+
+      <br>
+
+      <div class="condicions-grid">
+        <div *ngFor="let condicio of epigrafSeleccionat" class="condicio">
+          <div>
+            <label *ngIf="condicio.IS_ZONA == 1">Condició per la zona: <strong>{{ condicio.CODI }}</strong></label>
+            <label *ngIf="condicio.IS_ZONA == 0">Condició per l'àrea: <strong>{{ condicio.CODI }}</strong></label>
+            <p *ngIf="!condicio.editant">{{ condicio.CONDICIO }}</p>
+            <select [(ngModel)]="condicio.CONDICIO_ID" (change)="onCondicioChange(condicio)" *ngIf="condicio.editant">
+              <option [value]="1">No apte</option>
+              <option [value]="2">Apte</option>
+              <option [value]="3">Apte prioritari</option>
+              <option [value]="4">Distància 50m</option>
+              <option [value]="5">Distància 100m</option>
+              <option [value]="6">Densitat 50m</option>
+              <option [value]="7">Amplaria carrer</option>
+              <option [value]="8">Ubicacio ARE</option>
+              <option [value]="9">Ubicacio parcel·la</option>
+              <option [value]="10">Urbanistica</option>
+              <option [value]="11">Dimensio</option>
+            </select>
+          </div>
+
+          <div *ngIf="condicio.CONDICIO_ID == 6 || condicio.CONDICIO_ID == 7" class="valor-field">
+            <label>Valor:</label>
+            <p *ngIf="!condicio.editant">{{ condicio.VALOR }}</p>
+
+            <input [(ngModel)]="condicio.VALOR" type="number" *ngIf="condicio.editant"/>
+          </div>
+
+          <div class="modal-buttons" *ngIf="!nouEpigrafMode">
+            <button (click)="guardarEpigraf(condicio)" class="save" *ngIf="condicio.editant">Guardar</button>
+            <button (click)="cancelCondition(condicio)" class="cancel" *ngIf="condicio.editant">Cancel·lar</button>
+            <button (click)="editCondition(condicio)" class="edit" *ngIf="!condicio.editant">Editar</button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-buttons" *ngIf="nouEpigrafMode">
+        <button (click)="guardarNouEpigraf()" class="save">Crear</button>
+        <button (click)="cancelarNouEpigraf()" class="cancel">Cancel·lar</button>
+      </div>
+    </div>
+  </div>
 </div>
