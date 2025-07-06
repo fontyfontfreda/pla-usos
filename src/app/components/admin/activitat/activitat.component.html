@@ -1,24 +1,36 @@
-<app-notificacio *ngIf="textNoti != ''" [text]="textNoti" [tipus]="tipusNoti"></app-notificacio>
-
-<button (click)="iniciarNovaActivitat()" class="nou-boto">+ Nou epígraf</button>
+<div class="botons-crear">
+  <button (click)="iniciarNouGrup()" class="nou-boto">+ Nou ús</button>
+  <button (click)="iniciarNouSubgrup()" class="nou-boto">+ Nou grup</button>
+  <button (click)="iniciarNovaActivitat()" class="nou-boto">+ Nova activitat</button>
+</div>
 
 <ul class="grup-list">
   <li *ngFor="let grup of objectKeys(activitats)">
     <div class="grup-title" (click)="toggleGrup(grup)">
       {{ grup }}
-      <span class="arrow">{{ grupSeleccionat === grup ? '▲' : '▼' }}</span>
+      <div class="title-buttons">
+        <span class="arrow" (click)="veureGrup( grup); $event.stopPropagation()">
+          <i class="fa fa-pencil"></i>
+        </span>
+        <span class="arrow">{{ grupSeleccionat === grup ? '▲' : '▼' }}</span>
+      </div>
     </div>
 
     <ul *ngIf="grupSeleccionat === grup" class="subgrup-list">
       <li *ngFor="let subgrup of objectKeys(activitats[grup])">
         <div class="subgrup-title" (click)="toggleSubgrup(subgrup)">
           {{ subgrup }}
-          <span class="arrow">{{ subgrupSeleccionat === subgrup ? '▲' : '▼' }}</span>
+          <div class="title-buttons">
+            <span class="arrow" (click)="veureSubgrup(subgrup, grup); $event.stopPropagation()">
+              <i class="fa fa-pencil"></i>
+            </span>
+            <span class="arrow">{{ subgrupSeleccionat === subgrup ? '▲' : '▼' }}</span>
+          </div>
         </div>
 
         <ul *ngIf="subgrupSeleccionat === subgrup" class="activitat-list">
           <li *ngFor="let activitat of activitats[grup][subgrup]" class="activitat-item">
-            <div class="activitat-title" (click)="veureActivitat(activitat)">
+            <div class="activitat-title" (click)="veureActivitat(activitat, subgrup, grup)">
               {{ activitat }}
             </div>
           </li>
@@ -27,101 +39,175 @@
     </ul>
   </li>
 </ul>
-
+<!--MODAL ACTIVITAT-->
 <div class="modal" *ngIf="activitatSeleccionada" (click)="onBackdropClick($event)">
-  <div class="modal-content" (click)="$event.stopPropagation()">
+  <div *ngIf="activitatSeleccionada" class="modal-content" (click)="$event.stopPropagation()">
+    <app-notificacio *ngIf="textNoti != ''" [text]="textNoti" [tipus]="tipusNoti"></app-notificacio>
     <button class="tancar-modal" (click)="tancarModal()">✖</button>
-    <h3 *ngIf="!novaActivitatMode">Edita l'epígraf: {{ activitatSeleccionada[0]?.DESCRIPCIO }}</h3>
-    <h3 *ngIf="novaActivitatMode">Crea un nou epígraf</h3>
 
-    <!-- Només per nova activitat -->
-    <div *ngIf="novaActivitatMode" class="condicio condicio-grups">
-      <!-- Selecció de grup -->
-      <div class="grups">
-        <label>ÚS:</label>
-        <div>
-          <select (change)="onGrupSeleccionat($event)">
-            <option [value]="''" disabled selected>Selecciona un ús</option>
-            <option *ngFor="let grup of grupsDisponibles" [value]="grup">{{ grup }}</option>
-          </select>
-        </div>
-        <div>
-          <input [(ngModel)]="novaActivitat.GRUP" placeholder="O escriu un ús nou"/>
-        </div>
-        <div>
-          <input [(ngModel)]="novaActivitat.CODI_GRUP" placeholder="Codi de l'ús"  *ngIf="codiGrup"/>
-        </div>
-      </div>
+    <h3 *ngIf="!creant">Edita l'activitat: {{ activitatSeleccionada.descripcio_activitat }}</h3>
+    <h3 *ngIf="creant">Crea una nova activitat</h3>
 
-      <!-- Selecció de subgrup -->
-      <div class="subgrups">
-        <label>Grup:</label>
-        <div>
-          <select (change)="assignarSubgup($event)">
-            <option [value]="''" disabled selected>Selecciona un grup</option>
-            <option *ngFor="let subgrup of subgrupsDisponibles" [value]="subgrup">{{ subgrup }}</option>
-          </select>
+    <div *ngIf="!creant" class="condicio condicio-grups">
+      <div class="activitats_box">
+        <div class="activitat">
+          <label>Descripció: </label>
+          <div>
+            <input [(ngModel)]="activitatSeleccionada.descripcio_activitat" placeholder="Escriu un epígraf nou"/>
+          </div>
+        </div>
+        <div class="activitat">
+          <label>EPÍGRAF:</label>
+          <div>
+            <select [(ngModel)]="epigrafSeleccionat" (change)="canviEpigraf($event)">
+              <option [value]="''" disabled>Selecciona un epígraf</option>
+              <option *ngFor="let epigraf of epigrafsDisponibles"
+                      [value]="epigraf.id">{{ epigraf.codi1 + '.' + epigraf.codi2 + '.' + epigraf.codi3 + ' ' + epigraf.descripcio }}
+              </option>
+            </select>
+          </div>
         </div>
         <div>
-          <input [(ngModel)]="novaActivitat.SUBGRUP" placeholder="O escriu un grup nou"/>
-        </div>
-        <div>
-          <input [(ngModel)]="novaActivitat.CODI_SUBGRUP" placeholder="Codi del grup" *ngIf="codiSubgrup"/>
-        </div>
-      </div>
-      <div class="activitats">
-        <label>Descripció: </label>
-        <div>
-          <input [(ngModel)]="novaActivitat.DESCRIPCIO" placeholder="Escriu una activitat nova"/>
-        </div>
-        <div>
-          <input [(ngModel)]="novaActivitat.CODI_ACTIVITAT" placeholder="Codi de l'activitat"/>
+          <label style="display: flex; align-items: center; gap: 0.5rem;">
+            Actiu
+            <input type="checkbox" [(ngModel)]="activitatSeleccionada.mostrar"/>
+          </label>
         </div>
       </div>
     </div>
 
-    <br>
-
-    <div class="condicions-grid">
-      <div *ngFor="let condicio of activitatSeleccionada" class="condicio">
+    <div *ngIf="creant" class="condicio condicio-grups">
+      <div style="display: flex;flex-direction: column; gap:10px">
+        <div class="activitat">
+          <label>Ús: </label>
+          <div>
+            <select [(ngModel)]="grupDisponible" (change)="canviGrup($event)">
+              <option [value]="''" disabled selected>Selecciona un grup</option>
+              <option *ngFor="let grup of grupsDisponibles" [value]="grup">
+                {{ grup }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="activitat">
+          <label>Grup: </label>
+          <div>
+            <select [(ngModel)]="subgrupDisponible" [disabled]="!subgrupsDisponibles.length">
+              <option [value]="''" disabled selected>Selecciona un subgrup</option>
+              <option *ngFor="let subgrup of subgrupsDisponibles" [value]="subgrup">
+                {{ subgrup }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="activitat">
+          <label>EPÍGRAF:</label>
+          <div>
+            <select [(ngModel)]="epigrafSeleccionat" (change)="canviEpigraf($event)">
+              <option [value]="''" disabled>Selecciona un epígraf</option>
+              <option *ngFor="let epigraf of epigrafsDisponibles"
+                      [value]="epigraf.id">{{ epigraf.codi1 + '.' + epigraf.codi2 + '.' + epigraf.codi3 + ' ' + epigraf.descripcio }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="activitat">
+          <label>Descripció: </label>
+          <div>
+            <input [(ngModel)]="activitatSeleccionada.descripcio_activitat" placeholder="Escriu un epígraf nou"/>
+          </div>
+        </div>
         <div>
-          <label *ngIf="condicio.IS_ZONA == 1">Condició per la zona: <strong>{{ condicio.CODI }}</strong></label>
-          <label *ngIf="condicio.IS_ZONA == 0">Condició per l'àrea: <strong>{{ condicio.CODI }}</strong></label>
-          <p *ngIf="!condicio.editant">{{ condicio.CONDICIO }}</p>
-          <select [(ngModel)]="condicio.CONDICIO_ID" (change)="onCondicioChange(condicio)" *ngIf="condicio.editant">
-            <option [value]="1">No apte</option>
-            <option [value]="2">Apte</option>
-            <option [value]="3">Apte prioritari</option>
-            <option [value]="4">Distància 50m</option>
-            <option [value]="5">Distància 100m</option>
-            <option [value]="6">Densitat 50m</option>
-            <option [value]="7">Amplaria carrer</option>
-            <option [value]="8">Ubicacio ARE</option>
-            <option [value]="9">Ubicacio parcel·la</option>
-            <option [value]="10">Urbanistica</option>
-            <option [value]="11">Dimensio</option>
-          </select>
-        </div>
-
-        <div *ngIf="condicio.CONDICIO_ID == 6 || condicio.CONDICIO_ID == 7" class="valor-field">
-          <label>Valor:</label>
-          <p *ngIf="!condicio.editant">{{ condicio.VALOR }}</p>
-
-          <input [(ngModel)]="condicio.VALOR" type="number" *ngIf="condicio.editant"/>
-        </div>
-
-        <div class="modal-buttons" *ngIf="!novaActivitatMode">
-          <button (click)="guardarActivitat(condicio)" class="save" *ngIf="condicio.editant">Guardar</button>
-          <button (click)="cancelCondition(condicio)" class="cancel" *ngIf="condicio.editant">Cancel·lar</button>
-          <button (click)="editCondition(condicio)" class="edit" *ngIf="!condicio.editant">Editar</button>
+          <label style="display: flex; justify-content:start; align-items: center; gap: 2px;">
+            Actiu
+            <input type="checkbox" [(ngModel)]="activitatSeleccionada.mostrar"/>
+          </label>
         </div>
       </div>
     </div>
-    <div class="modal-buttons" *ngIf="novaActivitatMode">
-      <button (click)="guardarNovaActivitat()" class="save">Crear</button>
-      <button (click)="cancelarNovaActivitat()" class="cancel">Cancel·lar</button>
+
+    <div class="modal-buttons">
+      <button (click)="guardarActivitat()" class="save">Guardar</button>
+      <button (click)="tancarModal()" class="cancel">Cancel·lar</button>
     </div>
   </div>
 </div>
+<!--MODAL SUBGRUP-->
+<div class="modal" *ngIf="subgrupEditar" (click)="onBackdropClick($event)">
+  <div *ngIf="subgrupEditar" class="modal-content" (click)="$event.stopPropagation()">
+    <app-notificacio *ngIf="textNoti != ''" [text]="textNoti" [tipus]="tipusNoti"></app-notificacio>
+    <button class="tancar-modal" (click)="tancarModal()">✖</button>
 
+    <h3 *ngIf="!creant">Edita el subgrup: {{ subgrupEditar.descripcio_subgrup }}</h3>
+    <h3 *ngIf="creant">Crea una nou subgrup</h3>
 
+    <div *ngIf="!creant" class="condicio condicio-grups">
+      <div class="activitats_box">
+        <div class="activitat">
+          <label>Ús: </label>
+          <div>
+            <input readonly [(ngModel)]="subgrupEditar.descripcio_grup" placeholder="Escriu un subgrup nou"/>
+          </div>
+        </div>
+        <div class="activitat">
+          <label>Descripció grup: </label>
+          <div>
+            <input [(ngModel)]="subgrupEditar.descripcio_subgrup"/>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="creant" class="condicio condicio-grups">
+      <div class="activitats_box">
+        <div class="activitat">
+          <label>Ús: </label>
+          <div>
+            <select [(ngModel)]="epigrafSeleccionat" (change)="canviEpigraf($event)">
+              <option [value]="''" disabled>Selecciona un ús</option>
+              <option *ngFor="let grup of grupsDisponibles"
+                      [value]="grup">{{ grup }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="activitat">
+          <label>Descripció grup: </label>
+          <div>
+            <input [(ngModel)]="subgrupEditar.descripcio_subgrup" placeholder="Escriu un subgrup nou"/>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-buttons">
+      <button (click)="guardarActivitat()" class="save">Guardar</button>
+      <button (click)="tancarModal()" class="cancel">Cancel·lar</button>
+    </div>
+  </div>
+</div>
+<!--MODAL GRUP-->
+<div class="modal" *ngIf="grupEditar" (click)="onBackdropClick($event)">
+  <div *ngIf="grupEditar" class="modal-content" (click)="$event.stopPropagation()">
+    <app-notificacio *ngIf="textNoti != ''" [text]="textNoti" [tipus]="tipusNoti"></app-notificacio>
+    <button class="tancar-modal" (click)="tancarModal()">✖</button>
+
+    <h3 *ngIf="!creant">Edita l'ús: {{ grupEditar.descripcio_grup }}</h3>
+    <h3 *ngIf="creant">Crea un nou ús</h3>
+
+    <div class="condicio condicio-grups">
+      <div class="activitats_box">
+        <div class="activitat">
+          <label>Descripció de l'ús: </label>
+          <div>
+            <input [(ngModel)]="grupEditar.descripcio_grup" placeholder="Escriu un ús nou"/>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-buttons">
+      <button (click)="guardarActivitat()" class="save">Guardar</button>
+      <button (click)="tancarModal()" class="cancel">Cancel·lar</button>
+    </div>
+  </div>
+</div>

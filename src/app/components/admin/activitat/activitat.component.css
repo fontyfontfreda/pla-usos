@@ -13,6 +13,8 @@ ul {
   font-weight: bold;
   border-radius: 8px;
   transition: background-color 0.3s;
+  display: flex;
+  justify-content: space-between;
 }
 
 .grup-title:hover {
@@ -28,6 +30,15 @@ ul {
   font-weight: 500;
   border-radius: 6px;
   transition: background-color 0.3s;
+  display: flex;
+  justify-content: space-between;
+}
+
+.title-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 5px;
 }
 
 .subgrup-title:hover {
@@ -212,3 +223,23 @@ ul {
 .nou-boto:hover {
   background-color: darkgreen;
 }
+
+.activitats_box {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  gap: 10px;
+  align-items: center;
+}
+
+.activitat{
+  display: flex;
+  flex-direction: column;
+}
+
+.botons-crear {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+

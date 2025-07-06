@@ -232,7 +232,6 @@ export class EpigrafComponent implements OnInit {
   async editarEpigraf(epigraf: Epigraf) {
     try {
       this.epigrafEdit = await this.epigrafService.getEpigraf(epigraf);
-      console.log(this.epigrafEdit)
       this.epigrafEdit.MOSTRAR = this.epigrafEdit.MOSTRAR == 1;
       this.epigrafSeleccionat = this.epigrafEdit.condicions;
       this.epigrafSeleccionat.forEach((c: { editant: boolean; }) => c.editant = false);

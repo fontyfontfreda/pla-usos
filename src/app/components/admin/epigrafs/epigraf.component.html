@@ -42,7 +42,7 @@
       <h3 *ngIf="!nouEpigrafMode">Edita l'epígraf: {{ epigrafEdit.DESCRIPCIO }}</h3>
       <h3 *ngIf="nouEpigrafMode">Crea un nou epígraf</h3>
 
-      <!-- Només per nova activitat -->
+      <!-- Només per nou epígraf -->
       <div *ngIf="nouEpigrafMode" class="condicio condicio-grups">
         <div class="epigrafs">
           <div class="epigraf">
@@ -66,6 +66,7 @@
         </div>
       </div>
 
+      <!-- Editar epígraf -->
       <div *ngIf="!nouEpigrafMode" class="condicio condicio-grups">
         <div class="epigrafs">
           <div class="epigraf">
@@ -82,11 +83,7 @@
           </div>
         </div>
       </div>
-
-
-
       <br>
-
       <div class="condicions-grid">
         <div *ngFor="let condicio of epigrafSeleccionat" class="condicio">
           <div>

@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivitatService } from '../../../services/activitat.service';
-import { MatDialog } from '@angular/material/dialog';
+import {Component, OnInit} from '@angular/core';
+import {ActivitatService} from '../../../services/activitat.service';
+import {MatDialog} from '@angular/material/dialog';
 import {NgForOf, NgIf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {NotificacioComponent} from '../../shared/notificacio/notificacio.component';
+import {EpigrafService} from '../../../services/epigraf.service';
+import {Epigraf} from '../../../models/epigraf.model';
 
 @Component({
   selector: 'app-activitat',
@@ -27,21 +29,28 @@ export class ActivitatComponent implements OnInit {
   subgrupSeleccionat: string | null = null;
 
   activitatSeleccionada: any | null = null;
-  backupCondicions: Record<number, any> = {};
+  subgrupEditar: any | null = null;
+  grupEditar: any | null = null;
 
-  novaActivitatMode: boolean = false;
-  novaActivitat: any | null = null;
+  creant: boolean = false;
+
+  // @ts-ignore
+  editing: 1 | 2 | 3 = 1;
+
+  epigrafsDisponibles: Epigraf[] = [];
+  epigrafSeleccionat: string = '';
 
   grupsDisponibles: string[] = [];
   subgrupsDisponibles: string[] = [];
 
-  codiGrup: boolean = true;
-  codiSubgrup: boolean = true;
+  grupDisponible: string | null = null;
+  subgrupDisponible: string | null = null;
 
   textNoti: string = '';
   tipusNoti: 'error' | 'ok' | 'info' = 'info';
 
-  constructor(private activitatService: ActivitatService, public dialog: MatDialog) {}
+  constructor(private activitatService: ActivitatService, private epigrafService: EpigrafService, public dialog: MatDialog) {
+  }
 
   ngOnInit(): void {
     this.loadActivitats();
@@ -50,7 +59,7 @@ export class ActivitatComponent implements OnInit {
   async loadActivitats() {
     try {
       this.activitats = await this.activitatService.getAllActivitats();
-      this.grupsDisponibles = Object.keys(this.activitats);
+      this.epigrafsDisponibles = await this.epigrafService.getEpigrafs();
     } catch (error) {
       this.textNoti = 'Error carregant les activitats';
       this.tipusNoti = 'error';
@@ -67,10 +76,11 @@ export class ActivitatComponent implements OnInit {
     this.subgrupSeleccionat = this.subgrupSeleccionat === subgrup ? null : subgrup;
   }
 
-  async veureActivitat(activitat: string) {
+  async veureActivitat(activitat: string, subgrup: string, grup: string) {
     try {
-      this.activitatSeleccionada = await this.activitatService.getActivitat(activitat);
-      this.activitatSeleccionada.forEach((c: { editant: boolean; }) => c.editant = false);
+      this.activitatSeleccionada = await this.activitatService.getActivitat(activitat, subgrup, grup);
+      this.epigrafSeleccionat = this.activitatSeleccionada.id_epigraf;
+      this.editing = 3;
     } catch (error) {
       this.textNoti = 'Error carregant l\'activitat: ' + activitat;
       this.tipusNoti = 'error';
@@ -78,162 +88,110 @@ export class ActivitatComponent implements OnInit {
     }
   }
 
-  tancarModal() {
-    this.activitatSeleccionada = null;
-    this.novaActivitatMode = false;
-    this.novaActivitat = null;
-  }
-
-  async guardarActivitat(condicio: any) {
-    const condicioPlana = {
-      ID: condicio.ID,
-      CONDICIO_ID: condicio.CONDICIO_ID,
-      VALOR: condicio.VALOR
-    };
-
+  async veureSubgrup(subgrup: string, grup: string) {
     try {
-      await this.activitatService.updateCondicio(condicioPlana);
-      this.textNoti = 'Condició actualitzada correctament.';
-      this.tipusNoti = 'ok';
-      this.timeOutNoti();
-      condicio.editant = false;
+      this.subgrupEditar = await this.activitatService.getSubgrup(subgrup, grup);
+      this.editing = 2;
     } catch (error) {
-      this.textNoti = 'Error actualitzant la condició.';
+      this.textNoti = 'Error carregant el subgrup: ' + subgrup;
       this.tipusNoti = 'error';
       this.timeOutNoti();
     }
   }
 
-  onCondicioChange(condicio: any) {
-    const opcions = {
-      1: 'No apte',
-      2: 'Apte',
-      3: 'Apte prioritari',
-      4: 'Distància 50m',
-      5: 'Distància 100m',
-      6: 'Densitat 50m',
-      7: 'Amplaria carrer',
-      8: 'Ubicacio ARE',
-      9: 'Ubicacio parcel·la',
-      10: 'Urbanistica',
-      11: 'Dimensio'
-    };
+  async veureGrup(grup: string) {
+    try {
+      this.grupEditar = await this.activitatService.getGrup(grup);
+      this.editing = 1;
+    } catch (error) {
+      this.textNoti = 'Error carregant el grup: ' + grup;
+      this.tipusNoti = 'error';
+      this.timeOutNoti();
+    }
+  }
 
-    // @ts-ignore
-    condicio.CONDICIO = opcions[condicio.CONDICIO_ID] || '';
+  tancarModal() {
+    this.activitatSeleccionada = null;
+    this.subgrupEditar = null;
+    this.grupEditar = null;
+    this.creant = false;
+    this.epigrafSeleccionat = '';
+    this.subgrupDisponible = '';
+    this.grupDisponible = '';
+    this.loadActivitats();
+  }
+
+  async guardarActivitat() {
+    if (!this.creant) {
+      if (this.editing == 1) {
+        this.grupEditar.editing = this.editing;
+      } else if (this.editing == 2) {
+        this.subgrupEditar.editing = this.editing;
+      } else if (this.editing == 3) {
+        this.activitatSeleccionada.id_epigraf = this.epigrafSeleccionat;
+        this.activitatSeleccionada.editing = this.editing;
+      }
+      try {
+        if (this.editing == 1) {
+          await this.activitatService.updateActivitat(this.grupEditar);
+          this.textNoti = 'Grup actualitzat correctament.';
+        } else if (this.editing == 2) {
+          await this.activitatService.updateActivitat(this.subgrupEditar);
+          this.textNoti = 'Subgrup actualitzat correctament.';
+        } else if (this.editing == 3) {
+          await this.activitatService.updateActivitat(this.activitatSeleccionada);
+          this.textNoti = 'Activitat actualitzada correctament.';
+        }
+        this.tipusNoti = 'ok';
+        this.timeOutNoti();
+        this.tancarModal();
+      } catch (error) {
+        if (this.editing == 1)
+          this.textNoti = 'Error actualitzant el grup: ' + this.subgrupEditar.descripcio_subgrup;
+        else if (this.editing == 2)
+          this.textNoti = 'Error actualitzant el subgrup: ' + this.subgrupEditar.descripcio_subgrup;
+        else if (this.editing == 3)
+          this.textNoti = 'Error actualitzant l\'activitat: ' + this.activitatSeleccionada.descripcio_activitat;
+        this.tipusNoti = 'error';
+        this.timeOutNoti();
+      }
+    } else {
+      try {
+        if (this.editing == 1) {
+          await this.activitatService.createGrup(this.grupEditar);
+          this.textNoti = 'Grup creat correctament.';
+        } else if (this.editing == 2) {
+          await this.activitatService.createSubgrup(this.subgrupEditar, this.epigrafSeleccionat);
+          this.textNoti = 'Subgrup actualitzat correctament.';
+        } else if (this.editing == 3) {
+          let activitat = {
+            grup: this.grupDisponible,
+            subgrup: this.subgrupDisponible,
+            epigraf: this.epigrafSeleccionat,
+            activitat: this.activitatSeleccionada
+          }
+          await this.activitatService.createActivitat(activitat);
+          this.textNoti = 'Activitat actualitzada correctament.';
+        }
+        this.tipusNoti = 'ok';
+        this.timeOutNoti();
+        this.tancarModal();
+      } catch (error: any) {
+        const missatgeError = error?.response?.data || 'Error desconegut';
+        if (this.editing == 1)
+          this.textNoti = 'Error creant el grup: ' + missatgeError;
+        else if (this.editing == 2)
+          this.textNoti = 'Error creant el subgrup: ' + missatgeError;
+        else if (this.editing == 3)
+          this.textNoti = 'Error creant l\'activitat: ' + missatgeError;
+        this.tipusNoti = 'error';
+        this.timeOutNoti();
+      }
+    }
   }
 
   onBackdropClick(event: MouseEvent): void {
     this.tancarModal();
-  }
-
-  editCondition(condicio: any){
-    condicio.editant = true;
-    this.backupCondicions[condicio.ID] = { ...condicio };
-  }
-
-  cancelCondition(condicio: any) {
-    const original = this.backupCondicions[condicio.ID];
-    if (original) {
-      condicio.CONDICIO_ID = original.CONDICIO_ID;
-      condicio.CONDICIO = original.CONDICIO;
-      condicio.VALOR = original.VALOR;
-    }
-    condicio.editant = false;
-  }
-
-  async iniciarNovaActivitat() {
-    const condicions = await this.carregarCondicionsInicials(); // per zones i àrees
-
-    this.novaActivitatMode = true;
-    this.novaActivitat = {
-      CODI_GRUP: '',
-      GRUP: '',
-      CODI_SUBGRUP: '',
-      SUBGRUP: '',
-      CODI_ACTIVITAT: '',
-      DESCRIPCIO: '',
-      CONDICIONS: condicions.map(c => ({
-        ...c,
-        editant: true
-      }))
-    };
-    this.activitatSeleccionada = this.novaActivitat.CONDICIONS;
-  }
-
-  async guardarNovaActivitat() {
-    const dades = {
-      GRUP: this.novaActivitat.GRUP,
-      CODI_GRUP: this.novaActivitat.CODI_GRUP,
-      SUBGRUP: this.novaActivitat.SUBGRUP,
-      CODI_SUBGRUP: this.novaActivitat.CODI_SUBGRUP,
-      DESCRIPCIO: this.novaActivitat.DESCRIPCIO,
-      CODI_ACTIVITAT: this.novaActivitat.CODI_ACTIVITAT,
-      CONDICIONS: this.activitatSeleccionada.map((c: any) => ({
-        CODI: c.CODI,
-        ID_ZONA: c.ID_ZONA,
-        IS_ZONA: c.IS_ZONA,
-        CONDICIO_ID: c.CONDICIO_ID,
-        VALOR: c.VALOR
-      }))
-    };
-
-    try {
-      await this.activitatService.createActivitat(dades);
-      this.textNoti = 'Activitat creada correctament.';
-      this.tipusNoti = 'ok';
-      this.timeOutNoti();
-      this.tancarModal();
-      this.loadActivitats();
-    } catch (error) {
-      this.textNoti = 'Error creant activitat';
-      this.tipusNoti = 'error';
-      this.timeOutNoti();
-    }
-  }
-
-  cancelarNovaActivitat() {
-    this.tancarModal();
-  }
-
-  async carregarCondicionsInicials() {
-    const zones = await this.activitatService.getZones();
-    const arees = await this.activitatService.getArees();
-
-    return [
-      ...zones.map((z: { CODI: string, ID: string }) => ({
-        IS_ZONA: 1,
-        ID_ZONA: z.ID,
-        CODI: z.CODI,
-        CONDICIO_ID: null,
-        CONDICIO: '',
-        VALOR: null
-      })),
-      ...arees.map((a: { CODI: string, ID: string }) => ({
-        IS_ZONA: 0,
-        ID_ZONA: a.ID,
-        CODI: a.CODI,
-        CONDICIO_ID: null,
-        CONDICIO: '',
-        VALOR: null
-      }))
-    ];
-
-  }
-
-  onGrupSeleccionat(event: any) {
-    let grup = event.target.value
-    this.novaActivitat.GRUP = grup;
-    this.subgrupsDisponibles = Object.keys(this.activitats[grup] || {});
-    this.codiGrup = false;
-
-    this.novaActivitat.SUBGRUP = '';
-
-  }
-
-  assignarSubgup(event: any) {
-    this.novaActivitat.SUBGRUP = event.target.value;
-    this.codiSubgrup = false;
   }
 
   timeOutNoti() {
@@ -244,4 +202,53 @@ export class ActivitatComponent implements OnInit {
 
   protected readonly event = event;
 
+  canviEpigraf(event: Event) {
+    const valor = (event.target as HTMLInputElement).value;
+    console.log(valor)
+  }
+
+  iniciarNouGrup() {
+    this.editing = 1;
+    this.creant = true;
+    this.grupEditar = {
+      descripcio_grup: ""
+    }
+  }
+
+  iniciarNouSubgrup() {
+    this.grupsDisponibles = Object.keys(this.activitats);
+
+    this.creant = true;
+    this.editing = 2;
+    this.creant = true;
+    this.subgrupEditar = {
+      descripcio_subgrup: ""
+    }
+  }
+
+  iniciarNovaActivitat() {
+    this.grupsDisponibles = Object.keys(this.activitats);
+
+    this.creant = true;
+    this.editing = 3;
+    this.creant = true;
+    this.activitatSeleccionada = {
+      descripcio_activitat: "",
+      mostrar: true,
+    }
+  }
+
+  canviGrup(event: Event): void {
+    const grup = this.grupDisponible;
+
+    // Comprovem si existeix el grup
+    if (grup && this.activitats[grup]) {
+      this.subgrupsDisponibles = Object.keys(this.activitats[grup]);
+    } else {
+      this.subgrupsDisponibles = [];
+    }
+
+    // Reiniciar la selecció de subgrup si canviem de grup
+    this.subgrupDisponible = '';
+  }
 }

@@ -4,6 +4,7 @@ import {Adreca} from '../models/adreca.model';
 import {Activitat} from '../models/activitat.model';
 import {AuthService} from './auth.service';
 import {environment} from '../../environments/environment';
+import {Epigraf} from '../models/epigraf.model';
 
 @Injectable({
   providedIn: 'root'
@@ -78,14 +79,18 @@ export class ActivitatService {
     }
   }
 
-  async getActivitat(activitat: string): Promise<any[]> {
+  async getActivitat(activitat: string, subgrup: string, grup: string): Promise<any[]> {
     try {
       const token = this.authService.getToken();
-      const response: AxiosResponse<any[]> = await axios.get(this.API_URL+'/activitat/'+activitat,{
-        headers: {
-          Authorization: `Bearer ${token}` // Afegir el token a l'encapçalament
+      const response: AxiosResponse<any[]> = await axios.get(
+        `${this.API_URL}/activitat/${activitat}/${subgrup}/${grup}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
         }
-      });
+      );
+
       return response.data;
     } catch (error) {
       console.error('Error obtenint activitat: ' + activitat, error);
@@ -93,21 +98,41 @@ export class ActivitatService {
     }
   }
 
-  async updateCondicio(condicio: any): Promise<any> {
+  async getSubgrup(subgrup: string, grup: string): Promise<any> {
     try {
       const token = this.authService.getToken();
-      const response: AxiosResponse<any> = await axios.put(
-        this.API_URL+`/condicio`,
-        { condicio },
+      const response: AxiosResponse<any> = await axios.get(
+        `${this.API_URL}/subgrup/${subgrup}/${grup}`,
         {
           headers: {
             Authorization: `Bearer ${token}`
           }
         }
       );
+
       return response.data;
     } catch (error) {
-      throw error;
+      console.error('Error obtenint el subgrup: ' + subgrup, error);
+      return [];
+    }
+  }
+
+  async getGrup(grup: string): Promise<any> {
+    try {
+      const token = this.authService.getToken();
+      const response: AxiosResponse<any> = await axios.get(
+        `${this.API_URL}/grup/${grup}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      console.error('Error obtenint el subgrup: ' + grup, error);
+      return [];
     }
   }
 
@@ -147,12 +172,12 @@ export class ActivitatService {
     }
   }
 
-  async createActivitat(dades: { SUBGRUP: string; GRUP: string; CONDICIONS: any; DESCRIPCIO: string }) {
+  async createActivitat(activitat: any) {
     try {
       const token = this.authService.getToken();
       const response: AxiosResponse<any> = await axios.post(
-        this.API_URL,
-        {dades: dades},
+        this.API_URL+`/activitat`,
+        {activitat},
         {
           headers: {
             Authorization: `Bearer ${token}`
@@ -163,4 +188,57 @@ export class ActivitatService {
       throw error;
     }
   }
+
+  async createGrup(grup: any) {
+    try {
+      const token = this.authService.getToken();
+      const response: AxiosResponse<any> = await axios.post(
+        this.API_URL+`/grup`,
+        {grup},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }}
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async createSubgrup(subgrup: any, grup: string) {
+    try {
+      const token = this.authService.getToken();
+      const response: AxiosResponse<any> = await axios.post(
+        this.API_URL+`/subgrup`,
+        {grup, subgrup},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }}
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async updateActivitat(activitat: any): Promise<any> {
+    try {
+      const token = this.authService.getToken();
+      const response: AxiosResponse<any> = await axios.put(
+        this.API_URL+`/activitat`,
+        { activitat },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
 }
