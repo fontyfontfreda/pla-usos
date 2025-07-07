@@ -110,7 +110,11 @@ form button:hover {
   }
 
   .alerta img {
-    width: 40px;
+    display: none;
+  }
+
+  .alerta div {
+    width: 90%;
   }
 
   button {
