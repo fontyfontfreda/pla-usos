@@ -1,0 +1,26 @@
+<div class="contenidor">
+  <h2>CONFIGURACIÓ</h2>
+  <div class="configuracions">
+    <div class="link-container">
+      <label>Enllaç Pla Especial Usos:</label>
+      <input [(ngModel)]="link.link" id="link" readonly />
+      <div class="buttons-accions">
+        <button (click)="obrirCanviLink()" style="background: #e0ad03">
+          <i class="fa fa-pencil"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal modificaió Paràmetre -->
+<div *ngIf="paramDialog" class="paramDialog">
+  <div class="dialog-content">
+    <h3>Formulari de modificació d'un paràmetre</h3>
+    <input type="text" [(ngModel)]="nouLink" placeholder="Enllaç" />
+    <div class="dialog-buttons">
+      <button (click)="guardarParam()">Guardar</button>
+      <button (click)="paramDialog = false">Tancar</button>
+    </div>
+  </div>
+</div>

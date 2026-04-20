@@ -1,0 +1,104 @@
+.contenidor {
+    display: flex;
+    flex-direction: column;
+}
+
+.configuracions {
+    display: flex;
+    flex-direction: column;
+}
+    
+.link-container {
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.link-container input {
+  margin-left: 10px;
+  padding: 8px;
+  width: 80%;
+}
+
+.paramDialog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Fons negre translúcid */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Per sobre de tot */
+}
+
+.dialog-content {
+  background-color: #ffffff;
+  padding: 20px 30px;
+  border-radius: 8px;
+  text-align: start;
+  width: 20%;
+}
+
+.dialog-buttons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.dialog-buttons button {
+  padding: 8px 16px;
+}
+
+.dialog-content input {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 8px;
+}
+
+.buttons-accions {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  gap: 5px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.button {
+  display: flex;
+  flex-direction: row;
+  padding-bottom: 16px;
+}
+
+button {
+  background-color: darkgreen;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+form button:hover {
+  background-color: green;
+}
+
+.usuaris-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.usuaris-table th, .usuaris-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}

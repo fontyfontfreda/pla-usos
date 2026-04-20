@@ -22,4 +22,22 @@ export class ConfiguracioService {
       return "";
     }
   }
+
+  async updateLink(link: string): Promise<any> {
+    try {
+      const token = this.authService.getToken();
+      const response: AxiosResponse<any> = await axios.put(
+        this.API_URL+'/link-pla-especial',
+        { link },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
