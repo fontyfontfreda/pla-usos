@@ -1,38 +1,49 @@
-<app-notificacio *ngIf="textNoti != ''" [text]="textNoti" [tipus]="tipusNoti"></app-notificacio>
+<app-notificacio
+  *ngIf="textNoti != ''"
+  [text]="textNoti"
+  [tipus]="tipusNoti"
+></app-notificacio>
 
-<div *ngIf="isLoading" class="loader">
-  🔄 Carregant usuaris...
-</div>
+<div *ngIf="isLoading" class="loader">🔄 Carregant usuaris...</div>
 
 <div *ngIf="!isLoading" class="container">
   <!-- Botó alta nou usuari -->
   <div class="button">
-    <button (click)="usuariDialog = true;">Alta usuari</button>
+    <button (click)="usuariDialog = true">Alta usuari</button>
   </div>
 
   <div class="usuaris-table">
     <!-- Taula dels usuaris -->
     <table>
       <thead>
-      <tr>
-        <th>Nom Usuari</th>
-        <th>Accions</th> <!-- Nova columna -->
-      </tr>
+        <tr>
+          <th>Nom Usuari</th>
+          <th>Accions</th>
+          <!-- Nova columna -->
+        </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let usuari of usuaris">
-        <td>{{ usuari.usuari }}</td>
-        <td>
-          <div class="buttons-accions">
-            <button (click)="obrirCanviContrasenya(usuari)" style="background: #E0AD03">
-              <i class="fa fa-pencil"></i>
-            </button>
-            <button (click)="esborrarUsuari(usuari)" style="background: darkred">
-              <i class="fa fa-trash"></i>
-            </button>
-          </div>
-        </td>
-      </tr>
+        <tr *ngFor="let usuari of usuaris">
+          <td>{{ usuari.usuari }}</td>
+          <td>
+            <div class="buttons-accions">
+              <button
+                (click)="obrirCanviContrasenya(usuari)"
+                style="background: #e0ad03"
+                *ngIf="usuari.rol > 1"
+              >
+                <i class="fa fa-pencil"></i>
+              </button>
+              <button
+                (click)="esborrarUsuari(usuari)"
+                style="background: darkred"
+                *ngIf="usuari.rol > 1"
+              >
+                <i class="fa fa-trash"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
@@ -41,24 +52,72 @@
 <!-- Modal alta usuari -->
 <div *ngIf="usuariDialog" class="altaUsuariDialog">
   <div class="dialog-content">
-    <h3>Formulari d'alta d'un nou usuari</h3>
-    <input type="text" [(ngModel)]="nouUsuari.usuari" placeholder="Usuari"/>
-    <input type="password" [(ngModel)]="nouUsuari.contrasenya" placeholder="Contrasenya"/>
+    <div class="seleccionable">
+      <h3>Formulari d'alta d'un nou usuari</h3>
+      <input type="text" [(ngModel)]="nouUsuari.usuari" placeholder="Usuari" />
+      <input
+        type="password"
+        [(ngModel)]="nouUsuari.contrasenya"
+        placeholder="Contrasenya"
+      />
+    </div>
+    <div class="seleccionable">
+      <select
+        id="rol"
+        class="select-rol"
+        [(ngModel)]="selectedRol"
+        name="rol"
+        required
+        (change)="onRolChange()"
+      >
+        <option value="" disabled selected>Selecciona un rol</option>
+        <option *ngFor="let rol of rols" [value]="rol.codi">
+          {{ rol.descripcio }}
+        </option>
+      </select>
+    </div>
     <div class="dialog-buttons">
       <button (click)="guardarUsuari()">Guardar</button>
-      <button (click)="usuariDialog = false;">Tancar</button>
+      <button (click)="usuariDialog = false">Tancar</button>
     </div>
   </div>
 </div>
 
-<!-- Modal canvi contrasenya -->
-<div *ngIf="canviContrasenyaDialog" class="altaUsuariDialog">
+<!-- Modal canvi dades -->
+<div *ngIf="modificacioUsuariDialog" class="altaUsuariDialog">
   <div class="dialog-content">
-    <h3>Canviar contrasenya de {{ usuariSeleccionat?.usuari }}</h3>
-    <input type="password" [(ngModel)]="novaContrasenya" placeholder="Nova contrasenya"/>
+    <div class="seleccionable">
+      <label
+        >Canviar de dades de
+        <strong>{{ usuariSeleccionat?.usuari }}</strong></label
+      >
+      <input
+        type="password"
+        [(ngModel)]="novaContrasenya"
+        placeholder="Nova contrasenya"
+      />
+    </div>
+
+    <div class="seleccionable">
+      <label for="grup">Rol:</label>
+      <select
+        id="rol"
+        class="select-rol"
+        [(ngModel)]="selectedRol"
+        name="rol"
+        required
+        (change)="onRolChange()"
+      >
+        <option value="" disabled selected>Selecciona un rol</option>
+        <option *ngFor="let rol of rols" [value]="rol.codi">
+          {{ rol.descripcio }}
+        </option>
+      </select>
+    </div>
+
     <div class="dialog-buttons">
-      <button (click)="guardarNovaContrasenya()">Guardar Contrasenya</button>
-      <button (click)="canviContrasenyaDialog = false;">Tancar</button>
+      <button (click)="actualitzarUsuari()">Guardar</button>
+      <button (click)="modificacioUsuariDialog = false">Tancar</button>
     </div>
   </div>
 </div>
