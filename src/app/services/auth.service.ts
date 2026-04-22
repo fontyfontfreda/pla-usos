@@ -19,6 +19,8 @@ export class AuthService {
       .then((response: AxiosResponse<any>) => {
         if (response.data.token) {
           localStorage.setItem('jwt_token', response.data.token); // Desa el token a localStorage
+          localStorage.setItem('rol_usuari', response.data.rol);
+          localStorage.setItem('nom_usuari', username);
           this.loggedIn = true;
           return true;
         } else {
@@ -34,6 +36,8 @@ export class AuthService {
   logout() {
     this.loggedIn = false;
     localStorage.removeItem('jwt_token'); // Elimina el token en logout
+    localStorage.removeItem('rol_usuari');
+    localStorage.removeItem('nom_usuari');
     this.router.navigate(['/login']);
   }
 

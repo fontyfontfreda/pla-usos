@@ -10,7 +10,10 @@
   </ul>
 
   <!-- Botó de logout a sota de tot -->
-  <div class="boto">
-    <button (click)="logout()">Tancar la sessió</button>
-  </div>
+   <div class="sidebar_footer">
+    <p>Usuari: <strong>{{username}}</strong></p>
+     <div class="boto">
+       <button (click)="logout()">Tancar la sessió</button>
+     </div>
+   </div>
 </div>

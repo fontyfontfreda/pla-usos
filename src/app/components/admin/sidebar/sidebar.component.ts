@@ -14,9 +14,15 @@ import { RouterModule } from '@angular/router';
 export class SidebarComponent {
   @Output() canviComonent = new EventEmitter<number>(); // Emissor d'esdeveniments per al sidebar
 
-  constructor(private authService: AuthService) {} // Injectar AuthService
+  username: string | null = "";
+
+  constructor(private authService: AuthService) {
+    this.username = localStorage.getItem('nom_usuari');
+  } // Injectar AuthService
 
   toggleSidebar(page: number) {
+    console.log(localStorage.getItem('rol_usuari'));
+   
     this.canviComonent.emit(page);
   }
 
