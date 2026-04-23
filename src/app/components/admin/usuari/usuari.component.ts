@@ -21,12 +21,13 @@ import { NotificacioComponent } from '../../shared/notificacio/notificacio.compo
   styleUrl: './usuari.component.css',
 })
 export class UsuariComponent {
+  rolUsuari: string | null = null;
   isLoading: boolean = false;
   // Llista d'usuaris amb el model Usuari
   usuaris: Usuari[] = [];
 
   usuariDialog = false;
-  nouUsuari: Usuari = new Usuari('', '', 0);
+  nouUsuari: Usuari = new Usuari('', '', 0, '');
 
   usuariSeleccionat: any = null;
   novaContrasenya: string = '';
@@ -41,7 +42,9 @@ export class UsuariComponent {
   constructor(
     private usuariService: UsuariService,
     public dialog: MatDialog,
-  ) {}
+  ) {
+    this.rolUsuari = localStorage.getItem('rol_usuari');
+  }
 
   ngOnInit(): void {
     this.loadUsuaris().then();
@@ -76,7 +79,7 @@ export class UsuariComponent {
   }
 
   onRolChange() {
-    console.log(this.selectedRol);
+    console.log('');
   }
 
   guardarUsuari() {
@@ -98,11 +101,11 @@ export class UsuariComponent {
         this.tipusNoti = 'ok';
         this.timeOutNoti();
         this.usuariDialog = false;
-        this.nouUsuari = new Usuari('', '', 0);
+        this.nouUsuari = new Usuari('', '', 0, '');
         this.loadUsuaris(); // Tornar a carregar la taula d'usuaris (si tens aquesta funció)
       })
       .catch((error) => {
-        this.textNoti = 'Error creant usuari: ' + error;
+        this.textNoti = 'Error creant usuari: ' + error.response.data.message;
         this.tipusNoti = 'error';
         this.timeOutNoti();
       });
@@ -130,7 +133,7 @@ export class UsuariComponent {
           this.modificacioUsuariDialog = false;
         })
         .catch((error) => {
-          this.textNoti = 'Error actualitzant la contrasenya: ' + error;
+          this.textNoti = 'Error actualitzant la contrasenya: ' + error.response.data.message;
           this.tipusNoti = 'error';
           this.timeOutNoti();
         });
@@ -145,7 +148,7 @@ export class UsuariComponent {
         this.modificacioUsuariDialog = false;
       })
       .catch((error) => {
-        this.textNoti = 'Error actualitzant el rol: ' + error;
+        this.textNoti = 'Error actualitzant el rol: ' + error.response.data.message;
         this.tipusNoti = 'error';
         this.timeOutNoti();
       });
@@ -163,7 +166,7 @@ export class UsuariComponent {
           this.loadUsuaris(); // Torna a carregar la taula
         })
         .catch((error) => {
-          this.textNoti = 'Error esborrant usuari: ' + error;
+          this.textNoti = 'Error esborrant usuari: ' + error.response.data.message;
           this.tipusNoti = 'error';
           this.timeOutNoti();
         });

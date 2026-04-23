@@ -5,7 +5,7 @@
       <label>Enllaç Pla Especial Usos:</label>
       <input [(ngModel)]="link.link" id="link" readonly />
       <div class="buttons-accions">
-        <button (click)="obrirCanviLink()" style="background: #e0ad03">
+        <button *ngIf="this.rolUsuari && this.rolUsuari < '3'" (click)="obrirCanviLink()" style="background: #e0ad03">
           <i class="fa fa-pencil"></i>
         </button>
       </div>

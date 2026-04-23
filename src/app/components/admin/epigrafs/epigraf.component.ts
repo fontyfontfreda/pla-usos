@@ -21,6 +21,7 @@ import {ActivitatService} from '../../../services/activitat.service';
 })
 
 export class EpigrafComponent implements OnInit {
+  rolUsuari: string | null = null;
   epigrafs: Epigraf[] = [];
   selectedEpigraf: Epigraf | null = null;
   searchTerm: string = '';
@@ -38,6 +39,7 @@ export class EpigrafComponent implements OnInit {
   tipusNoti: 'error' | 'ok' | 'info' = 'info';
 
   constructor(private epigrafService: EpigrafService, private activitatService: ActivitatService, public dialog: MatDialog) {
+    this.rolUsuari = localStorage.getItem('rol_usuari');
   }
 
   ngOnInit(): void {

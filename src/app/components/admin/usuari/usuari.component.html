@@ -9,7 +9,7 @@
 <div *ngIf="!isLoading" class="container">
   <!-- Botó alta nou usuari -->
   <div class="button">
-    <button (click)="usuariDialog = true">Alta usuari</button>
+    <button  *ngIf="this.rolUsuari && this.rolUsuari < '3'" (click)="usuariDialog = true">Alta usuari</button>
   </div>
 
   <div class="usuaris-table">
@@ -18,26 +18,27 @@
       <thead>
         <tr>
           <th>Nom Usuari</th>
-          <th>Accions</th>
-          <!-- Nova columna -->
+          <th>Rol</th>
+          <th *ngIf="this.rolUsuari && this.rolUsuari < '3'">Accions</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let usuari of usuaris">
           <td>{{ usuari.usuari }}</td>
-          <td>
+          <td>{{ usuari.rol_descripcio }}</td>
+          <td *ngIf="this.rolUsuari && this.rolUsuari < '3'">
             <div class="buttons-accions">
               <button
                 (click)="obrirCanviContrasenya(usuari)"
                 style="background: #e0ad03"
-                *ngIf="usuari.rol > 1"
+                *ngIf="this.rolUsuari && this.rolUsuari < '3'"
               >
                 <i class="fa fa-pencil"></i>
               </button>
               <button
                 (click)="esborrarUsuari(usuari)"
                 style="background: darkred"
-                *ngIf="usuari.rol > 1"
+                *ngIf="this.rolUsuari && this.rolUsuari < '3'"
               >
                 <i class="fa fa-trash"></i>
               </button>

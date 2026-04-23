@@ -20,9 +20,7 @@ export class SidebarComponent {
     this.username = localStorage.getItem('nom_usuari');
   } // Injectar AuthService
 
-  toggleSidebar(page: number) {
-    console.log(localStorage.getItem('rol_usuari'));
-   
+  toggleSidebar(page: number) {   
     this.canviComonent.emit(page);
   }
 

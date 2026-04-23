@@ -29,7 +29,7 @@
         <td>
           <div class="button-detalls">
             <button (click)="veureDetalls(adreca)"><i class="fa fa-eye"></i></button>
-            <button (click)="editarAdreca(adreca)"><i class="fa fa-pencil"></i></button>
+            <button *ngIf="this.rolUsuari && this.rolUsuari < '3'" (click)="editarAdreca(adreca)"><i class="fa fa-pencil"></i></button>
           </div>
         </td>
       </tr>

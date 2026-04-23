@@ -7,7 +7,7 @@
       <input [(ngModel)]="searchTerm" id="search" placeholder="Cerca per descripcio d'epígraf"/>
     </div>
     <div>
-      <button (click)="iniciarNouEpigraf()" class="nou-boto">+ Nou epígraf</button>
+      <button *ngIf="this.rolUsuari && this.rolUsuari < '3'" (click)="iniciarNouEpigraf()" class="nou-boto">+ Nou epígraf</button>
     </div>
   </div>
 
@@ -18,7 +18,7 @@
       <th>Codi</th>
       <th>Descripció</th>
       <th>Actiu</th>
-      <th>Accions</th>
+      <th *ngIf="this.rolUsuari && this.rolUsuari < '3'">Accions</th>
     </tr>
     </thead>
     <tbody>
@@ -26,9 +26,9 @@
       <td>{{ epigraf.codi1 + '.' + epigraf.codi2 + '.' + epigraf.codi3 }}</td>
       <td>{{ epigraf.descripcio }}</td>
       <td>{{ epigraf.mostrar ? "Sí" : "No" }}</td>
-      <td>
+      <td *ngIf="this.rolUsuari && this.rolUsuari < '3'">
         <div class="button-detalls">
-          <button (click)="editarEpigraf(epigraf)"><i class="fa fa-pencil"></i></button>
+          <button *ngIf="this.rolUsuari && this.rolUsuari < '3'" (click)="editarEpigraf(epigraf)"><i class="fa fa-pencil"></i></button>
         </div>
       </td>
     </tr>

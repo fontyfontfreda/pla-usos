@@ -22,6 +22,8 @@ import { NotificacioComponent } from '../../shared/notificacio/notificacio.compo
   styleUrl: './configuracio.component.css',
 })
 export class ConfiguracioComponent implements OnInit {
+  rolUsuari: string | null = null;
+
   link: string = '';
   nouLink: string = '';
 
@@ -30,7 +32,9 @@ export class ConfiguracioComponent implements OnInit {
   textNoti: string = '';
   tipusNoti: 'error' | 'ok' | 'info' = 'info';
 
-  constructor(private configuracioService: ConfiguracioService) {}
+  constructor(private configuracioService: ConfiguracioService) {
+    this.rolUsuari = localStorage.getItem('rol_usuari');
+  }
 
   ngOnInit(): void {
     this.loadConfiguracio().then();

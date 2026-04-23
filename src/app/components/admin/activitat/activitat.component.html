@@ -1,7 +1,7 @@
 <div class="botons-crear">
-  <button (click)="iniciarNouGrup()" class="nou-boto">+ Nou ús</button>
-  <button (click)="iniciarNouSubgrup()" class="nou-boto">+ Nou grup</button>
-  <button (click)="iniciarNovaActivitat()" class="nou-boto">+ Nova activitat</button>
+  <button *ngIf="this.rolUsuari && this.rolUsuari < '3'" (click)="iniciarNouGrup()" class="nou-boto">+ Nou ús</button>
+  <button *ngIf="this.rolUsuari && this.rolUsuari < '3'" (click)="iniciarNouSubgrup()" class="nou-boto">+ Nou grup</button>
+  <button *ngIf="this.rolUsuari && this.rolUsuari < '3'" (click)="iniciarNovaActivitat()" class="nou-boto">+ Nova activitat</button>
 </div>
 
 <ul class="grup-list">
@@ -9,7 +9,7 @@
     <div class="grup-title" (click)="toggleGrup(grup)">
       {{ grup }}
       <div class="title-buttons">
-        <span class="arrow" (click)="veureGrup( grup); $event.stopPropagation()">
+        <span *ngIf="this.rolUsuari && this.rolUsuari < '3'" class="arrow" (click)="veureGrup( grup); $event.stopPropagation()">
           <i class="fa fa-pencil"></i>
         </span>
         <span class="arrow">{{ grupSeleccionat === grup ? '▲' : '▼' }}</span>
@@ -21,7 +21,7 @@
         <div class="subgrup-title" (click)="toggleSubgrup(subgrup)">
           {{ subgrup }}
           <div class="title-buttons">
-            <span class="arrow" (click)="veureSubgrup(subgrup, grup); $event.stopPropagation()">
+            <span *ngIf="this.rolUsuari && this.rolUsuari < '3'" class="arrow" (click)="veureSubgrup(subgrup, grup); $event.stopPropagation()">
               <i class="fa fa-pencil"></i>
             </span>
             <span class="arrow">{{ subgrupSeleccionat === subgrup ? '▲' : '▼' }}</span>
@@ -33,7 +33,7 @@
             <div class="activitat-title" (click)="veureActivitat(activitat, subgrup, grup)">
               {{ activitat }}
               <div class="title-buttons">
-                <span class="arrow" (click)="veureActivitat(activitat, subgrup, grup); $event.stopPropagation()">
+                <span *ngIf="this.rolUsuari && this.rolUsuari < '3'" class="arrow" (click)="veureActivitat(activitat, subgrup, grup); $event.stopPropagation()">
                   <i class="fa fa-pencil"></i>
                 </span>
               </div>

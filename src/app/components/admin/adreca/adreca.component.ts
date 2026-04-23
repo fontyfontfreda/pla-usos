@@ -41,6 +41,8 @@ export class AdrecaComponent implements OnInit {
     'VIA PÚBLICA'
   ];
 
+  rolUsuari: string | null = null;
+
   isLoading: boolean = false;
   // Llista d'adreces amb el model Adreca
   adreces: Adreca[] = [];
@@ -53,6 +55,7 @@ export class AdrecaComponent implements OnInit {
   tipusNoti: 'error' | 'ok' | 'info' = 'info';
 
   constructor(private adrecaService: AdrecaService, public dialog: MatDialog) {
+    this.rolUsuari = localStorage.getItem('rol_usuari');    
   }
 
   ngOnInit(): void {

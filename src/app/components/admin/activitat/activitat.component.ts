@@ -21,6 +21,7 @@ import {Epigraf} from '../../../models/epigraf.model';
 })
 
 export class ActivitatComponent implements OnInit {
+  rolUsuari: string | null = null;
   activitats: Record<string, Record<string, string[]>> = {};
 
   objectKeys = Object.keys;
@@ -50,6 +51,7 @@ export class ActivitatComponent implements OnInit {
   tipusNoti: 'error' | 'ok' | 'info' = 'info';
 
   constructor(private activitatService: ActivitatService, private epigrafService: EpigrafService, public dialog: MatDialog) {
+    this.rolUsuari = localStorage.getItem('rol_usuari');
   }
 
   ngOnInit(): void {
@@ -77,14 +79,16 @@ export class ActivitatComponent implements OnInit {
   }
 
   async veureActivitat(activitat: string, subgrup: string, grup: string) {
-    try {
-      this.activitatSeleccionada = await this.activitatService.getActivitat(activitat, subgrup, grup);
-      this.epigrafSeleccionat = this.activitatSeleccionada.id_epigraf;
-      this.editing = 3;
-    } catch (error) {
-      this.textNoti = 'Error carregant l\'activitat: ' + activitat;
-      this.tipusNoti = 'error';
-      this.timeOutNoti();
+    if (this.rolUsuari && this.rolUsuari < '3'){
+      try {
+        this.activitatSeleccionada = await this.activitatService.getActivitat(activitat, subgrup, grup);
+        this.epigrafSeleccionat = this.activitatSeleccionada.id_epigraf;
+        this.editing = 3;
+      } catch (error) {
+        this.textNoti = 'Error carregant l\'activitat: ' + activitat;
+        this.tipusNoti = 'error';
+        this.timeOutNoti();
+      }
     }
   }
 

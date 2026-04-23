@@ -84,8 +84,7 @@ export class UsuariService {
   async updateRol(usuari: string, nouRol: number): Promise<any> {
     try {
       const token = this.authService.getToken();      
-      console.log(nouRol);
-      
+     
       const response: AxiosResponse<any> = await axios.put(
         this.API_URL+`/${usuari}/rol`,
         { nouRol },
