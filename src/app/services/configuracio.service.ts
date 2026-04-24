@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import axios, { AxiosResponse } from 'axios';
 import {AuthService} from './auth.service';
 import {environment} from '../../environments/environment';
-
+const ERR_TOKEN = 470;
 @Injectable({
   providedIn: 'root'
 })
@@ -36,8 +36,13 @@ export class ConfiguracioService {
         }
       );
       return response.data;
-    } catch (error) {
-      throw error;
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status == ERR_TOKEN) {
+          this.authService.logout();
+        }
+      } else {
+      throw error;}
     }
   }
 }

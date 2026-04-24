@@ -1,14 +1,13 @@
 //src/app/services/epigraf.service.ts
-import {Injectable} from '@angular/core';
-import axios, {AxiosResponse} from 'axios';
+import { Injectable } from '@angular/core';
+import axios, { AxiosResponse } from 'axios';
 import { AuthService } from './auth.service';
-import {Epigraf} from '../models/epigraf.model';
-import {environment} from '../../environments/environment';
-
+import { Epigraf } from '../models/epigraf.model';
+import { environment } from '../../environments/environment';
+const ERR_TOKEN = 470;
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-
 export class EpigrafService {
   private API_URL = `${environment.apiUrl}/epigrafs`; // Enllaç al backend
 
@@ -19,44 +18,74 @@ export class EpigrafService {
       const token = this.authService.getToken();
       const response: AxiosResponse<any[]> = await axios.get(this.API_URL, {
         headers: {
-          Authorization: `Bearer ${token}` // Afegir el token a l'encapçalament
-        }
+          Authorization: `Bearer ${token}`, // Afegir el token a l'encapçalament
+        },
       });
       return response.data;
-    } catch (error) {
-      console.error('Error obtenint epígrafs:', error);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status == ERR_TOKEN) {
+          this.authService.logout();
+        }
+      } else {
+        console.error('Error obtenint epígrafs:', error);
+      }
       return [];
     }
   }
 
-  async createEpigraf(dades: { id: number; codi1: number; codi2: number; codi3: number, descripcio: string, mostrar: boolean, CONDICIONS: any }) {
+  async createEpigraf(dades: {
+    id: number;
+    codi1: number;
+    codi2: number;
+    codi3: number;
+    descripcio: string;
+    mostrar: boolean;
+    CONDICIONS: any;
+  }) {
     try {
       const token = this.authService.getToken();
       const response: AxiosResponse<any> = await axios.post(
         this.API_URL,
-        {dades: dades},
+        { dades: dades },
         {
           headers: {
-            Authorization: `Bearer ${token}`
-          }}
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
       return response.data;
-    } catch (error) {
-      throw error;
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status == ERR_TOKEN) {
+          this.authService.logout();
+        }
+      } else {
+        throw error;
+      }
     }
   }
 
   async getEpigraf(epigraf: Epigraf): Promise<any> {
     try {
       const token = this.authService.getToken();
-      const response: AxiosResponse<any[]> = await axios.get(this.API_URL+'/'+epigraf.id,{
-        headers: {
-          Authorization: `Bearer ${token}` // Afegir el token a l'encapçalament
-        }
-      });
+      const response: AxiosResponse<any[]> = await axios.get(
+        this.API_URL + '/' + epigraf.id,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Afegir el token a l'encapçalament
+          },
+        },
+      );
       return response.data;
-    } catch (error) {
-      console.error('Error obtenint l\'epígraf: ' + epigraf.descripcio, error);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status == ERR_TOKEN) {
+          this.authService.logout();
+        }
+      } else {
+        console.error("Error obtenint l'epígraf: " + epigraf.descripcio, error);
+      }
       return [];
     }
   }
@@ -65,17 +94,23 @@ export class EpigrafService {
     try {
       const token = this.authService.getToken();
       const response: AxiosResponse<any> = await axios.put(
-        this.API_URL+`/condicio`,
+        this.API_URL + `/condicio`,
         { condicio },
         {
           headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
       return response.data;
-    } catch (error) {
-      throw error;
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status == ERR_TOKEN) {
+          this.authService.logout();
+        }
+      } else {
+        throw error;
+      }
     }
   }
 
@@ -83,17 +118,23 @@ export class EpigrafService {
     try {
       const token = this.authService.getToken();
       const response: AxiosResponse<any> = await axios.put(
-        this.API_URL+`/epigraf`,
+        this.API_URL + `/epigraf`,
         { epigraf },
         {
           headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
       return response.data;
-    } catch (error) {
-      throw error;
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status == ERR_TOKEN) {
+          this.authService.logout();
+        }
+      } else {
+        throw error;
+      }
     }
   }
 }

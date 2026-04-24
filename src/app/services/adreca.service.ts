@@ -1,18 +1,17 @@
 //src/app/services/adreca.service.ts
 import { Injectable } from '@angular/core';
 import axios, { AxiosResponse } from 'axios';
-import {Adreca} from '../models/adreca.model';
-import {AuthService} from './auth.service';
-import {environment} from '../../environments/environment';
-
+import { Adreca } from '../models/adreca.model';
+import { AuthService } from './auth.service';
+import { environment } from '../../environments/environment';
+const ERR_TOKEN = 470;
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AdrecaService {
   private API_URL = `${environment.apiUrl}/adreces`; // Enllaç al backend
 
-  constructor(private authService: AuthService) {
-  }
+  constructor(private authService: AuthService) {}
 
   async getAdreces(): Promise<any[]> {
     try {
@@ -28,17 +27,23 @@ export class AdrecaService {
     try {
       const token = this.authService.getToken();
       const response: AxiosResponse<any> = await axios.put(
-        this.API_URL+`/${adreca.DOMCOD}`,
+        this.API_URL + `/${adreca.DOMCOD}`,
         { adreca },
         {
           headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
       return response.data;
-    } catch (error) {
-      throw error;
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status == ERR_TOKEN) {
+          this.authService.logout();
+        }
+      } else {
+        throw error;
+      }
     }
   }
 }

@@ -1,23 +1,26 @@
 import { Injectable } from '@angular/core';
-import axios, {AxiosResponse} from 'axios';
-import {Adreca} from '../models/adreca.model';
-import {Activitat} from '../models/activitat.model';
-import {AuthService} from './auth.service';
-import {environment} from '../../environments/environment';
-import {Epigraf} from '../models/epigraf.model';
+import axios, { AxiosResponse } from 'axios';
+import { Adreca } from '../models/adreca.model';
+import { Activitat } from '../models/activitat.model';
+import { AuthService } from './auth.service';
+import { environment } from '../../environments/environment';
+import { Epigraf } from '../models/epigraf.model';
+
+const ERR_TOKEN = 470;
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ActivitatService {
-
   private API_URL = `${environment.apiUrl}/activitats`; // Enllaç al backend
 
   constructor(private authService: AuthService) {}
 
   async getActivitats(adreca: Adreca | null): Promise<any[]> {
     try {
-      const response: AxiosResponse<any[]> = await axios.get(this.API_URL+'/'+adreca?.DOMCOD);
+      const response: AxiosResponse<any[]> = await axios.get(
+        this.API_URL + '/' + adreca?.DOMCOD,
+      );
       return response.data;
     } catch (error) {
       console.error('Error obtenint activitats:', error);
@@ -25,10 +28,10 @@ export class ActivitatService {
     }
   }
 
-  async sendActivitat(dades: any): Promise<{ blob: Blob, is_apte: boolean }> {
+  async sendActivitat(dades: any): Promise<{ blob: Blob; is_apte: boolean }> {
     try {
       const response = await axios.post(`${this.API_URL}/consulta`, {
-        dades: { dades }
+        dades: { dades },
       });
 
       console.log('response.data:', response.data); // Per veure què retorna el backend
@@ -57,7 +60,6 @@ export class ActivitatService {
       const blob = new Blob([buffer], { type: 'application/pdf' });
 
       return { blob, is_apte };
-
     } catch (error) {
       console.error('Error al processar pdf:', error);
       throw error;
@@ -67,33 +69,50 @@ export class ActivitatService {
   async getAllActivitats(): Promise<Record<string, Record<string, string[]>>> {
     try {
       const token = this.authService.getToken();
-      const response: AxiosResponse<Record<string, Record<string, string[]>>> = await axios.get(this.API_URL, {
-        headers: {
-          Authorization: `Bearer ${token}` // Afegir el token a l'encapçalament
-        }
-      });
+      const response: AxiosResponse<Record<string, Record<string, string[]>>> =
+        await axios.get(this.API_URL, {
+          headers: {
+            Authorization: `Bearer ${token}`, // Afegir el token a l'encapçalament
+          },
+        });
       return response.data;
-    } catch (error) {
-      console.error('Error obtenint activitats:', error);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status == ERR_TOKEN) {
+          this.authService.logout();
+        }
+      } else {
+        console.error('Error obtenint activitats:', error);
+      }
       return {};
     }
   }
 
-  async getActivitat(activitat: string, subgrup: string, grup: string): Promise<any[]> {
+  async getActivitat(
+    activitat: string,
+    subgrup: string,
+    grup: string,
+  ): Promise<any[]> {
     try {
       const token = this.authService.getToken();
       const response: AxiosResponse<any[]> = await axios.get(
         `${this.API_URL}/activitat/${activitat}/${subgrup}/${grup}`,
         {
           headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
 
       return response.data;
-    } catch (error) {
-      console.error('Error obtenint activitat: ' + activitat, error);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status == ERR_TOKEN) {
+          this.authService.logout();
+        }
+      } else {
+        console.error('Error obtenint activitat: ' + activitat, error);
+      }
       return [];
     }
   }
@@ -105,14 +124,20 @@ export class ActivitatService {
         `${this.API_URL}/subgrup/${subgrup}/${grup}`,
         {
           headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
 
       return response.data;
-    } catch (error) {
-      console.error('Error obtenint el subgrup: ' + subgrup, error);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status == ERR_TOKEN) {
+          this.authService.logout();
+        }
+      } else {
+        console.error('Error obtenint el subgrup: ' + subgrup, error);
+      }
       return [];
     }
   }
@@ -124,14 +149,20 @@ export class ActivitatService {
         `${this.API_URL}/grup/${grup}`,
         {
           headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
 
       return response.data;
-    } catch (error) {
-      console.error('Error obtenint el subgrup: ' + grup, error);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status == ERR_TOKEN) {
+          this.authService.logout();
+        }
+      } else {
+        console.error('Error obtenint el subgrup: ' + grup, error);
+      }
       return [];
     }
   }
@@ -140,17 +171,23 @@ export class ActivitatService {
     try {
       const token = this.authService.getToken();
       const response: AxiosResponse<any> = await axios.put(
-        this.API_URL+`/zones`,
+        this.API_URL + `/zones`,
         {},
         {
           headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
       return response.data;
-    } catch (error) {
-      throw error;
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status == ERR_TOKEN) {
+          this.authService.logout();
+        }
+      } else {
+        throw error;
+      }
     }
   }
 
@@ -158,17 +195,23 @@ export class ActivitatService {
     try {
       const token = this.authService.getToken();
       const response: AxiosResponse<any> = await axios.put(
-        this.API_URL+`/arees`,
+        this.API_URL + `/arees`,
         {},
         {
           headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
       return response.data;
-    } catch (error) {
-      throw error;
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status == ERR_TOKEN) {
+          this.authService.logout();
+        }
+      } else {
+        throw error;
+      }
     }
   }
 
@@ -176,16 +219,23 @@ export class ActivitatService {
     try {
       const token = this.authService.getToken();
       const response: AxiosResponse<any> = await axios.post(
-        this.API_URL+`/activitat`,
-        {activitat},
+        this.API_URL + `/activitat`,
+        { activitat },
         {
           headers: {
-            Authorization: `Bearer ${token}`
-          }}
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
       return response.data;
-    } catch (error) {
-      throw error;
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status == ERR_TOKEN) {
+          this.authService.logout();
+        }
+      } else {
+        throw error;
+      }
     }
   }
 
@@ -193,16 +243,23 @@ export class ActivitatService {
     try {
       const token = this.authService.getToken();
       const response: AxiosResponse<any> = await axios.post(
-        this.API_URL+`/grup`,
-        {grup},
+        this.API_URL + `/grup`,
+        { grup },
         {
           headers: {
-            Authorization: `Bearer ${token}`
-          }}
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
       return response.data;
-    } catch (error) {
-      throw error;
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status == ERR_TOKEN) {
+          this.authService.logout();
+        }
+      } else {
+        throw error;
+      }
     }
   }
 
@@ -210,16 +267,23 @@ export class ActivitatService {
     try {
       const token = this.authService.getToken();
       const response: AxiosResponse<any> = await axios.post(
-        this.API_URL+`/subgrup`,
-        {grup, subgrup},
+        this.API_URL + `/subgrup`,
+        { grup, subgrup },
         {
           headers: {
-            Authorization: `Bearer ${token}`
-          }}
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
       return response.data;
-    } catch (error) {
-      throw error;
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status == ERR_TOKEN) {
+          this.authService.logout();
+        }
+      } else {
+        throw error;
+      }
     }
   }
 
@@ -227,18 +291,23 @@ export class ActivitatService {
     try {
       const token = this.authService.getToken();
       const response: AxiosResponse<any> = await axios.put(
-        this.API_URL+`/activitat`,
+        this.API_URL + `/activitat`,
         { activitat },
         {
           headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
       return response.data;
-    } catch (error) {
-      throw error;
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status == ERR_TOKEN) {
+          this.authService.logout();
+        }
+      } else {
+        throw error;
+      }
     }
   }
-
 }

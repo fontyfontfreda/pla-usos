@@ -1,8 +1,10 @@
 //src/app/services/zona.service.ts
-import {Injectable} from '@angular/core';
-import axios, {AxiosResponse} from 'axios';
+import { Injectable } from '@angular/core';
+import axios, { AxiosResponse } from 'axios';
 import { AuthService } from './auth.service';
-import {environment} from '../../environments/environment';
+import { environment } from '../../environments/environment';
+
+const ERR_TOKEN = 470;
 
 interface Area {
   codi_area: string;
@@ -16,9 +18,8 @@ interface Zona {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-
 export class ZonaService {
   private API_URL = `${environment.apiUrl}/zones`; // Enllaç al backend
 
@@ -37,30 +38,48 @@ export class ZonaService {
   async deleteArea(codi_area: string): Promise<any> {
     try {
       const token = this.authService.getToken();
-      const response: AxiosResponse<any> = await axios.delete(`${this.API_URL}/area`, {
-        headers: {
-          Authorization: `Bearer ${token}` // Afegir el token a l'encapçalament
+      const response: AxiosResponse<any> = await axios.delete(
+        `${this.API_URL}/area`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Afegir el token a l'encapçalament
+          },
+          data: { codi_area }, // Enviem les dades al cos de la sol·licitud
         },
-        data: { codi_area }, // Enviem les dades al cos de la sol·licitud
-      });
+      );
       return response.data;
-    } catch (error) {
-      throw error;
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status == ERR_TOKEN) {
+          this.authService.logout();
+        }
+      } else {
+        throw error;
+      }
     }
   }
 
   async deleteZona(codi_zona: number): Promise<any> {
     try {
       const token = this.authService.getToken();
-      const response: AxiosResponse<any> = await axios.delete(`${this.API_URL}/zona`, {
-        headers: {
-          Authorization: `Bearer ${token}` // Afegir el token a l'encapçalament
+      const response: AxiosResponse<any> = await axios.delete(
+        `${this.API_URL}/zona`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Afegir el token a l'encapçalament
+          },
+          data: { codi_zona }, // Enviem les dades al cos de la sol·licitud
         },
-        data: { codi_zona }, // Enviem les dades al cos de la sol·licitud
-      });
+      );
       return response.data;
-    } catch (error) {
-      throw error;
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status == ERR_TOKEN) {
+          this.authService.logout();
+        }
+      } else {
+        throw error;
+      }
     }
   }
 
@@ -74,11 +93,17 @@ export class ZonaService {
           headers: {
             Authorization: `Bearer ${token}`, // <-- Aquest és l'encapçalament
           },
-        }
+        },
       );
       return response.data;
-    } catch (error) {
-      throw error;
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status == ERR_TOKEN) {
+          this.authService.logout();
+        }
+      } else {
+        throw error;
+      }
     }
   }
 
@@ -92,12 +117,17 @@ export class ZonaService {
           headers: {
             Authorization: `Bearer ${token}`, // <-- Aquest és l'encapçalament
           },
-        }
+        },
       );
       return response.data;
-    } catch (error) {
-      throw error;
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status == ERR_TOKEN) {
+          this.authService.logout();
+        }
+      } else {
+        throw error;
+      }
     }
   }
-
 }

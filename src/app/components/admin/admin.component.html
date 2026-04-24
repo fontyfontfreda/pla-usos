@@ -1,10 +1,9 @@
 <div class="admin-container">
   <!-- Menú lateral -->
   <app-sidebar (canviComonent)="canviComponent($event)"></app-sidebar>
+  
   <!-- #sidebar per a referenciar el component -->
-
-  <!-- Contingut de l'administració -->
-  <div class="admin-content">
+   <div class="admin-content">
     <app-zona *ngIf="zonaComponent"></app-zona>
     <app-adreca *ngIf="adrecaComponent"></app-adreca>
     <app-usuari *ngIf="usuariComponent"></app-usuari>
