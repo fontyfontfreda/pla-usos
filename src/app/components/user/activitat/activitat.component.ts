@@ -48,6 +48,8 @@ export class ActivitatComponent {
       this.grups = [...new Set(this.activitats.map(a => a.descripcio_grup))];
       this.subgrups = [...new Set(this.activitats.map(a => a.descripcio_subgrup))];
       this.activitatsFiltrades = [...new Set(this.activitats.map(a => a.descripcio_descripcio_activitat)), "Altres"]
+      console.log(this.activitatsFiltrades);
+
     });
   }
 
@@ -160,7 +162,7 @@ export class ActivitatComponent {
   }
 
   getColor(activitat: string): string {
-    let condicio = this.activitats.find(a => a.descripcio_descripcio_activitat === activitat)?.id_condicio;
+    let condicio = this.activitats.find(a => a.descripcio_descripcio_activitat === activitat)?.condicions[0].id;
     if (!condicio) return 'black';
     else if (+condicio == 2 || +condicio == 3) return 'green';
     if (+condicio == 1) return 'red';

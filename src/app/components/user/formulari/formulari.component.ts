@@ -82,7 +82,7 @@ export class FormulariComponent implements OnInit {
     if (activitat.is_altres) {
       this.dialogAltres = true;
     } else {
-      if (!(activitat.id_condicio == 1 || activitat.id_condicio == 2 || activitat.id_condicio == 3)) {
+      if (!(activitat.condicions[0].id == 1 || activitat.condicions[0].id == 2 || activitat.condicions[0].id == 3)) {
         this.isCondicio = true;
         this.dialogCondicio = true;
       }
