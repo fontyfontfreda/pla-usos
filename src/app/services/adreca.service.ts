@@ -13,13 +13,15 @@ export class AdrecaService {
 
   constructor(private authService: AuthService) {}
 
-  async getAdreces(): Promise<any[]> {
+  async getAdreces(page: number = 1, limit: number = 25, search: string = ''): Promise<{ data: Adreca[]; total: number }> {
     try {
-      const response: AxiosResponse<any[]> = await axios.get(this.API_URL);
+      const response: AxiosResponse<{ data: Adreca[]; total: number }> = await axios.get(this.API_URL, {
+        params: { page, limit, q: search || undefined },
+      });
       return response.data;
     } catch (error) {
       console.error('Error obtenint adreces:', error);
-      return [];
+      return { data: [], total: 0 };
     }
   }
 

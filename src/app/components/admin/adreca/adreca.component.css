@@ -91,6 +91,27 @@ img {
   cursor: pointer;
 }
 
+.pagination {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+}
+
+.pagination button {
+  padding: 5px 10px;
+  background-color: #E62B01;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
 form label {
   display: block;
   margin-top: 0.8rem;

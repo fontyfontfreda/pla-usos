@@ -10,7 +10,7 @@
     <!-- Input de cerca -->
     <div class="search-container">
       <label for="search">Cerca:</label>
-      <input [(ngModel)]="searchTerm" id="search" placeholder="Cerca per DOMCOD o ADREÇA"/>
+      <input [(ngModel)]="searchTerm" (ngModelChange)="onSearchChange()" id="search" placeholder="Cerca per DOMCOD o ADREÇA"/>
     </div>
 
     <!-- Taula de les adreces -->
@@ -23,7 +23,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let adreca of filteredAdreces()">
+      <tr *ngFor="let adreca of adreces">
         <td>{{ adreca.DOMCOD }}</td>
         <td>{{ adreca.adreca }}</td>
         <td>
@@ -35,6 +35,13 @@
       </tr>
       </tbody>
     </table>
+
+    <!-- Paginació -->
+    <div class="pagination" *ngIf="totalItems > 0">
+      <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">« Anterior</button>
+      <span>Pàgina {{ currentPage }} de {{ totalPages }} ({{ totalItems }} adreces)</span>
+      <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Següent »</button>
+    </div>
 
     <!-- Modal per veure el detall de l'adreça -->
     <div *ngIf="selectedAdreca" class="modal">
@@ -80,23 +87,6 @@
             <p><strong>TIPUS DOMICILI: </strong>{{ editantAdreca.tipus_dom }}</p>
             <p><strong>TIPUS LOCAL: </strong>{{ editantAdreca.tipus_loc }}</p>
             <p><strong>AMPLADA CARRER:: </strong>{{ editantAdreca.amplada_carrer }}</p>
-
-<!--            <label><strong>TIPUS DOMICILI:</strong>-->
-<!--              <select [(ngModel)]="editantAdreca.tipus_dom" name="tipus_dom">-->
-<!--                <option *ngFor="let tipus of tipusDomOptions" [value]="tipus">{{ tipus }}</option>-->
-<!--              </select>-->
-<!--            </label>-->
-
-<!--            <label><strong>TIPUS LOCAL:</strong>-->
-<!--              <select [(ngModel)]="editantAdreca.tipus_loc" name="tipus_loc">-->
-<!--                <option *ngFor="let tipus of tipusLocOptions" [value]="tipus">{{ tipus }}</option>-->
-<!--              </select>-->
-<!--            </label>-->
-
-<!--            <label><strong>AMPLADA CARRER:</strong>-->
-<!--              <input type="number" [(ngModel)]="editantAdreca.amplada_carrer" name="amplada_carrer"/>-->
-<!--            </label>-->
-
             <p><strong>COORD X: </strong>{{ editantAdreca.coord_x }}</p>
             <p><strong>COORD Y: </strong>{{ editantAdreca.coord_y }}</p>
             <p><strong>CODI ZONA: </strong>{{ editantAdreca.codi_zona }}</p>

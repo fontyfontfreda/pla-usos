@@ -44,10 +44,16 @@ export class AdrecaComponent implements OnInit {
   rolUsuari: string | null = null;
 
   isLoading: boolean = false;
-  // Llista d'adreces amb el model Adreca
+  // Llista d'adreces amb el model Adreca (només la pàgina actual)
   adreces: Adreca[] = [];
 
   searchTerm: string = '';
+  private searchDebounceId: any = null;
+
+  pageSize: number = 25;
+  currentPage: number = 1;
+  totalItems: number = 0;
+
   selectedAdreca: Adreca | null = null;
   editantAdreca: any = null;
 
@@ -55,17 +61,23 @@ export class AdrecaComponent implements OnInit {
   tipusNoti: 'error' | 'ok' | 'info' = 'info';
 
   constructor(private adrecaService: AdrecaService, public dialog: MatDialog) {
-    this.rolUsuari = localStorage.getItem('rol_usuari');    
+    this.rolUsuari = localStorage.getItem('rol_usuari');
   }
 
   ngOnInit(): void {
     this.loadAdreces().then();
   }
 
+  get totalPages(): number {
+    return Math.max(Math.ceil(this.totalItems / this.pageSize), 1);
+  }
+
   async loadAdreces() {
     this.isLoading = true; // Activa el loader
     try {
-      this.adreces = await this.adrecaService.getAdreces();
+      const { data, total } = await this.adrecaService.getAdreces(this.currentPage, this.pageSize, this.searchTerm);
+      this.adreces = data;
+      this.totalItems = total;
     } catch (error) {
       this.textNoti = 'Error carregant les adreces';
       this.tipusNoti = 'error';
@@ -75,15 +87,23 @@ export class AdrecaComponent implements OnInit {
     }
   }
 
-  // Mètode per filtrar les adreces segons el terme de cerca
-  filteredAdreces() {
-    if (!this.searchTerm) {
-      return this.adreces;
+  // Es crida en cada tecla de l'input de cerca; espera que l'usuari deixi d'escriure abans de consultar el backend
+  onSearchChange() {
+    if (this.searchDebounceId) {
+      clearTimeout(this.searchDebounceId);
     }
-    return this.adreces.filter(adreca =>
-      adreca.DOMCOD.toString().includes(this.searchTerm) || // Busca per DOMCOD
-      adreca.adreca.toLowerCase().includes(this.searchTerm.toLowerCase())
-    );
+    this.searchDebounceId = setTimeout(() => {
+      this.currentPage = 1;
+      this.loadAdreces();
+    }, 400);
+  }
+
+  goToPage(page: number) {
+    if (page < 1 || page > this.totalPages || page === this.currentPage) {
+      return;
+    }
+    this.currentPage = page;
+    this.loadAdreces();
   }
 
   // Mètode per veure els detalls d'una adreça

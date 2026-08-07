@@ -17,12 +17,12 @@ export class AdrecaComponent {
   @Output() adrecaSubmit = new EventEmitter<Adreca | null>(); // Emissor d'esdeveniments per a l'adreça
   @Output() goBackEvent = new EventEmitter<number>(); // Emissor d'esdeveniments per tornar enrera
 
-  adreces: Adreca[] = [];
   filteredAdreces: Adreca[] = [];
   adreca: Adreca | null = null;
 
   modalError: boolean = false;
   srcUrl!: SafeResourceUrl;
+  private filterDebounceId: any = null;
 
   constructor(private adrecaService: AdrecaService, private sanitizer: DomSanitizer) {
     this.safeUrl("0", "0");
@@ -35,16 +35,16 @@ export class AdrecaComponent {
     }
   }
 
-  async ngOnInit() {
-    this.adreces = await this.adrecaService.getAdreces();
-    this.filteredAdreces = [];  // Inicialment no mostrem cap adreça
-  }
-
   filterAdreces(event: any) {
     const query = event.target.value.toLowerCase();
-    if (query.length >= 3) {  // Només es filtra quan hi ha almenys 3 caràcters
-      this.filteredAdreces = this.adreces.filter(adreca =>
-        (adreca.adreca).toLowerCase().includes(query));
+    if (this.filterDebounceId) {
+      clearTimeout(this.filterDebounceId);
+    }
+    if (query.length >= 3) {  // Només es cerca quan hi ha almenys 3 caràcters
+      this.filterDebounceId = setTimeout(async () => {
+        const { data } = await this.adrecaService.getAdreces(1, 20, query);
+        this.filteredAdreces = data;
+      }, 300);
     } else {
       this.filteredAdreces = [];  // Si l'usuari escriu menys de 3 caràcters, es buida la llista
     }
